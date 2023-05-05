@@ -63,8 +63,10 @@ model Mentor {
   exp_react   Boolean     @default(false)
   exp_devops  Boolean     @default(false)
   exp_gcp     Boolean     @default(false)
-  created_at  DateTime    @default(now())
-  updated_at  DateTime    @default(now())
+  // created_at  DateTime    @default(now())
+  // updated_at  DateTime    @default(now())
+  created_at  DateTime    @default(now()) @map("created_at")
+  updated_at  DateTime    @default(now()) @map("updated_at")
   Mentoring   Mentoring[]
 }
 

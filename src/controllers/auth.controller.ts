@@ -1,35 +1,31 @@
-import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
+import { UserService } from "../services/user.service";
+import { User } from "../models/user.model";
 
-const prisma = new PrismaClient();
+const userService = new UserService();
 
 export const register = async (req: Request, res: Response) => {
-  const { auth, email, name, phone, address, role_id } = req.body;
-
   try {
-    // Check if the email already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
+    const { auth, email, name, phone, address, role_id } = req.body;
 
-    if (existingUser) {
-      return res.status(400).json({ message: "Email already taken" });
+    const user: User = {
+      auth,
+      email,
+      name,
+      phone,
+      address,
+      role_id,
+    };
+
+    const result = await userService.register(user);
+
+    if (result.success) {
+      return res.status(201).json(result.data);
+    } else {
+      return res.status(400).json({ message: result.message });
     }
-
-    // Create the new user
-    const newUser = await prisma.user.create({
-      data: {
-        auth,
-        email,
-        name,
-        phone,
-        address,
-        role_id,
-      },
-    });
-    return res.status(201).json({ user: newUser });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Server error" });
+  } catch (error: any) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
   }
 };
