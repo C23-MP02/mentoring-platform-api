@@ -1,0 +1,117 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  User User[]
+}
+
+model User {
+  id                Int                 @id @default(autoincrement())
+  auth              String              @unique
+  email             String              @unique
+  name              String
+  phone             String              @unique
+  address           String?
+  role_id           Int
+  Mentee            Mentee?
+  Mentor            Mentor?
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @default(now())
+  role              Role                @relation(fields: [role_id], references: [id])
+  Time_Availability Time_Availability[]
+}
+
+model Mentee {
+  id          Int         @id @default(autoincrement())
+  user_id     Int         @unique
+  user        User        @relation(fields: [user_id], references: [id])
+  int_android Boolean     @default(false)
+  int_web     Boolean     @default(false)
+  int_ios     Boolean     @default(false)
+  int_ml      Boolean     @default(false)
+  int_flutter Boolean     @default(false)
+  int_be      Boolean     @default(false)
+  int_react   Boolean     @default(false)
+  int_devops  Boolean     @default(false)
+  int_gcp     Boolean     @default(false)
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @default(now())
+  Mentoring   Mentoring[]
+}
+
+model Mentor {
+  id          Int         @id @default(autoincrement())
+  user_id     Int         @unique
+  user        User        @relation(fields: [user_id], references: [id])
+  exp_android Boolean     @default(false)
+  exp_web     Boolean     @default(false)
+  exp_ios     Boolean     @default(false)
+  exp_ml      Boolean     @default(false)
+  exp_flutter Boolean     @default(false)
+  exp_be      Boolean     @default(false)
+  exp_react   Boolean     @default(false)
+  exp_devops  Boolean     @default(false)
+  exp_gcp     Boolean     @default(false)
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @default(now())
+  Mentoring   Mentoring[]
+}
+
+model Mentoring {
+  id         Int      @id @default(autoincrement())
+  mentee_id  Int
+  mentee     Mentee   @relation(fields: [mentee_id], references: [user_id])
+  mentor_id  Int
+  mentor     Mentor   @relation(fields: [mentor_id], references: [user_id])
+  rating     Int
+  feedback   String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+model Time_Availability {
+  id           Int       @id @default(autoincrement())
+  user_id      Int
+  user         User      @relation(fields: [user_id], references: [id])
+  time_slot_id Int
+  time         Time_Slot @relation(fields: [time_slot_id], references: [id])
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @default(now())
+}
+
+model Time_Slot {
+  id                Int                 @id @default(autoincrement())
+  day               Day
+  time_id           Int
+  time              Time                @relation(fields: [time_id], references: [id])
+  Time_Availability Time_Availability[]
+}
+
+model Time {
+  id         Int                 @id @default(autoincrement())
+  start_time Unsupported("time")
+  end_time   Unsupported("time")
+  Time_Slot  Time_Slot[]
+  time_id    Int
+}
+
+enum Day {
+  MON
+  TUE
+  WED
+  THU
+  FRI
+  SAT
+  SUN
+}
