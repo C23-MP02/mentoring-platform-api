@@ -1,29 +1,35 @@
 import { Request, Response } from "express";
-import { UserService } from "../services/user.service";
 import { User } from "../models/user.model";
+import { PrismaClient } from "@prisma/client";
+import { firebaseAuth } from "../config/firebase";
 
-const userService = new UserService();
+const prisma = new PrismaClient();
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { auth, email, name, phone, address, role_id } = req.body;
+    const { email, name, password } = req.body;
 
-    const user: User = {
-      auth,
+    const newUser = await prisma.user.create({
+      data: {
+        email,
+        name,
+      },
+    });
+
+    const uid = newUser.id.toString();
+
+    const firebaseAccount = await firebaseAuth.createUser({
       email,
-      name,
-      phone,
-      address,
-      role_id,
-    };
+      displayName: name,
+      password,
+      uid,
+    });
 
-    const result = await userService.register(user);
+    await firebaseAuth.setCustomUserClaims(uid, { role: "mentee" });
 
-    if (result.success) {
-      return res.status(201).json(result.data);
-    } else {
-      return res.status(400).json({ message: result.message });
-    }
+    return res
+      .status(201)
+      .json({ message: "User created", data: firebaseAccount });
   } catch (error: any) {
     console.log(error);
     return res.status(500).json({ message: error.message });

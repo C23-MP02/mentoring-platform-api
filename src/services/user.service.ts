@@ -1,7 +1,7 @@
 import { UserRepository } from "../repositories/user.repository";
 import { User } from "../models/user.model";
 
-export class UserService {
+class UserService {
   private userRepository: UserRepository;
 
   constructor() {
@@ -22,3 +22,5 @@ export class UserService {
     return { success: true, data: { user: newUser } };
   }
 }
+
+export const userService = new UserService();

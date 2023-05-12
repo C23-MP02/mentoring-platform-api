@@ -8,26 +8,39 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "cd ./src && tsc"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "keywords": [],
   "author": "C23-MP02",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/storage": "^6.10.0",
     "@prisma/client": "^4.13.0",
     "@types/http-errors": "^2.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "firebase": "^9.21.0",
+    "firebase-admin": "^11.8.0",
     "helmet": "^6.1.5",
     "lodash": "^4.17.21",
-    "luxon": "^3.3.0"
+    "luxon": "^3.3.0",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/luxon": "^3.3.0",
+    "@types/multer": "^1.4.7",
     "@types/node": "^20.0.0",
+    "@types/uuid": "^9.0.1",
+    "autoprefixer": "^10.4.14",
     "nodemon": "^2.0.22",
+    "postcss": "^8.4.23",
     "prisma": "^4.13.0",
+    "tailwindcss": "^3.3.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   }

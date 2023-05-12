@@ -16,70 +16,85 @@ model Role {
   User User[]
 }
 
+model Times {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+}
+
+model Gender {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  User User[]
+}
+
 model User {
-  id                Int                 @id @default(autoincrement())
-  auth              String              @unique
-  email             String              @unique
-  name              String
-  phone             String              @unique
-  address           String?
-  role_id           Int
-  Mentee            Mentee?
-  Mentor            Mentor?
-  created_at        DateTime            @default(now())
-  updated_at        DateTime            @default(now())
-  role              Role                @relation(fields: [role_id], references: [id])
-  Time_Availability Time_Availability[]
+  id                  Int                 @id @default(autoincrement())
+  name                String
+  role_id             Int                 @default(2)
+  gender_id           Int?
+  email               String              @unique
+  address             String?
+  phone               String?             @unique
+  bio                 String?
+  profile_picture_url String?
+  is_path_android     Boolean             @default(false)
+  is_path_web         Boolean             @default(false)
+  is_path_ios         Boolean             @default(false)
+  is_path_ml          Boolean             @default(false)
+  is_path_flutter     Boolean             @default(false)
+  is_path_fe          Boolean             @default(false)
+  is_path_be          Boolean             @default(false)
+  is_path_react       Boolean             @default(false)
+  is_path_devops      Boolean             @default(false)
+  is_path_gcp         Boolean             @default(false)
+  created_at          DateTime            @default(now())
+  updated_at          DateTime            @default(now())
+  Mentee              Mentee?
+  Mentor              Mentor?
+  Time_Availability   Time_Availability[]
+  Role                Role                @relation(fields: [role_id], references: [id])
+  Gender              Gender?             @relation(fields: [gender_id], references: [id])
 }
 
 model Mentee {
-  id          Int         @id @default(autoincrement())
-  user_id     Int         @unique
-  user        User        @relation(fields: [user_id], references: [id])
-  int_android Boolean     @default(false)
-  int_web     Boolean     @default(false)
-  int_ios     Boolean     @default(false)
-  int_ml      Boolean     @default(false)
-  int_flutter Boolean     @default(false)
-  int_be      Boolean     @default(false)
-  int_react   Boolean     @default(false)
-  int_devops  Boolean     @default(false)
-  int_gcp     Boolean     @default(false)
-  created_at  DateTime    @default(now())
-  updated_at  DateTime    @default(now())
-  Mentoring   Mentoring[]
+  id                 Int                  @id @default(autoincrement())
+  user_id            Int                  @unique
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @default(now())
+  User               User                 @relation(fields: [user_id], references: [id])
+  Mentoring_Attendee Mentoring_Attendee[]
 }
 
 model Mentor {
-  id          Int         @id @default(autoincrement())
-  user_id     Int         @unique
-  user        User        @relation(fields: [user_id], references: [id])
-  exp_android Boolean     @default(false)
-  exp_web     Boolean     @default(false)
-  exp_ios     Boolean     @default(false)
-  exp_ml      Boolean     @default(false)
-  exp_flutter Boolean     @default(false)
-  exp_be      Boolean     @default(false)
-  exp_react   Boolean     @default(false)
-  exp_devops  Boolean     @default(false)
-  exp_gcp     Boolean     @default(false)
-  // created_at  DateTime    @default(now())
-  // updated_at  DateTime    @default(now())
-  created_at  DateTime    @default(now()) @map("created_at")
-  updated_at  DateTime    @default(now()) @map("updated_at")
-  Mentoring   Mentoring[]
+  id         Int         @id @default(autoincrement())
+  user_id    Int         @unique
+  created_at DateTime    @default(now()) @map("created_at")
+  updated_at DateTime    @default(now()) @map("updated_at")
+  User       User        @relation(fields: [user_id], references: [id])
+  Mentoring  Mentoring[]
 }
 
 model Mentoring {
-  id         Int      @id @default(autoincrement())
-  mentee_id  Int
-  mentee     Mentee   @relation(fields: [mentee_id], references: [user_id])
-  mentor_id  Int
-  mentor     Mentor   @relation(fields: [mentor_id], references: [user_id])
-  rating     Int
-  feedback   String
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  id                 Int                  @id @default(autoincrement())
+  mentor_id          Int
+  rating             Int
+  feedback           String
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @default(now())
+  Mentor             Mentor               @relation(fields: [mentor_id], references: [user_id])
+  Mentoring_Attendee Mentoring_Attendee[]
+}
+
+model Mentoring_Attendee {
+  id           Int       @id @default(autoincrement())
+  mentoring_id Int
+  mentee_id    Int
+  rating       Int
+  feedback     String
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @default(now())
+  Mentoring    Mentoring @relation(fields: [mentoring_id], references: [id])
+  Mentee       Mentee    @relation(fields: [mentee_id], references: [user_id])
 }
 
 model Time_Availability {
@@ -90,6 +105,7 @@ model Time_Availability {
   time         Time_Slot @relation(fields: [time_slot_id], references: [id])
   created_at   DateTime  @default(now())
   updated_at   DateTime  @default(now())
+  time_Slot2Id Int?
 }
 
 model Time_Slot {
@@ -101,11 +117,10 @@ model Time_Slot {
 }
 
 model Time {
-  id         Int                 @id @default(autoincrement())
-  start_time Unsupported("time")
-  end_time   Unsupported("time")
+  id         Int         @id @default(autoincrement())
+  start_time String
+  end_time   String
   Time_Slot  Time_Slot[]
-  time_id    Int
 }
 
 enum Day {
