@@ -30,8 +30,7 @@ app.get("/", async (req: Request, res: Response) => {
 });
 
 app.use("/auth", authRoutes);
-// app.use("/user", isAuth, userRoutes);
-app.use("/user", userRoutes);
+app.use("/user", isAuth, userRoutes);
 
 app.listen(3000, () =>
   console.log(`⚡️[server]: Server is running at http://localhost:3000`)

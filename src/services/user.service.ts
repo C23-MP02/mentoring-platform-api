@@ -1,26 +1,40 @@
+import { User, UserInterests, UserUpdateInput } from "../models/user.model";
+import { AuthRepository } from "../repositories/auth.repository";
 import { UserRepository } from "../repositories/user.repository";
-import { User } from "../models/user.model";
 
-class UserService {
+export class UserService {
   private userRepository: UserRepository;
+  private authRepository: AuthRepository;
 
   constructor() {
     this.userRepository = new UserRepository();
+    this.authRepository = new AuthRepository();
   }
 
-  async register(user: User) {
-    const { email } = user;
+  async getUserById(id: number): Promise<User | null> {
+    const user = await this.userRepository.getUserById(id);
+    return user;
+  }
 
-    const existingUser = await this.userRepository.findUserByEmail(email);
+  async updateUser(id: number, user: UserUpdateInput): Promise<User> {
+    const updatedUser = await this.userRepository.updateUser(id, user);
 
-    if (existingUser) {
-      return { success: false, message: "Email already taken" };
-    }
+    await this.authRepository.updateUser(id.toString(), {
+      name: updatedUser.name,
+      email: updatedUser.email,
+      phoneNumber: updatedUser.phone,
+    });
 
-    const newUser = await this.userRepository.createUser(user);
+    return updatedUser;
+  }
 
-    return { success: true, data: { user: newUser } };
+  async getUserInterestsById(id: number): Promise<UserInterests | null> {
+    const user = await this.userRepository.getUserInterestsById(id);
+    return user;
+  }
+
+  async getUserProfilePictureById(id: number): Promise<string | null> {
+    const user = await this.userRepository.getUserProfilePictureById(id);
+    return user;
   }
 }
-
-export const userService = new UserService();

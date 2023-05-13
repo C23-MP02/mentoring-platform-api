@@ -1,4 +1,4 @@
-import { AuthenticatedRequest } from "../typings/types";
+import { AuthenticatedRequest } from "../typings/request.type";
 import { Response, NextFunction } from "express";
 import { firebaseAuth } from "../config/firebase";
 

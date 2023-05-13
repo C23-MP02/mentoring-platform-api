@@ -1,22 +1,34 @@
 import { auth } from "firebase-admin";
+import { firebaseAuth } from "../config/firebase";
+import { FirebaseUpdateData } from "../typings/firebase.type";
 
 export class AuthRepository {
   async createUser(
+    uid: string,
+    name: string,
     email: string,
     password: string,
-    name: string,
-    phone: string
+    phoneNumber?: string
   ): Promise<auth.UserRecord> {
-    const userRecord = await auth().createUser({
+    const userRecord = await firebaseAuth.createUser({
+      uid,
       email,
       password,
       displayName: name,
-      phoneNumber: phone,
+      phoneNumber,
     });
     return userRecord;
   }
 
   async setRoleClaims(uid: string, claims: { role: string }): Promise<void> {
-    await auth().setCustomUserClaims(uid, claims);
+    await firebaseAuth.setCustomUserClaims(uid, claims);
+  }
+
+  async updateUser(
+    uid: string,
+    data: FirebaseUpdateData
+  ): Promise<auth.UserRecord> {
+    const userRecord = await firebaseAuth.updateUser(uid, data);
+    return userRecord;
   }
 }

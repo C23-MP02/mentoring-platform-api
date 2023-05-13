@@ -1,22 +1,80 @@
-import { PrismaClient, User } from "@prisma/client";
-// import { User } from "../models/user.model";
+import { User } from "@prisma/client";
+import {
+  UserCreateInput,
+  UserInterests,
+  UserUpdateInput,
+} from "../models/user.model";
+import { Repository } from "./index.repository";
 
-const prisma = new PrismaClient();
-
-export class UserRepository {
-  async createUser(user: User): Promise<User> {
-    const newUser = await prisma.user.create({
+export class UserRepository extends Repository {
+  async createUser(user: UserCreateInput): Promise<User> {
+    const newUser = await this.prisma.user.create({
       data: user,
     });
     return newUser;
   }
 
   async findUserByEmail(email: string): Promise<User | null> {
-    const user = await prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: {
         email,
       },
     });
     return user;
+  }
+
+  async updateUser(id: number, user: UserUpdateInput): Promise<User> {
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        ...user,
+        updated_at: new Date(),
+      },
+    });
+    return updatedUser;
+  }
+
+  async getUserById(id: number): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    return user;
+  }
+
+  async getUserInterestsById(id: number): Promise<UserInterests | null> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        is_path_android: true,
+        is_path_web: true,
+        is_path_ios: true,
+        is_path_ml: true,
+        is_path_flutter: true,
+        is_path_fe: true,
+        is_path_be: true,
+        is_path_react: true,
+        is_path_devops: true,
+        is_path_gcp: true,
+      },
+    });
+    return user;
+  }
+
+  async getUserProfilePictureById(id: number): Promise<string | null> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        profile_picture_url: true,
+      },
+    });
+    return user!.profile_picture_url;
   }
 }
