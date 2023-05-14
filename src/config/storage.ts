@@ -1,5 +1,8 @@
 import { Storage } from "@google-cloud/storage";
-import serviceAccount from "../../serviceAccountKey.json";
+
+require("dotenv").config();
+const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY || "");
+// import serviceAccount from "../../serviceAccountKey.json";
 
 const config = {
   projectId: serviceAccount.project_id,

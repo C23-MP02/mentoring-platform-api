@@ -1,6 +1,9 @@
 import * as admin from "firebase-admin";
+require("dotenv").config();
 
-import serviceAccount from "../../serviceAccountKey.json";
+// import serviceAccount from "../../serviceAccountKey.json";
+
+const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY || "");
 
 const params = {
   type: serviceAccount.type,
