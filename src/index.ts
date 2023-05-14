@@ -26,16 +26,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(multerMid.single("file"));
 
 app.get("/", async (req: Request, res: Response) => {
-  res.json({ message: "Hello World!" });
+  res.json({ message: "Response Success" });
 });
 
 app.use("/auth", authRoutes);
 app.use("/user", isAuth, userRoutes);
 
+app.use((req: Request, res: Response, next: Function) => {
+  next(createError(404));
+});
 app.listen(3000, () =>
   console.log(`⚡️[server]: Server is running at http://localhost:3000`)
 );
-
-// app.use((req: Request, res: Response, next: Function) => {
-//   next(createError(404));
-// });
