@@ -4,7 +4,7 @@ import { AuthService } from "../services/auth.service";
 export const register = async (req: Request, res: Response) => {
   try {
     const { email, name, password } = req.body;
-    const menteeRole = 2;
+    const menteeRole = 3;
 
     const authService = new AuthService();
 

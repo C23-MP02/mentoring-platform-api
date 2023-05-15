@@ -10,6 +10,8 @@ import authRoutes from "./routes/auth.route";
 import userRoutes from "./routes/user.route";
 import { isAuth } from "./middlewares/firebase.auth";
 
+const PORT = parseInt(process.env.PORT!) || 8080;
+
 const app = express();
 
 const multerMid = multer({
@@ -35,6 +37,6 @@ app.use("/user", isAuth, userRoutes);
 app.use((req: Request, res: Response, next: Function) => {
   next(createError(404));
 });
-app.listen(3000, () =>
-  console.log(`⚡️[server]: Server is running at http://localhost:3000`)
+app.listen(PORT, () =>
+  console.log(`⚡️[server]: Server is running on port: ${PORT}`)
 );
