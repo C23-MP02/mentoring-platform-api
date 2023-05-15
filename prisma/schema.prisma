@@ -28,32 +28,39 @@ model Gender {
 }
 
 model User {
-  id                  Int                 @id @default(autoincrement())
-  name                String
-  role_id             Int                 @default(2)
-  gender_id           Int?
-  email               String              @unique
-  address             String?
-  phone               String?             @unique
-  bio                 String?
-  profile_picture_url String?
-  is_path_android     Boolean             @default(false)
-  is_path_web         Boolean             @default(false)
-  is_path_ios         Boolean             @default(false)
-  is_path_ml          Boolean             @default(false)
-  is_path_flutter     Boolean             @default(false)
-  is_path_fe          Boolean             @default(false)
-  is_path_be          Boolean             @default(false)
-  is_path_react       Boolean             @default(false)
-  is_path_devops      Boolean             @default(false)
-  is_path_gcp         Boolean             @default(false)
-  created_at          DateTime            @default(now())
-  updated_at          DateTime            @default(now())
-  Mentee              Mentee?
-  Mentor              Mentor?
-  Time_Availability   Time_Availability[]
-  Role                Role                @relation(fields: [role_id], references: [id])
-  Gender              Gender?             @relation(fields: [gender_id], references: [id])
+  id                     Int                 @id @default(autoincrement())
+  name                   String
+  role_id                Int                 @default(2)
+  gender_id              Int?
+  email                  String              @unique
+  address                String?
+  phone                  String?             @unique
+  bio                    String?
+  profile_picture_url    String?
+  is_path_android        Boolean             @default(false)
+  is_path_web            Boolean             @default(false)
+  is_path_ios            Boolean             @default(false)
+  is_path_ml             Boolean             @default(false)
+  is_path_flutter        Boolean             @default(false)
+  is_path_fe             Boolean             @default(false)
+  is_path_be             Boolean             @default(false)
+  is_path_react          Boolean             @default(false)
+  is_path_devops         Boolean             @default(false)
+  is_path_gcp            Boolean             @default(false)
+  is_monday_available    Boolean             @default(false)
+  is_tuesday_available   Boolean             @default(false)
+  is_wednesday_available Boolean             @default(false)
+  is_thursday_available  Boolean             @default(false)
+  is_friday_available    Boolean             @default(false)
+  is_saturday_available  Boolean             @default(false)
+  is_sunday_available    Boolean             @default(false)
+  created_at             DateTime            @default(now())
+  updated_at             DateTime            @default(now())
+  Mentee                 Mentee?
+  Mentor                 Mentor?
+  Time_Availability      Time_Availability[]
+  Role                   Role                @relation(fields: [role_id], references: [id])
+  Gender                 Gender?             @relation(fields: [gender_id], references: [id])
 }
 
 model Mentee {

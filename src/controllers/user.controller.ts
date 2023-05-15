@@ -56,7 +56,7 @@ export const updateProfile = async (
   }
 };
 
-export const updateInterest = async (
+export const updateInterests = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {
@@ -103,6 +103,41 @@ export const updateRole = async (req: AuthenticatedRequest, res: Response) => {
     const { role_id } = req.body;
 
     const updatedUser = await userService.updateUserRole(id!, role_id);
+
+    return res
+      .status(200)
+      .json({ message: "Update user success", updatedUser });
+  } catch (error: any) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateDaysAvailability = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const id = req.userId;
+    const {
+      is_monday_available,
+      is_tuesday_available,
+      is_wednesday_available,
+      is_thursday_available,
+      is_friday_available,
+      is_saturday_available,
+      is_sunday_available,
+    } = req.body;
+
+    const updatedUser = await userService.updateUserDaysAvailability(id!, {
+      is_monday_available,
+      is_tuesday_available,
+      is_wednesday_available,
+      is_thursday_available,
+      is_friday_available,
+      is_saturday_available,
+      is_sunday_available,
+    });
 
     return res
       .status(200)

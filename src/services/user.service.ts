@@ -1,5 +1,10 @@
 import { getRoleNameFromRoleId } from "../helpers/role";
-import { User, UserInterests, UserUpdateInput } from "../models/user.model";
+import {
+  User,
+  UserDaysAvailability,
+  UserInterests,
+  UserUpdateInput,
+} from "../models/user.model";
 import { AuthRepository } from "../repositories/auth.repository";
 import { UserRepository } from "../repositories/user.repository";
 
@@ -27,6 +32,13 @@ export class UserService {
     return user;
   }
 
+  async getUserDaysAvailabilityById(
+    id: number
+  ): Promise<UserDaysAvailability | null> {
+    const user = await this.userRepository.getUserDaysAvailabilityById(id);
+    return user;
+  }
+
   async updateUser(id: number, user: UserUpdateInput): Promise<User> {
     const updatedUser = await this.userRepository.updateUser(id, user);
 
@@ -35,6 +47,27 @@ export class UserService {
       email: updatedUser.email,
       phoneNumber: updatedUser.phone,
     });
+
+    return updatedUser;
+  }
+
+  async updateUserInterests(
+    id: number,
+    interests: UserInterests
+  ): Promise<UserInterests> {
+    const updatedUser = await this.userRepository.updateUser(id, interests);
+
+    return updatedUser;
+  }
+
+  async updateUserDaysAvailability(
+    id: number,
+    daysAvailability: UserDaysAvailability
+  ): Promise<User> {
+    const updatedUser = await this.userRepository.updateUser(
+      id,
+      daysAvailability
+    );
 
     return updatedUser;
   }

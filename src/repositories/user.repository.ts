@@ -1,6 +1,7 @@
 import { User } from "@prisma/client";
 import {
   UserCreateInput,
+  UserDaysAvailability,
   UserInterests,
   UserUpdateInput,
 } from "../models/user.model";
@@ -76,5 +77,25 @@ export class UserRepository extends Repository {
       },
     });
     return user!.profile_picture_url;
+  }
+
+  async getUserDaysAvailabilityById(
+    id: number
+  ): Promise<UserDaysAvailability | null> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        is_monday_available: true,
+        is_tuesday_available: true,
+        is_wednesday_available: true,
+        is_thursday_available: true,
+        is_friday_available: true,
+        is_saturday_available: true,
+        is_sunday_available: true,
+      },
+    });
+    return user;
   }
 }

@@ -2,7 +2,8 @@ import { Router } from "express";
 import {
   getInterest,
   getProfile,
-  updateInterest,
+  updateDaysAvailability,
+  updateInterests,
   updateProfile,
   updateRole,
   uploadAvatar,
@@ -14,7 +15,8 @@ router.get("/", getProfile);
 router.get("/interest", getInterest);
 
 router.post("/", updateProfile);
-router.post("/interest", updateInterest);
+router.post("/interest", updateInterests);
+router.post("/days", updateDaysAvailability);
 router.post("/role", updateRole);
 router.post("/avatar", uploadAvatar);
 

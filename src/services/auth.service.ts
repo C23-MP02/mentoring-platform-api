@@ -2,6 +2,7 @@ import { AuthRepository } from "../repositories/auth.repository";
 import { UserRecord } from "firebase-admin/lib/auth";
 import { UserRepository } from "../repositories/user.repository";
 import { FirebaseUpdateData } from "../typings/firebase.type";
+import { getRoleNameFromRoleId } from "../helpers/role";
 
 export class AuthService {
   private authRepository: AuthRepository;
@@ -47,19 +48,11 @@ export class AuthService {
         password
       );
 
-      if (role_id === 1) {
-        await this.authRepository.setRoleClaims(uid, {
-          role: "mentee",
-        });
-      } else if (role_id === 2) {
-        await this.authRepository.setRoleClaims(uid, {
-          role: "mentee",
-        });
-      } else if (role_id === 3) {
-        await this.authRepository.setRoleClaims(uid, {
-          role: "mentor",
-        });
-      }
+      const roleName = getRoleNameFromRoleId(role_id);
+
+      await this.authRepository.setRoleClaims(uid, {
+        role: roleName!,
+      });
 
       return {
         success: true,

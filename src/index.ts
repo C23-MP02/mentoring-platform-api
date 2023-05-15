@@ -6,9 +6,7 @@ import multer from "multer";
 
 import createError from "http-errors";
 
-import authRoutes from "./routes/auth.route";
-import userRoutes from "./routes/user.route";
-import { isAuth } from "./middlewares/firebase.auth";
+import routes from "./routes";
 
 const PORT = parseInt(process.env.PORT!) || 8080;
 
@@ -31,8 +29,7 @@ app.get("/", async (req: Request, res: Response) => {
   res.json({ message: "Response Success" });
 });
 
-app.use("/auth", authRoutes);
-app.use("/user", isAuth, userRoutes);
+app.use(routes);
 
 app.use((req: Request, res: Response, next: Function) => {
   next(createError(404));
