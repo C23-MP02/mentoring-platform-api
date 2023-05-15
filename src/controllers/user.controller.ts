@@ -31,6 +31,23 @@ export const getInterest = async (req: AuthenticatedRequest, res: Response) => {
   }
 };
 
+export const getAvailability = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const id = req.userId;
+    const user = await userService.getUserDaysAvailabilityById(id!);
+
+    return res
+      .status(200)
+      .json({ message: "Get user availability success", user });
+  } catch (error: any) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 export const updateProfile = async (
   req: AuthenticatedRequest,
   res: Response

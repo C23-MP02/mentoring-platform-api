@@ -6,7 +6,7 @@ import multer from "multer";
 
 import createError from "http-errors";
 
-import routes from "./routes";
+import routes from "./routes/index.routes";
 
 const PORT = parseInt(process.env.PORT!) || 8080;
 

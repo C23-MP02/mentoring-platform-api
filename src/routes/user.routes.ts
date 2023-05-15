@@ -1,5 +1,6 @@
-import { Router } from "express";
+import router from "./router";
 import {
+  getAvailability,
   getInterest,
   getProfile,
   updateDaysAvailability,
@@ -9,10 +10,9 @@ import {
   uploadAvatar,
 } from "../controllers/user.controller";
 
-const router = Router();
-
 router.get("/", getProfile);
 router.get("/interest", getInterest);
+router.get("/days", getAvailability);
 
 router.post("/", updateProfile);
 router.post("/interest", updateInterests);
