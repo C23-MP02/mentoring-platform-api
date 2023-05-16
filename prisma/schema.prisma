@@ -84,8 +84,8 @@ model Mentor {
 model Mentoring {
   id                 Int                  @id @default(autoincrement())
   mentor_id          Int
-  rating             Int
-  feedback           String
+  start_time         DateTime
+  end_time           DateTime
   created_at         DateTime             @default(now())
   updated_at         DateTime             @default(now())
   Mentor             Mentor               @relation(fields: [mentor_id], references: [user_id])

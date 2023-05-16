@@ -1,0 +1,18 @@
+Make Model
+npx prisma generate
+
+Migrate Dev
+1. Change the .env db to dev
+2. Run command
+    npx prisma migrate dev --name v2.5
+
+Migrate Staging/Prod
+1. Change the .env db to staging/prod db
+2. Run command
+    npx prisma migrate deploy
+
+Build Docker Image
+docker build . -t mentoring-platform-api
+
+Run Docker Container
+docker run -p 8080:8080 -d mentoring-platform-api
