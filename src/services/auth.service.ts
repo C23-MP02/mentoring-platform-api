@@ -3,14 +3,20 @@ import { UserRecord } from "firebase-admin/lib/auth";
 import { UserRepository } from "../repositories/user.repository";
 import { FirebaseUpdateData } from "../typings/firebase.type";
 import { getRoleNameFromRoleId } from "../helpers/role";
+import { MentorRepository } from "../repositories/mentor.repository";
+import { MenteeRepository } from "../repositories/mentee.repository";
 
 export class AuthService {
   private authRepository: AuthRepository;
   private userRepository: UserRepository;
+  private menteeRepository: MenteeRepository;
+  private mentorRepository: MentorRepository;
 
   constructor() {
     this.authRepository = new AuthRepository();
     this.userRepository = new UserRepository();
+    this.menteeRepository = new MenteeRepository();
+    this.mentorRepository = new MentorRepository();
   }
 
   async register(
@@ -50,32 +56,16 @@ export class AuthService {
 
       const roleName = getRoleNameFromRoleId(role_id);
 
+      if (roleName === "mentor") {
+        await this.mentorRepository.createMentor(createdUser.id);
+      } else {
+        await this.menteeRepository.createMentee(createdUser.id);
+      }
+
       await this.authRepository.setRoleClaims(uid, {
         role: roleName!,
       });
 
-      return {
-        success: true,
-        data: userRecord,
-      };
-    } catch (error: any) {
-      return { success: false, message: error.message };
-    }
-  }
-
-  async update(
-    uid: string,
-    data: FirebaseUpdateData
-  ): Promise<{
-    success: boolean;
-    data?: UserRecord;
-    message?: string;
-  }> {
-    try {
-      const userRecord: UserRecord = await this.authRepository.updateUser(
-        uid,
-        data
-      );
       return {
         success: true,
         data: userRecord,

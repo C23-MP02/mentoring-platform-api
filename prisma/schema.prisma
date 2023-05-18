@@ -96,8 +96,8 @@ model Mentoring_Attendee {
   id           Int       @id @default(autoincrement())
   mentoring_id Int
   mentee_id    Int
-  rating       Int
-  feedback     String
+  rating       Int?
+  feedback     String?
   created_at   DateTime  @default(now())
   updated_at   DateTime  @default(now())
   Mentoring    Mentoring @relation(fields: [mentoring_id], references: [id])

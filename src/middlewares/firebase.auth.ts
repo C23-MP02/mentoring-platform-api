@@ -45,3 +45,27 @@ export const isMentee = (
     res.status(403).json({ error: "Unauthorized" });
   }
 };
+
+export const isMentor = (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.role === "mentor") {
+    next();
+  } else {
+    res.status(403).json({ error: "Unauthorized" });
+  }
+};
+
+export const isAdmin = (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.role === "admin") {
+    next();
+  } else {
+    res.status(403).json({ error: "Unauthorized" });
+  }
+};

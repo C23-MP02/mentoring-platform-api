@@ -1,6 +1,6 @@
+import { AuthenticatedRequest } from "../typings/request.type";
 import { Response } from "express";
 import { deleteImage, uploadImage } from "../helpers/image";
-import { AuthenticatedRequest } from "../typings/request.type";
 import { UserService } from "../services/user.service";
 import { AuthService } from "../services/auth.service";
 
@@ -185,10 +185,6 @@ export const uploadAvatar = async (
 
     const updatedUser = await userService.updateUser(id!, {
       profile_picture_url: imageUrl,
-    });
-
-    await authService.update(id!.toString(), {
-      photoURL: imageUrl,
     });
 
     return res

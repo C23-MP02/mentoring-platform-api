@@ -3,7 +3,9 @@ import { AuthService } from "../services/auth.service";
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { email, name, password } = req.body;
+    const { email, name, password, role } = req.body;
+
+    // Set as default role
     const menteeRole = 3;
 
     const authService = new AuthService();
@@ -12,7 +14,7 @@ export const register = async (req: Request, res: Response) => {
       name,
       email,
       password,
-      menteeRole
+      role ?? menteeRole
     );
 
     if (registrationResult.success) {
