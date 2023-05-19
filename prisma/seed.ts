@@ -23,7 +23,7 @@ async function main() {
   if (times.length === 0) {
   }
 
-  await prisma.time.createMany;
+  // await prisma.time.createMany;
 
   // const times = await prisma.({
   //   data: [

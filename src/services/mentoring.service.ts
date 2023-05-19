@@ -38,13 +38,23 @@ export class MentoringService {
     feedback: string,
     rating: number
   ) {
+    const mentoringAttendee =
+      await this.mentoringAttendeeRepository.getMentoringAttendeeByMenteeIdAndMentoringId(
+        mentee_id,
+        mentoring_id
+      );
+
+    if (!mentoringAttendee) {
+      throw new Error("Mentoring Attendee not found");
+    }
+
     const mentoringFeedback =
       await this.mentoringAttendeeRepository.createMentoringFeedback(
-        mentee_id,
-        mentoring_id,
+        mentoringAttendee!.id,
         feedback,
         rating
       );
+
     return mentoringFeedback;
   }
 }

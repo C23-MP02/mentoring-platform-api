@@ -16,10 +16,10 @@ model Role {
   User User[]
 }
 
-model Times {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-}
+// model Times {
+//   id   Int    @id @default(autoincrement())
+//   name String @unique
+// }
 
 model Gender {
   id   Int    @id @default(autoincrement())
@@ -28,39 +28,38 @@ model Gender {
 }
 
 model User {
-  id                     Int                 @id @default(autoincrement())
+  id                     Int      @id @default(autoincrement())
   name                   String
-  role_id                Int                 @default(2)
+  role_id                Int      @default(2)
   gender_id              Int?
-  email                  String              @unique
+  email                  String   @unique
   address                String?
-  phone                  String?             @unique
+  phone                  String?  @unique
   bio                    String?
   profile_picture_url    String?
-  is_path_android        Boolean             @default(false)
-  is_path_web            Boolean             @default(false)
-  is_path_ios            Boolean             @default(false)
-  is_path_ml             Boolean             @default(false)
-  is_path_flutter        Boolean             @default(false)
-  is_path_fe             Boolean             @default(false)
-  is_path_be             Boolean             @default(false)
-  is_path_react          Boolean             @default(false)
-  is_path_devops         Boolean             @default(false)
-  is_path_gcp            Boolean             @default(false)
-  is_monday_available    Boolean             @default(false)
-  is_tuesday_available   Boolean             @default(false)
-  is_wednesday_available Boolean             @default(false)
-  is_thursday_available  Boolean             @default(false)
-  is_friday_available    Boolean             @default(false)
-  is_saturday_available  Boolean             @default(false)
-  is_sunday_available    Boolean             @default(false)
-  created_at             DateTime            @default(now())
-  updated_at             DateTime            @default(now())
+  is_path_android        Boolean  @default(false)
+  is_path_web            Boolean  @default(false)
+  is_path_ios            Boolean  @default(false)
+  is_path_ml             Boolean  @default(false)
+  is_path_flutter        Boolean  @default(false)
+  is_path_fe             Boolean  @default(false)
+  is_path_be             Boolean  @default(false)
+  is_path_react          Boolean  @default(false)
+  is_path_devops         Boolean  @default(false)
+  is_path_gcp            Boolean  @default(false)
+  is_monday_available    Boolean  @default(false)
+  is_tuesday_available   Boolean  @default(false)
+  is_wednesday_available Boolean  @default(false)
+  is_thursday_available  Boolean  @default(false)
+  is_friday_available    Boolean  @default(false)
+  is_saturday_available  Boolean  @default(false)
+  is_sunday_available    Boolean  @default(false)
+  created_at             DateTime @default(now())
+  updated_at             DateTime @default(now())
   Mentee                 Mentee?
   Mentor                 Mentor?
-  Time_Availability      Time_Availability[]
-  Role                   Role                @relation(fields: [role_id], references: [id])
-  Gender                 Gender?             @relation(fields: [gender_id], references: [id])
+  Role                   Role     @relation(fields: [role_id], references: [id])
+  Gender                 Gender?  @relation(fields: [gender_id], references: [id])
 }
 
 model Mentee {
@@ -98,37 +97,38 @@ model Mentoring_Attendee {
   mentee_id    Int
   rating       Int?
   feedback     String?
+  en_feedback  String?
   created_at   DateTime  @default(now())
   updated_at   DateTime  @default(now())
   Mentoring    Mentoring @relation(fields: [mentoring_id], references: [id])
   Mentee       Mentee    @relation(fields: [mentee_id], references: [user_id])
 }
 
-model Time_Availability {
-  id           Int       @id @default(autoincrement())
-  user_id      Int
-  user         User      @relation(fields: [user_id], references: [id])
-  time_slot_id Int
-  time         Time_Slot @relation(fields: [time_slot_id], references: [id])
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @default(now())
-  time_Slot2Id Int?
-}
+// model Time_Availability {
+//   id           Int       @id @default(autoincrement())
+//   user_id      Int
+//   user         User      @relation(fields: [user_id], references: [id])
+//   time_slot_id Int
+//   time         Time_Slot @relation(fields: [time_slot_id], references: [id])
+//   created_at   DateTime  @default(now())
+//   updated_at   DateTime  @default(now())
+//   time_Slot2Id Int?
+// }
 
-model Time_Slot {
-  id                Int                 @id @default(autoincrement())
-  day               Day
-  time_id           Int
-  time              Time                @relation(fields: [time_id], references: [id])
-  Time_Availability Time_Availability[]
-}
+// model Time_Slot {
+//   id                Int                 @id @default(autoincrement())
+//   day               Day
+//   time_id           Int
+//   time              Time                @relation(fields: [time_id], references: [id])
+//   Time_Availability Time_Availability[]
+// }
 
-model Time {
-  id         Int         @id @default(autoincrement())
-  start_time String
-  end_time   String
-  Time_Slot  Time_Slot[]
-}
+// model Time {
+//   id         Int         @id @default(autoincrement())
+//   start_time String
+//   end_time   String
+//   Time_Slot  Time_Slot[]
+// }
 
 enum Day {
   MON

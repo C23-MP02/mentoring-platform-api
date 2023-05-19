@@ -16,3 +16,15 @@ docker build . -t mentoring-platform-api
 
 Run Docker Container
 docker run -p 8080:8080 -d mentoring-platform-api
+
+##############################################################################################
+Build Docker Image on gcloud (change x to version. Current version: 0.0.3)
+gcloud docker build -t gcr.io/$PROJECT_ID/mentoring-platform-api:0.0.x .
+
+Push Docker Image to gcloud (change x to version. Current version: 0.0.3)
+gcloud docker push gcr.io/$PROJECT_ID/mentoring-platform-api:0.0.X
+
+Deploy Docker Image to gcloud (change x to version. Current version: 0.0.3)
+gcloud run deploy --image gcr.io/$PROJECT_ID/mentoring-platform-api:0.0.X --platform managed
+##############################################################################################
+

@@ -12,8 +12,6 @@ export const createMentoring = async (
   const { mentees_id, start_time, end_time } = req.body;
   const mentor_id = req.userId;
 
-  console.log(mentor_id);
-
   try {
     const mentoring = await mentoringService.createMentoring(
       Number(mentor_id),

@@ -6,7 +6,15 @@ export class MentoringRepository extends Repository {
       where: {
         id,
       },
+      include: {
+        Mentoring_Attendee: {
+          include: {
+            Mentee: true,
+          },
+        },
+      },
     });
+
     return mentoring;
   }
 
@@ -15,7 +23,15 @@ export class MentoringRepository extends Repository {
       where: {
         mentor_id,
       },
+      include: {
+        Mentoring_Attendee: {
+          include: {
+            Mentee: true,
+          },
+        },
+      },
     });
+
     return mentorings;
   }
 
