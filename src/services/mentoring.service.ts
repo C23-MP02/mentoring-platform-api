@@ -74,3 +74,6 @@ export class MentoringService {
     return mentoringFeedback;
   }
 }
+
+const mentoringService = new MentoringService();
+export default mentoringService;

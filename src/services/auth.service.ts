@@ -1,22 +1,24 @@
 import { AuthRepository } from "../repositories/auth.repository";
 import { UserRecord } from "firebase-admin/lib/auth";
 import { UserRepository } from "../repositories/user.repository";
-import { FirebaseUpdateData } from "../typings/firebase.type";
 import { getRoleNameFromRoleId } from "../helpers/role";
 import { MentorRepository } from "../repositories/mentor.repository";
 import { MenteeRepository } from "../repositories/mentee.repository";
+import { FirestoreRepository } from "../repositories/user.firestore.repository";
 
 export class AuthService {
   private authRepository: AuthRepository;
   private userRepository: UserRepository;
   private menteeRepository: MenteeRepository;
   private mentorRepository: MentorRepository;
+  private firestoreRepository: FirestoreRepository;
 
   constructor() {
     this.authRepository = new AuthRepository();
     this.userRepository = new UserRepository();
     this.menteeRepository = new MenteeRepository();
     this.mentorRepository = new MentorRepository();
+    this.firestoreRepository = new FirestoreRepository();
   }
 
   async register(
@@ -66,6 +68,11 @@ export class AuthService {
         role: roleName!,
       });
 
+      await this.firestoreRepository.createDocument("users", uid, {
+        name: userRecord.displayName,
+        groups: [],
+      });
+
       return {
         success: true,
         data: userRecord,
@@ -75,3 +82,6 @@ export class AuthService {
     }
   }
 }
+
+const authService = new AuthService();
+export default authService;

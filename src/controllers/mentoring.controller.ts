@@ -1,8 +1,7 @@
 import { MentoringService } from "../services/mentoring.service";
 import { AuthenticatedRequest } from "../typings/request.type";
 import { Response } from "express";
-
-const mentoringService = new MentoringService();
+import mentoringService from "../services/mentoring.service";
 
 // TODO: Integrate with Google Calendar API
 export const createMentoring = async (

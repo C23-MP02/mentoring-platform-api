@@ -1,11 +1,7 @@
 import { AuthenticatedRequest } from "../typings/request.type";
 import { Response } from "express";
 import { deleteImage, uploadImage } from "../helpers/image";
-import { UserService } from "../services/user.service";
-import { AuthService } from "../services/auth.service";
-
-const userService = new UserService();
-const authService = new AuthService();
+import userService from "../services/user.service";
 
 export const getProfile = async (req: AuthenticatedRequest, res: Response) => {
   try {

@@ -10,3 +10,6 @@ export class MentorService {
     return mentors;
   }
 }
+
+const mentorService = new MentorService();
+export default mentorService;

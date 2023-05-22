@@ -99,3 +99,6 @@ export class UserRepository extends Repository {
     return user;
   }
 }
+
+const userRepository = new UserRepository();
+export default userRepository;

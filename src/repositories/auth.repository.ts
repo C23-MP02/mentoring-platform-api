@@ -32,3 +32,6 @@ export class AuthRepository {
     return userRecord;
   }
 }
+
+const authRepository = new AuthRepository();
+export default authRepository;

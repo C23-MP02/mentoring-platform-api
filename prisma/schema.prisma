@@ -97,39 +97,23 @@ model Mentoring_Attendee {
   rating       Int?
   feedback     String?
   en_feedback  String?
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @default(now())
-  Mentoring    Mentoring @relation(fields: [mentoring_id], references: [id])
-  Mentee       Mentee    @relation(fields: [mentee_id], references: [user_id])
+  sentiment_id Int?
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @default(now())
+  Mentoring    Mentoring  @relation(fields: [mentoring_id], references: [id])
+  Mentee       Mentee     @relation(fields: [mentee_id], references: [user_id])
+  Sentiment    Sentiment? @relation(fields: [sentiment_id], references: [id])
 
   @@id([mentoring_id, mentee_id])
 }
 
-// model Time_Availability {
-//   id           Int       @id @default(autoincrement())
-//   user_id      Int
-//   user         User      @relation(fields: [user_id], references: [id])
-//   time_slot_id Int
-//   time         Time_Slot @relation(fields: [time_slot_id], references: [id])
-//   created_at   DateTime  @default(now())
-//   updated_at   DateTime  @default(now())
-//   time_Slot2Id Int?
-// }
-
-// model Time_Slot {
-//   id                Int                 @id @default(autoincrement())
-//   day               Day
-//   time_id           Int
-//   time              Time                @relation(fields: [time_id], references: [id])
-//   Time_Availability Time_Availability[]
-// }
-
-// model Time {
-//   id         Int         @id @default(autoincrement())
-//   start_time String
-//   end_time   String
-//   Time_Slot  Time_Slot[]
-// }
+model Sentiment {
+  id                 Int                  @id @default(autoincrement())
+  name               String               @unique
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @default(now())
+  Mentoring_Attendee Mentoring_Attendee[]
+}
 
 enum Day {
   MON

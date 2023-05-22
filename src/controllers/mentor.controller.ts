@@ -1,8 +1,6 @@
 import { Response } from "express";
-import { MentorService } from "../services/mentor.service";
 import { AuthenticatedRequest } from "../typings/request.type";
-
-const mentorService = new MentorService();
+import mentorService from "../services/mentor.service";
 
 export const getAllMentors = async (
   req: AuthenticatedRequest,

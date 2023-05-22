@@ -11,6 +11,9 @@ Migrate Staging/Prod
 2. Run command
     npx prisma migrate deploy
 
+Seed DB
+npx prisma db seed
+
 Build Docker Image
 docker build . -t mentoring-platform-api
 
@@ -20,13 +23,18 @@ docker run -p 8080:8080 -d mentoring-platform-api
 ##############################################################################################
 GCLOUD CLOUD RUN DEPLOYMENT STEPS
 ##############################################################################################
-Build Docker Image on gcloud (change x to version. Current version: 0.0.4)
-gcloud docker build -t gcr.io/dicoding-mp/mentoring-platform-api:0.0.x .
+Build Docker Image (change x to version. Current version: 0.0.4)
+docker build -t gcr.io/dicoding-mp/mentoring-platform-api:0.0.x .
+
+docker build -t gcr.io/dicoding-mp/mentoring-platform-api .
+
+IF ASKING FOR PERMISSION
+gcloud auth configure-docker
 
 Push Docker Image to gcloud (change x to version. Current version: 0.0.4)
-gcloud docker push gcr.io/dicoding-mp/mentoring-platform-api:0.0.X
+docker push gcr.io/dicoding-mp/mentoring-platform-api
 
 Deploy Docker Image to gcloud (change x to version. Current version: 0.0.4)
-gcloud run deploy --image gcr.io/dicoding-mp/mentoring-platform-api:0.0.X --platform managed
+gcloud run deploy --image gcr.io/dicoding-mp/mentoring-platform-api
 ##############################################################################################
 

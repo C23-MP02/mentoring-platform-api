@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AuthService } from "../services/auth.service";
+import authService from "../services/auth.service";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -7,8 +7,6 @@ export const register = async (req: Request, res: Response) => {
 
     // Set as default role
     const menteeRole = 3;
-
-    const authService = new AuthService();
 
     const registrationResult = await authService.register(
       name,

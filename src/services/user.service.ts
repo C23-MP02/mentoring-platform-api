@@ -99,3 +99,6 @@ export class UserService {
     return updatedUser;
   }
 }
+
+const userService = new UserService();
+export default userService;
