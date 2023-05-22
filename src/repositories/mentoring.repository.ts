@@ -18,6 +18,19 @@ export class MentoringRepository extends Repository {
     return mentoring;
   }
 
+  async getMentorIdByMentoringId(id: number) {
+    const mentoring = await this.prisma.mentoring.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        mentor_id: true,
+      },
+    });
+
+    return mentoring;
+  }
+
   async getMentoringsByMentorId(mentor_id: number) {
     const mentorings = await this.prisma.mentoring.findMany({
       where: {

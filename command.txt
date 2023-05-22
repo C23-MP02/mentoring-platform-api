@@ -18,13 +18,15 @@ Run Docker Container
 docker run -p 8080:8080 -d mentoring-platform-api
 
 ##############################################################################################
-Build Docker Image on gcloud (change x to version. Current version: 0.0.3)
-gcloud docker build -t gcr.io/$PROJECT_ID/mentoring-platform-api:0.0.x .
+GCLOUD CLOUD RUN DEPLOYMENT STEPS
+##############################################################################################
+Build Docker Image on gcloud (change x to version. Current version: 0.0.4)
+gcloud docker build -t gcr.io/dicoding-mp/mentoring-platform-api:0.0.x .
 
-Push Docker Image to gcloud (change x to version. Current version: 0.0.3)
-gcloud docker push gcr.io/$PROJECT_ID/mentoring-platform-api:0.0.X
+Push Docker Image to gcloud (change x to version. Current version: 0.0.4)
+gcloud docker push gcr.io/dicoding-mp/mentoring-platform-api:0.0.X
 
-Deploy Docker Image to gcloud (change x to version. Current version: 0.0.3)
-gcloud run deploy --image gcr.io/$PROJECT_ID/mentoring-platform-api:0.0.X --platform managed
+Deploy Docker Image to gcloud (change x to version. Current version: 0.0.4)
+gcloud run deploy --image gcr.io/dicoding-mp/mentoring-platform-api:0.0.X --platform managed
 ##############################################################################################
 

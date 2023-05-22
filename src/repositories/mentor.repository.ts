@@ -27,4 +27,32 @@ export class MentorRepository extends Repository {
     });
     return mentor;
   }
+
+  async getMentorRating(user_id: number) {
+    const mentor = await this.prisma.mentor.findUnique({
+      where: {
+        user_id,
+      },
+      select: {
+        rating_average: true,
+        rating_count: true,
+      },
+    });
+    return mentor;
+  }
+
+  async updateMentorRating(user_id: number, rating_average: number) {
+    const mentor = await this.prisma.mentor.update({
+      where: {
+        user_id,
+      },
+      data: {
+        rating_count: {
+          increment: 1,
+        },
+        rating_average,
+      },
+    });
+    return mentor;
+  }
 }

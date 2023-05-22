@@ -30,7 +30,7 @@ export const createMentoring = async (
   }
 };
 
-export const mentoringFeedback = async (
+export const createMentoringFeedback = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {

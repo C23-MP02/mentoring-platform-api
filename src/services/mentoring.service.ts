@@ -1,13 +1,16 @@
+import { MentorRepository } from "../repositories/mentor.repository";
 import { MentoringRepository } from "../repositories/mentoring.repository";
 import { MentoringAttendeeRepository } from "../repositories/mentoringAttendee.repository";
 
 export class MentoringService {
   private mentoringRepository: MentoringRepository;
   private mentoringAttendeeRepository: MentoringAttendeeRepository;
+  private mentorRepository: MentorRepository;
 
   constructor() {
     this.mentoringRepository = new MentoringRepository();
     this.mentoringAttendeeRepository = new MentoringAttendeeRepository();
+    this.mentorRepository = new MentorRepository();
   }
 
   async createMentoring(
@@ -32,28 +35,41 @@ export class MentoringService {
     return mentoring;
   }
 
+  // TESTING REQUIRED
   async createMentoringFeedback(
-    mentee_id: number,
     mentoring_id: number,
+    mentee_id: number,
     feedback: string,
     rating: number
   ) {
-    const mentoringAttendee =
-      await this.mentoringAttendeeRepository.getMentoringAttendeeByMenteeIdAndMentoringId(
-        mentee_id,
-        mentoring_id
-      );
-
-    if (!mentoringAttendee) {
-      throw new Error("Mentoring Attendee not found");
-    }
-
     const mentoringFeedback =
       await this.mentoringAttendeeRepository.createMentoringFeedback(
-        mentoringAttendee!.id,
+        mentoring_id,
+        mentee_id,
         feedback,
         rating
       );
+
+    const mentor = await this.mentoringRepository.getMentorIdByMentoringId(
+      mentoring_id
+    );
+
+    const mentorRating = await this.mentorRepository.getMentorRating(
+      mentor!.mentor_id
+    );
+
+    if (mentorRating?.rating_average && mentorRating?.rating_count) {
+      const newRating =
+        (mentorRating.rating_average * mentorRating.rating_count + rating) /
+        (mentorRating.rating_count + 1);
+
+      await this.mentorRepository.updateMentorRating(
+        mentor!.mentor_id,
+        newRating
+      );
+    } else {
+      await this.mentorRepository.updateMentorRating(mentor!.mentor_id, rating);
+    }
 
     return mentoringFeedback;
   }
