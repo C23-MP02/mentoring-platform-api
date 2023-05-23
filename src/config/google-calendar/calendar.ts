@@ -9,8 +9,14 @@ const SCOPES = ["https://www.googleapis.com/auth/calendar"];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const TOKEN_PATH = path.join(process.cwd(), "token.json");
-const CREDENTIALS_PATH = path.join(process.cwd(), "credentials.json");
+const TOKEN_PATH = path.join(
+  process.cwd(),
+  "src/config/google-calendar/token.json"
+);
+const CREDENTIALS_PATH = path.join(
+  process.cwd(),
+  "src/config/google-calendar/credentials.json"
+);
 
 /**
  * Reads previously authorized credentials from the save file.
@@ -19,8 +25,8 @@ const CREDENTIALS_PATH = path.join(process.cwd(), "credentials.json");
  */
 async function loadSavedCredentialsIfExist(): Promise<OAuth2Client | null> {
   try {
-    const content = await readFile(TOKEN_PATH, "utf-8");
-    const credentials = JSON.parse(content);
+    // const content = await readFile(TOKEN_PATH, "utf-8");
+    const credentials = JSON.parse(process.env.GOOGLE_CALENDAR_TOKEN!);
     return google.auth.fromJSON(credentials) as OAuth2Client;
   } catch (err) {
     return null;
@@ -34,8 +40,8 @@ async function loadSavedCredentialsIfExist(): Promise<OAuth2Client | null> {
  * @return {Promise<void>}
  */
 async function saveCredentials(client: OAuth2Client): Promise<void> {
-  const content = await readFile(CREDENTIALS_PATH, "utf-8");
-  const keys = JSON.parse(content);
+  // const content = await readFile(CREDENTIALS_PATH, "utf-8");
+  const keys = JSON.parse(process.env.GOOGLE_CALENDAR_CREDENTIALS!);
   const key = keys.installed || keys.web;
   const payload = JSON.stringify({
     type: "authorized_user",

@@ -2,7 +2,7 @@ import { auth } from "firebase-admin";
 import { firebaseAuth } from "../config/firebase";
 import { FirebaseUpdateData } from "../typings/firebase.type";
 
-export class AuthRepository {
+export default class AuthRepository {
   async createUser(
     uid: string,
     name: string,
@@ -32,6 +32,3 @@ export class AuthRepository {
     return userRecord;
   }
 }
-
-const authRepository = new AuthRepository();
-export default authRepository;

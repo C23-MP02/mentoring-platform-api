@@ -1,4 +1,4 @@
-import { MentorRepository } from "../repositories/mentor.repository";
+import MentorRepository from "../repositories/mentor.repository";
 
 export class MentorService {
   private mentorRepository: MentorRepository;

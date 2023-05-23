@@ -5,10 +5,10 @@ import {
   UserInterests,
   UserUpdateInput,
 } from "../models/user.model";
-import { AuthRepository } from "../repositories/auth.repository";
-import { MenteeRepository } from "../repositories/mentee.repository";
-import { MentorRepository } from "../repositories/mentor.repository";
-import { UserRepository } from "../repositories/user.repository";
+import AuthRepository from "../repositories/auth.repository";
+import MenteeRepository from "../repositories/mentee.repository";
+import MentorRepository from "../repositories/mentor.repository";
+import UserRepository from "../repositories/user.repository";
 
 export class UserService {
   private userRepository: UserRepository;

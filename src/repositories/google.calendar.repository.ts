@@ -9,7 +9,7 @@ interface Attendee {
   email: string;
 }
 
-export class GoogleCalendarRepository {
+export default class GoogleCalendarRepository {
   protected auth: () => Promise<OAuth2Client>;
 
   constructor() {
@@ -21,11 +21,19 @@ export class GoogleCalendarRepository {
     endTime: string,
     summary: string,
     description: string,
-    attendees: Attendee[]
+    mentorEmail: string,
+    menteeEmail: string[]
   ) {
     const auth = await this.auth();
     const calendar = google.calendar({ version: "v3", auth });
     const requestId = uid();
+
+    const attendees: Attendee[] = [];
+    attendees.push({ email: mentorEmail });
+
+    for (const email of menteeEmail) {
+      attendees.push({ email });
+    }
 
     const event = {
       summary,
@@ -53,6 +61,14 @@ export class GoogleCalendarRepository {
       },
     };
 
-    // TODO
+    const res = await calendar.events.insert({
+      auth,
+      calendarId: "primary",
+      conferenceDataVersion: 1,
+      sendUpdates: "all",
+      requestBody: event,
+    });
+
+    return res.data;
   }
 }

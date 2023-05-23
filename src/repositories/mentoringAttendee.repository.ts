@@ -1,6 +1,6 @@
 import { Repository } from "./index.repository";
 
-export class MentoringAttendeeRepository extends Repository {
+export default class MentoringAttendeeRepository extends Repository {
   async createMentoringAttendee(mentoring_id: number, mentee_id: number) {
     const mentoringAttendee = await this.prisma.mentoring_Attendee.create({
       data: {

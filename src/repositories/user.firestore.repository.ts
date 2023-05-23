@@ -1,6 +1,6 @@
 import { firestore } from "../config/firebase";
 
-export class FirestoreRepository {
+export default class FirestoreRepository {
   protected firestore: FirebaseFirestore.Firestore;
 
   constructor() {

@@ -1,10 +1,11 @@
-import { AuthRepository } from "../repositories/auth.repository";
+import AuthRepository from "../repositories/auth.repository";
+import UserRepository from "../repositories/user.repository";
+import MentorRepository from "../repositories/mentor.repository";
+import MenteeRepository from "../repositories/mentee.repository";
+import FirestoreRepository from "../repositories/user.firestore.repository";
+
 import { UserRecord } from "firebase-admin/lib/auth";
-import { UserRepository } from "../repositories/user.repository";
 import { getRoleNameFromRoleId } from "../helpers/role";
-import { MentorRepository } from "../repositories/mentor.repository";
-import { MenteeRepository } from "../repositories/mentee.repository";
-import { FirestoreRepository } from "../repositories/user.firestore.repository";
 
 export class AuthService {
   private authRepository: AuthRepository;

@@ -7,7 +7,7 @@ import {
 } from "../models/user.model";
 import { Repository } from "./index.repository";
 
-export class UserRepository extends Repository {
+export default class UserRepository extends Repository {
   async createUser(user: UserCreateInput): Promise<User> {
     const newUser = await this.prisma.user.create({
       data: user,
@@ -99,6 +99,3 @@ export class UserRepository extends Repository {
     return user;
   }
 }
-
-const userRepository = new UserRepository();
-export default userRepository;

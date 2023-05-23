@@ -1,6 +1,6 @@
 import { Repository } from "./index.repository";
 
-export class MentoringRepository extends Repository {
+export default class MentoringRepository extends Repository {
   async getMentoringById(id: number) {
     const mentoring = await this.prisma.mentoring.findUnique({
       where: {
@@ -48,7 +48,11 @@ export class MentoringRepository extends Repository {
     return mentorings;
   }
 
-  async createMentoring(mentor_id: number, start_time: Date, end_time: Date) {
+  async createMentoring(
+    mentor_id: number,
+    start_time: string,
+    end_time: string
+  ) {
     const mentoring = await this.prisma.mentoring.create({
       data: {
         mentor_id,
@@ -59,7 +63,7 @@ export class MentoringRepository extends Repository {
     return mentoring;
   }
 
-  async updateMentoring(id: number, start_time: Date, end_time: Date) {
+  async updateMentoring(id: number, start_time: string, end_time: string) {
     const mentoring = await this.prisma.mentoring.update({
       where: {
         id,

@@ -1,6 +1,6 @@
 import { Repository } from "./index.repository";
 
-export class MentorRepository extends Repository {
+export default class MentorRepository extends Repository {
   async getAllMentors() {
     const mentors = await this.prisma.mentor.findMany({
       include: {
@@ -8,6 +8,18 @@ export class MentorRepository extends Repository {
       },
     });
     return mentors;
+  }
+
+  async getMentorById(user_id: number) {
+    const mentor = await this.prisma.mentor.findUnique({
+      where: {
+        user_id,
+      },
+      include: {
+        User: true,
+      },
+    });
+    return mentor;
   }
 
   async createMentor(user_id: number) {
