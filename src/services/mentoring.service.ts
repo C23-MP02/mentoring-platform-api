@@ -81,9 +81,9 @@ export class MentoringService {
       mentor!.mentor_id
     );
 
-    if (mentorRating?.rating_average && mentorRating?.rating_count) {
+    if (mentorRating?.average_rating && mentorRating?.rating_count) {
       const newRating =
-        (mentorRating.rating_average * mentorRating.rating_count + rating) /
+        (mentorRating.average_rating * mentorRating.rating_count + rating) /
         (mentorRating.rating_count + 1);
 
       await this.mentorRepository.updateMentorRating(

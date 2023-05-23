@@ -72,7 +72,7 @@ model Mentee {
 
 model Mentor {
   user_id        Int         @unique
-  rating_average Float?
+  average_rating Float?
   rating_count   Int?
   created_at     DateTime    @default(now()) @map("created_at")
   updated_at     DateTime    @default(now()) @map("updated_at")

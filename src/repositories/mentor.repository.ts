@@ -46,14 +46,14 @@ export default class MentorRepository extends Repository {
         user_id,
       },
       select: {
-        rating_average: true,
+        average_rating: true,
         rating_count: true,
       },
     });
     return mentor;
   }
 
-  async updateMentorRating(user_id: number, rating_average: number) {
+  async updateMentorRating(user_id: number, average_rating: number) {
     const mentor = await this.prisma.mentor.update({
       where: {
         user_id,
@@ -62,7 +62,7 @@ export default class MentorRepository extends Repository {
         rating_count: {
           increment: 1,
         },
-        rating_average,
+        average_rating,
       },
     });
     return mentor;
