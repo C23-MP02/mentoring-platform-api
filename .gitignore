@@ -3,4 +3,5 @@ node_modules
 .env
 dist
 serviceAccountKey.json
-OAuth.json
+/src/config/google-calendar/credentials.json
+/src/config/google-calendar/token.json

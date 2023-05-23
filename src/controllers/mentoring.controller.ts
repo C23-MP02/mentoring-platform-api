@@ -1,4 +1,3 @@
-import { MentoringService } from "../services/mentoring.service";
 import { AuthenticatedRequest } from "../typings/request.type";
 import { Response } from "express";
 import mentoringService from "../services/mentoring.service";
