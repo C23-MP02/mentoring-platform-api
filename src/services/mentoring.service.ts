@@ -96,6 +96,45 @@ export class MentoringService {
 
     return mentoringFeedback;
   }
+
+  async getMentoringsSchedule(
+    user_id: number,
+    role: string,
+    from_date?: string
+  ) {
+    let mentoring;
+    if (from_date) {
+      if (role === "mentor") {
+        mentoring =
+          await this.mentoringRepository.getFilteredMentoringsByMentorIdAndFromDate(
+            user_id,
+            from_date
+          );
+
+        return mentoring;
+      } else { // if role is mentee
+        mentoring =
+          await this.mentoringAttendeeRepository.getFilteredMentoringByMenteeIdAndFromDate(
+            user_id,
+            from_date
+          );
+
+        return mentoring;
+      }
+    } else { // if no filter date
+      if (role === "mentor") {
+        mentoring =
+          await this.mentoringRepository.getMentoringsByMentorId(user_id);
+
+        return mentoring;
+      } else { // if role is mentee
+        mentoring =
+          await this.mentoringAttendeeRepository.getMentoringByMenteeId(user_id);
+
+        return mentoring;
+      }
+    }
+  }
 }
 
 const mentoringService = new MentoringService();

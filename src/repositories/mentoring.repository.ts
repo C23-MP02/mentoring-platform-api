@@ -39,7 +39,35 @@ export default class MentoringRepository extends Repository {
       include: {
         Mentoring_Attendee: {
           include: {
-            Mentee: true,
+            Mentee: {
+              include: {
+                User: true
+              }
+            },
+          },
+        },
+      },
+    });
+
+    return mentorings;
+  }
+
+  async getFilteredMentoringsByMentorIdAndFromDate(mentor_id: number, from_date: string) {
+    const mentorings = await this.prisma.mentoring.findMany({
+      where: {
+        mentor_id,
+        start_time: {
+          gte: new Date(from_date),
+        },
+      },
+      include: {
+        Mentoring_Attendee: {
+          include: {
+            Mentee: {
+              include: {
+                User: true
+              }
+            },
           },
         },
       },
