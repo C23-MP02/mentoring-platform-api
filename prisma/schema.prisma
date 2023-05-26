@@ -16,11 +16,6 @@ model Role {
   User User[]
 }
 
-// model Times {
-//   id   Int    @id @default(autoincrement())
-//   name String @unique
-// }
-
 model Gender {
   id   Int    @id @default(autoincrement())
   name String @unique
@@ -30,7 +25,7 @@ model Gender {
 model User {
   id                     Int      @id @default(autoincrement())
   name                   String
-  role_id                Int      @default(2)
+  role_id                Int      @default(3)
   gender_id              Int?
   email                  String   @unique
   address                String?
@@ -73,7 +68,7 @@ model Mentee {
 model Mentor {
   user_id        Int         @unique
   average_rating Float?
-  rating_count   Int?
+  rating_count   Int         @default(0)
   created_at     DateTime    @default(now()) @map("created_at")
   updated_at     DateTime    @default(now()) @map("updated_at")
   User           User        @relation(fields: [user_id], references: [id])
@@ -85,6 +80,8 @@ model Mentoring {
   mentor_id          Int
   start_time         DateTime
   end_time           DateTime
+  event_id           String?
+  meeting_id         String?
   created_at         DateTime             @default(now())
   updated_at         DateTime             @default(now())
   Mentor             Mentor               @relation(fields: [mentor_id], references: [user_id])

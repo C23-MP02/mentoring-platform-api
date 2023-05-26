@@ -1,3 +1,4 @@
+import { MentoringUpdateInput } from "../typings/mentoring.type";
 import { Repository } from "./index.repository";
 
 export default class MentoringRepository extends Repository {
@@ -41,8 +42,8 @@ export default class MentoringRepository extends Repository {
           include: {
             Mentee: {
               include: {
-                User: true
-              }
+                User: true,
+              },
             },
           },
         },
@@ -52,12 +53,15 @@ export default class MentoringRepository extends Repository {
     return mentorings;
   }
 
-  async getFilteredMentoringsByMentorIdAndFromDate(mentor_id: number, from_date: string) {
+  async getFilteredMentoringsByMentorIdAndFromDate(
+    mentor_id: number,
+    from_date: string
+  ) {
     const mentorings = await this.prisma.mentoring.findMany({
       where: {
         mentor_id,
         start_time: {
-          gte: new Date(from_date),
+          gte: from_date,
         },
       },
       include: {
@@ -65,8 +69,8 @@ export default class MentoringRepository extends Repository {
           include: {
             Mentee: {
               include: {
-                User: true
-              }
+                User: true,
+              },
             },
           },
         },
@@ -91,7 +95,24 @@ export default class MentoringRepository extends Repository {
     return mentoring;
   }
 
-  async updateMentoring(id: number, start_time: string, end_time: string) {
+  async updateMentoringById(id: number, data: MentoringUpdateInput) {
+    const mentoring = await this.prisma.mentoring.update({
+      where: {
+        id,
+      },
+      data: {
+        ...data,
+        updated_at: new Date(),
+      },
+    });
+    return mentoring;
+  }
+
+  async updateMentoringTimeById(
+    id: number,
+    start_time: string,
+    end_time: string
+  ) {
     const mentoring = await this.prisma.mentoring.update({
       where: {
         id,
@@ -105,7 +126,7 @@ export default class MentoringRepository extends Repository {
     return mentoring;
   }
 
-  async deleteMentoring(id: number) {
+  async deleteMentoringById(id: number) {
     const mentoring = await this.prisma.mentoring.delete({
       where: {
         id,

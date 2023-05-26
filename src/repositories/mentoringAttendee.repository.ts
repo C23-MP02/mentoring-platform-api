@@ -43,79 +43,71 @@ export default class MentoringAttendeeRepository extends Repository {
       data: {
         feedback,
         rating,
+        updated_at: new Date(),
       },
     });
 
     return mentoringFeedback;
   }
 
-  async getMentoringByMenteeId(mentee_id: number) {
-    const mentoring: MentoringScheduleByMentee[] = await this.prisma.mentoring_Attendee.findMany({
-      where: {
-        mentee_id,
-      },
-      include: {
-        Mentoring: {
-          select: {
-            start_time: true,
-            end_time: true,
-            Mentor: {
-              select: {
-                User: {
-                  select: {
-                    name: true,
+  async getMentoringsByMenteeId(mentee_id: number) {
+    const mentoring: MentoringScheduleByMentee[] =
+      await this.prisma.mentoring_Attendee.findMany({
+        where: {
+          mentee_id,
+        },
+        include: {
+          Mentoring: {
+            select: {
+              start_time: true,
+              end_time: true,
+              meeting_id: true,
+              event_id: true,
+              Mentor: {
+                select: {
+                  User: {
+                    select: {
+                      name: true,
+                    },
                   },
                 },
               },
             },
           },
         },
-      },
-    });
-  
-    const formattedMentoring = mentoring.map((data) => ({
-      name: data.Mentoring.Mentor.User.name,
-      start_time: data.Mentoring.start_time,
-      end_time: data.Mentoring.end_time,
-    }));
-  
-    return formattedMentoring;
-  }
-  
+      });
 
-  async getFilteredMentoringByMenteeIdAndFromDate(
+    return mentoring;
+  }
+
+  async getFilteredMentoringsByMenteeIdAndFromDate(
     mentee_id: number,
     from_date: string
   ) {
-    const mentoring: MentoringScheduleByMentee[] = await this.prisma.mentoring_Attendee.findMany({
-      where: {
-        mentee_id,
-        Mentoring: {
-          start_time: {
-            gte: new Date(from_date),
+    const mentoring: MentoringScheduleByMentee[] =
+      await this.prisma.mentoring_Attendee.findMany({
+        where: {
+          mentee_id,
+          Mentoring: {
+            start_time: {
+              gte: new Date(from_date),
+            },
           },
         },
-      },
 
-      include: {
-        Mentoring: {
-          include: {
-            Mentor: {
-              include: {
-                User: true,
+        include: {
+          Mentoring: {
+            include: {
+              Mentor: {
+                include: {
+                  User: true,
+                },
               },
             },
           },
         },
-      },
-    });
+      });
 
-    const formattedMentoring = mentoring.map((data) => ({
-      name: data.Mentoring.Mentor.User.name,
-      start_time: data.Mentoring.start_time,
-      end_time: data.Mentoring.end_time,
-    }));
-  
-    return formattedMentoring;
+    return mentoring;
   }
 }

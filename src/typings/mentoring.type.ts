@@ -10,6 +10,8 @@ export interface MentoringScheduleByMentee {
   Mentoring: {
     start_time: Date;
     end_time: Date;
+    meeting_id: string | null;
+    event_id: string | null;
     Mentor: {
       User: {
         name: string;
@@ -17,3 +19,12 @@ export interface MentoringScheduleByMentee {
     };
   };
 }
+
+export type MentoringUpdateInput = {
+  start_time?: Date | string;
+  end_time?: Date | string;
+  event_id?: string | null;
+  meeting_id?: string | null;
+  created_at?: Date | string;
+  updated_at?: Date | string;
+};

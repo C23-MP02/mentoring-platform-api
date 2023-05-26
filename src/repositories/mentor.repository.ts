@@ -63,6 +63,7 @@ export default class MentorRepository extends Repository {
           increment: 1,
         },
         average_rating,
+        updated_at: new Date(),
       },
     });
     return mentor;

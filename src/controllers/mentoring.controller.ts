@@ -36,8 +36,8 @@ export const createMentoringFeedback = async (
     const { mentoring_id, feedback, rating } = req.body;
 
     const mentoringFeedback = await mentoringService.createMentoringFeedback(
-      Number(mentee_id),
       mentoring_id,
+      Number(mentee_id),
       feedback,
       rating
     );

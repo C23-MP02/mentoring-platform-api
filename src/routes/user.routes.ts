@@ -14,10 +14,10 @@ router.get("/", getProfile);
 router.get("/interest", getInterest);
 router.get("/days", getAvailability);
 
-router.post("/", updateProfile);
-router.post("/interest", updateInterests);
-router.post("/days", updateDaysAvailability);
-router.post("/role", updateRole);
-router.post("/avatar", uploadAvatar);
+router.put("/", updateProfile);
+router.put("/interest", updateInterests);
+router.put("/days", updateDaysAvailability);
+router.put("/role", updateRole);
+router.put("/avatar", uploadAvatar);
 
 export default router;

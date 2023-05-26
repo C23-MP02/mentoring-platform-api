@@ -3,6 +3,7 @@ import MenteeRepository from "../repositories/mentee.repository";
 import MentorRepository from "../repositories/mentor.repository";
 import MentoringRepository from "../repositories/mentoring.repository";
 import MentoringAttendeeRepository from "../repositories/mentoringAttendee.repository";
+import { formatMentoringDataFromMentee } from "../utils/dataFormatter";
 
 export class MentoringService {
   private mentoringRepository: MentoringRepository;
@@ -26,15 +27,14 @@ export class MentoringService {
     start_time: string,
     end_time: string
   ) {
+    const mentorData = await this.mentorRepository.getMentorById(mentor_id);
+    const menteesData = [];
+
     const mentoring = await this.mentoringRepository.createMentoring(
       mentor_id,
       start_time,
       end_time
     );
-
-    const mentorData = await this.mentorRepository.getMentorById(mentor_id);
-
-    const menteesData = [];
 
     for (const mentee_id of mentees_id) {
       await this.mentoringAttendeeRepository.createMentoringAttendee(
@@ -46,16 +46,27 @@ export class MentoringService {
       menteesData.push(menteeData);
     }
 
-    await this.googleCalendarRepository.createEvent(
+    const calendarData = await this.googleCalendarRepository.createEvent(
       start_time,
       end_time,
-      "Mentoring 1-on-1",
-      "Description",
+      `Mentoring Session with ${mentorData!.User.name}`,
+      `This event is created automatically by Mentoring Platform.
+      \nMentee(s): ${menteesData.map((mentee) => mentee!.User.name).join(", ")}
+        \nMentor: ${mentorData!.User.name}
+        `,
       mentorData!.User.email,
       menteesData.map((mentee) => mentee!.User.email)
     );
 
-    return mentoring;
+    const updatedMentoring = await this.mentoringRepository.updateMentoringById(
+      mentoring.id,
+      {
+        event_id: calendarData.id,
+        meeting_id: calendarData.conferenceData?.conferenceId,
+      }
+    );
+
+    return updatedMentoring;
   }
 
   // TESTING REQUIRED
@@ -103,36 +114,35 @@ export class MentoringService {
     from_date?: string
   ) {
     let mentoring;
-    if (from_date) {
-      if (role === "mentor") {
+    if (role === "mentor") {
+      if (from_date) {
         mentoring =
           await this.mentoringRepository.getFilteredMentoringsByMentorIdAndFromDate(
             user_id,
             from_date
           );
-
-        return mentoring;
-      } else { // if role is mentee
+      } else {
+        mentoring = await this.mentoringRepository.getMentoringsByMentorId(
+          user_id
+        );
+      }
+      // TODO Kat
+      return mentoring;
+    } else {
+      // if role is mentee
+      if (from_date) {
         mentoring =
-          await this.mentoringAttendeeRepository.getFilteredMentoringByMenteeIdAndFromDate(
+          await this.mentoringAttendeeRepository.getFilteredMentoringsByMenteeIdAndFromDate(
             user_id,
             from_date
           );
-
-        return mentoring;
-      }
-    } else { // if no filter date
-      if (role === "mentor") {
+      } else {
         mentoring =
-          await this.mentoringRepository.getMentoringsByMentorId(user_id);
-
-        return mentoring;
-      } else { // if role is mentee
-        mentoring =
-          await this.mentoringAttendeeRepository.getMentoringByMenteeId(user_id);
-
-        return mentoring;
+          await this.mentoringAttendeeRepository.getMentoringsByMenteeId(
+            user_id
+          );
       }
+      return formatMentoringDataFromMentee(mentoring);
     }
   }
 }

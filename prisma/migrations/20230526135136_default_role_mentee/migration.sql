@@ -8,7 +8,8 @@
 ALTER TABLE `user` DROP FOREIGN KEY `User_gender_id_fkey`;
 
 -- AlterTable
-ALTER TABLE `user` MODIFY `gender_id` INTEGER NOT NULL;
+ALTER TABLE `user` MODIFY `role_id` INTEGER NOT NULL DEFAULT 3,
+    MODIFY `gender_id` INTEGER NOT NULL;
 
 -- AddForeignKey
 ALTER TABLE `User` ADD CONSTRAINT `User_gender_id_fkey` FOREIGN KEY (`gender_id`) REFERENCES `Gender`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
