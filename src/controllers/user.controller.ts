@@ -52,10 +52,12 @@ export const updateProfile = async (
     const id = req.userId;
     const { name, email, gender_id, bio, phone } = req.body;
 
+    const parsedGenderId = parseInt(gender_id, 10);
+
     const updatedUser = await userService.updateUser(id!, {
       name,
       email,
-      gender_id,
+      gender_id: parsedGenderId,
       bio,
       phone,
     });
