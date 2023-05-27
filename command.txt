@@ -24,8 +24,6 @@ docker run -p 8080:8080 -d mentoring-platform-api
 GCLOUD CLOUD RUN DEPLOYMENT STEPS
 ##############################################################################################
 Build Docker Image (change x to version. Current version: 0.0.4)
-docker build -t gcr.io/dicoding-mp/mentoring-platform-api:0.0.x .
-
 docker build -t gcr.io/dicoding-mp/mentoring-platform-api .
 
 IF ASKING FOR PERMISSION

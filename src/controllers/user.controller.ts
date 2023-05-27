@@ -88,18 +88,23 @@ export const updateInterests = async (
       is_path_gcp,
     } = req.body;
 
-    const updatedUser = await userService.updateUser(id!, {
-      is_path_android,
-      is_path_web,
-      is_path_ios,
-      is_path_ml,
-      is_path_flutter,
-      is_path_fe,
-      is_path_be,
-      is_path_react,
-      is_path_devops,
-      is_path_gcp,
-    });
+    const interestBoolean = {
+      is_path_android: is_path_android == "true",
+      is_path_web: is_path_web == "true",
+      is_path_ios: is_path_ios == "true",
+      is_path_ml: is_path_ml == "true",
+      is_path_flutter: is_path_flutter == "true",
+      is_path_fe: is_path_fe == "true",
+      is_path_be: is_path_be == "true",
+      is_path_react: is_path_react == "true",
+      is_path_devops: is_path_devops == "true",
+      is_path_gcp: is_path_gcp == "true",
+    };
+
+    const updatedUser = await userService.updateUserInterests(
+      id!,
+      interestBoolean
+    );
 
     return res
       .status(200)

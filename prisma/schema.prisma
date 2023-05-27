@@ -91,7 +91,7 @@ model Mentoring {
 model Mentoring_Attendee {
   mentoring_id Int
   mentee_id    Int
-  rating       Int?
+  rating       Float?
   feedback     String?
   en_feedback  String?
   sentiment_id Int?
