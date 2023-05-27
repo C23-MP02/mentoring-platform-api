@@ -149,15 +149,17 @@ export const updateDaysAvailability = async (
       is_sunday_available,
     } = req.body;
 
-    const updatedUser = await userService.updateUserDaysAvailability(id!, {
-      is_monday_available,
-      is_tuesday_available,
-      is_wednesday_available,
-      is_thursday_available,
-      is_friday_available,
-      is_saturday_available,
-      is_sunday_available,
-    });
+    const daysAvailability = {
+      is_monday_available: is_monday_available == "true",
+      is_tuesday_available: is_tuesday_available == "true",
+      is_wednesday_available: is_wednesday_available == "true",
+      is_thursday_available: is_thursday_available == "true",
+      is_friday_available: is_friday_available == "true",
+      is_saturday_available: is_saturday_available == "true",
+      is_sunday_available: is_sunday_available == "true",
+    };
+
+    const updatedUser = await userService.updateUserDaysAvailability(id!, daysAvailability);
 
     return res
       .status(200)
