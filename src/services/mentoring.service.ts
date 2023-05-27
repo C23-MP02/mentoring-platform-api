@@ -46,11 +46,11 @@ export class MentoringService {
 
       await this.mentoringAttendeeRepository.createMentoringAttendee(
         mentoring.id,
-        Number(int_mentee_id)
+        int_mentee_id
       );
 
       const menteeData = await this.menteeRepository.getMenteeById(
-        Number(int_mentee_id)
+        int_mentee_id
       );
       menteesData.push(menteeData);
     }
