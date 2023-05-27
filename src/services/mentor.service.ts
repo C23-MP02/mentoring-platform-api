@@ -6,6 +6,7 @@ export class MentorService {
     this.mentorRepository = new MentorRepository();
   }
   async getAllMentors() {
+    // TODO: Integrate with ML API
     const mentors = await this.mentorRepository.getAllMentors();
     return mentors;
   }
