@@ -3,7 +3,7 @@ import MenteeRepository from "../repositories/mentee.repository";
 import MentorRepository from "../repositories/mentor.repository";
 import MentoringRepository from "../repositories/mentoring.repository";
 import MentoringAttendeeRepository from "../repositories/mentoringAttendee.repository";
-import { formatMentoringDataFromMentee } from "../utils/dataFormatter";
+import { formatMentoringDataFromMentee, formatMentoringDataFromMentor } from "../utils/dataFormatter";
 
 export class MentoringService {
   private mentoringRepository: MentoringRepository;
@@ -127,7 +127,7 @@ export class MentoringService {
         );
       }
       // TODO Kat
-      return mentoring;
+      return formatMentoringDataFromMentor(mentoring);
     } else {
       // if role is mentee
       if (from_date) {
