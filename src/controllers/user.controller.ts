@@ -122,7 +122,7 @@ export const updateRole = async (req: AuthenticatedRequest, res: Response) => {
     const id = req.userId;
     const { role_id } = req.body;
 
-    const updatedUser = await userService.updateUserRole(id!, role_id);
+    const updatedUser = await userService.updateUserRole(id!, Number(role_id));
 
     return res
       .status(200)

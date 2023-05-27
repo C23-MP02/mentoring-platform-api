@@ -27,7 +27,7 @@ export class MentoringService {
   // TESTING REQUIRED
   async createMentoring(
     mentor_id: number,
-    mentees_id: number[],
+    mentees_id: string[],
     start_time: string,
     end_time: string
   ) {
@@ -41,12 +41,17 @@ export class MentoringService {
     );
 
     for (const mentee_id of mentees_id) {
+      // Converting mentee_id from string to int
+      const int_mentee_id = Number(mentee_id);
+
       await this.mentoringAttendeeRepository.createMentoringAttendee(
         mentoring.id,
-        mentee_id
+        Number(int_mentee_id)
       );
 
-      const menteeData = await this.menteeRepository.getMenteeById(mentee_id);
+      const menteeData = await this.menteeRepository.getMenteeById(
+        Number(int_mentee_id)
+      );
       menteesData.push(menteeData);
     }
 
@@ -54,10 +59,7 @@ export class MentoringService {
       start_time,
       end_time,
       `Mentoring Session with ${mentorData!.User.name}`,
-      `This event is created automatically by Mentoring Platform.
-      \nMentee(s): ${menteesData.map((mentee) => mentee!.User.name).join(", ")}
-        \nMentor: ${mentorData!.User.name}
-        `,
+      `Mentee(s): ${menteesData.map((mentee) => mentee!.User.name).join(", ")}`,
       mentorData!.User.email,
       menteesData.map((mentee) => mentee!.User.email)
     );

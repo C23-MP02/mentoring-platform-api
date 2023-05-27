@@ -14,7 +14,7 @@ export const createMentoring = async (
   try {
     const mentoring = await mentoringService.createMentoring(
       Number(mentor_id),
-      mentees_id as number[],
+      mentees_id as string[],
       start_time,
       end_time
     );
@@ -50,7 +50,7 @@ export const createMentoringFeedback = async (
       feedback,
       translatedAndSentimentedFeedback.data[0].translate,
       translatedAndSentimentedFeedback.data[0].sentiment,
-      rating
+      Number(rating)
     );
 
     return res.status(200).json({
