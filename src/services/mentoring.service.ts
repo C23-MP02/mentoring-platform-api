@@ -3,6 +3,7 @@ import MenteeRepository from "../repositories/mentee.repository";
 import MentorRepository from "../repositories/mentor.repository";
 import MentoringRepository from "../repositories/mentoring.repository";
 import MentoringAttendeeRepository from "../repositories/mentoringAttendee.repository";
+import { getSentimentId } from "../utils/dataConverter";
 import {
   formatMentoringDataFromMentee,
   formatMentoringDataFromMentor,
@@ -77,13 +78,19 @@ export class MentoringService {
     mentoring_id: number,
     mentee_id: number,
     feedback: string,
+    en_feedback: string,
+    sentiment: string,
     rating: number
   ) {
+    const sentiment_id = getSentimentId(sentiment);
+
     const mentoringFeedback =
       await this.mentoringAttendeeRepository.createMentoringFeedback(
         mentoring_id,
         mentee_id,
         feedback,
+        en_feedback,
+        sentiment_id,
         rating
       );
 

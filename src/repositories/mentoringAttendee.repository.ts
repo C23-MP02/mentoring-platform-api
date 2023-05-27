@@ -31,6 +31,8 @@ export default class MentoringAttendeeRepository extends Repository {
     mentoring_id: number,
     mentee_id: number,
     feedback: string,
+    en_feedback: string,
+    sentiment_id: number,
     rating: number
   ) {
     const mentoringFeedback = await this.prisma.mentoring_Attendee.update({
@@ -43,6 +45,8 @@ export default class MentoringAttendeeRepository extends Repository {
       data: {
         feedback,
         rating,
+        en_feedback,
+        sentiment_id,
         updated_at: new Date(),
       },
     });

@@ -36,3 +36,12 @@ export type MentoringUpdateInput = {
   created_at?: Date | string;
   updated_at?: Date | string;
 };
+
+export type MentoringFeedbackInput = {
+  mentoring_id: number;
+  mentee_id: number;
+  feedback: string;
+  en_feedback: string;
+  sentiment: string;
+  rating: number;
+};
