@@ -1,15 +1,22 @@
-import { AuthenticatedRequest } from "../typings/request.type";
-import { Response } from "express";
-import mentoringService from "../services/mentoring.service";
 import axios from "axios";
+import { DateTime } from "luxon";
+import { Response } from "express";
+
+import { AuthenticatedRequest } from "../typings/request.type";
+import mentoringService from "../services/mentoring.service";
 import { translatedAndSentimentedFeedback } from "../typings/response.type";
 
 export const createMentoring = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {
-  const { mentees_id, start_time, end_time } = req.body;
+  const { mentees_id, start_time } = req.body;
+  let { end_time } = req.body;
   const mentor_id = req.userId;
+
+  if (!end_time) {
+    end_time = DateTime.fromISO(start_time).plus({ hours: 1 }).toISO();
+  }
 
   try {
     const mentoring = await mentoringService.createMentoring(
