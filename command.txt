@@ -36,3 +36,6 @@ Deploy Docker Image to gcloud (change x to version. Current version: 0.0.4)
 gcloud run deploy --image gcr.io/dicoding-mp/mentoring-platform-api
 ##############################################################################################
 
+docker build -t gcr.io/dicoding-mp/mentoring-platform-api .
+docker push gcr.io/dicoding-mp/mentoring-platform-api
+gcloud run deploy --image gcr.io/dicoding-mp/mentoring-platform-api

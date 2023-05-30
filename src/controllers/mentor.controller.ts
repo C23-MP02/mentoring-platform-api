@@ -17,3 +17,21 @@ export const getAllMentors = async (
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const getMentorDashboard = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const mentor_id = req.userId;
+
+    const dashboard = await mentorService.getMentorDashboard(Number(mentor_id));
+
+    return res
+      .status(200)
+      .json({ message: "Get mentor dashboard success", dashboard });
+  } catch (error: any) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};

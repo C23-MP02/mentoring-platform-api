@@ -66,13 +66,14 @@ model Mentee {
 }
 
 model Mentor {
-  user_id        Int         @unique
-  average_rating Float?
-  rating_count   Int         @default(0)
-  created_at     DateTime    @default(now()) @map("created_at")
-  updated_at     DateTime    @default(now()) @map("updated_at")
-  User           User        @relation(fields: [user_id], references: [id])
-  Mentoring      Mentoring[]
+  user_id          Int         @unique
+  average_rating   Float?
+  rating_count     Int         @default(0)
+  feedback_summary String?
+  created_at       DateTime    @default(now()) @map("created_at")
+  updated_at       DateTime    @default(now()) @map("updated_at")
+  User             User        @relation(fields: [user_id], references: [id])
+  Mentoring        Mentoring[]
 }
 
 model Mentoring {

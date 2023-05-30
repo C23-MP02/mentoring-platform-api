@@ -22,6 +22,20 @@ export default class MentorRepository extends Repository {
     return mentor;
   }
 
+  async getMentorSummaryById(user_id: number) {
+    const mentor = await this.prisma.mentor.findUnique({
+      where: {
+        user_id,
+      },
+      select: {
+        average_rating: true,
+        rating_count: true,
+        feedback_summary: true
+      },
+    });
+    return mentor;
+  }
+
   async createMentor(user_id: number) {
     const mentor = await this.prisma.mentor.create({
       data: {

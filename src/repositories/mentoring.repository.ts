@@ -80,6 +80,35 @@ export default class MentoringRepository extends Repository {
     return mentorings;
   }
 
+  async getMentoringsFeedbackByMentorId(mentor_id: number) {
+    const mentorings = await this.prisma.mentoring.findMany({
+      where: {
+        mentor_id,
+        Mentoring_Attendee: {
+          some: {
+            rating: {
+              not: null,
+            },
+          },
+        },
+      },
+      include: {
+        Mentoring_Attendee: {
+          include: {
+            Sentiment: true,
+            Mentee: {
+              include: {
+                User: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return mentorings;
+  }
+
   async createMentoring(
     mentor_id: number,
     start_time: string,
