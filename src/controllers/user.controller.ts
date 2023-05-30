@@ -51,8 +51,11 @@ export const updateProfile = async (
   try {
     const id = req.userId;
     const { name, email, gender_id, bio, phone } = req.body;
+    let parsedGenderId: number | undefined;
 
-    const parsedGenderId = parseInt(gender_id, 10);
+    if (gender_id) {
+      parsedGenderId = parseInt(gender_id, 10);
+    }
 
     const updatedUser = await userService.updateUser(id!, {
       name,
@@ -159,7 +162,10 @@ export const updateDaysAvailability = async (
       is_sunday_available: is_sunday_available == "true",
     };
 
-    const updatedUser = await userService.updateUserDaysAvailability(id!, daysAvailability);
+    const updatedUser = await userService.updateUserDaysAvailability(
+      id!,
+      daysAvailability
+    );
 
     return res
       .status(200)
