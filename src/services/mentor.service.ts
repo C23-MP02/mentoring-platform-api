@@ -1,6 +1,5 @@
 import MentorRepository from "../repositories/mentor.repository";
 import MentoringRepository from "../repositories/mentoring.repository";
-import { DashboardRawData } from "../typings/mentor.type";
 
 export class MentorService {
   private mentorRepository: MentorRepository;
