@@ -1,13 +1,13 @@
-import { isAuth } from "../middlewares/firebase.auth";
+import { isAuth, isMentee, isMentor } from "../middlewares/firebase.auth";
 import router from "./router";
 import authRoutes from "./auth.routes";
 import userRoutes from "./user.routes";
 import mentorRoutes from "./mentor.routes";
-import mentoringRoutes from "./mentoring.routes";
+import menteeRoutes from "./mentee.routes";
 
 router.use("/auth", authRoutes);
 router.use("/user", isAuth, userRoutes);
-router.use("/mentoring", isAuth, mentoringRoutes);
-router.use("/mentor", isAuth, mentorRoutes);
+router.use("/mentor", isAuth, isMentor, mentorRoutes);
+router.use("/mentee", isAuth, isMentee, menteeRoutes);
 
 export default router;

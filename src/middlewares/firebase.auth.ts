@@ -19,8 +19,9 @@ export const isAuth = (
       .verifyIdToken(token)
       .then((decodedToken) => {
         // Set the authenticated user ID on the request
-        req.userId = Number(decodedToken.uid);
-        req.role = decodedToken.role;
+        req.userId = Number(decodedToken.record_id);
+        req.roles = decodedToken.roles;
+        req.providerId = decodedToken.uid;
 
         // Proceed to the next middleware or route handler
         next();
@@ -39,7 +40,7 @@ export const isMentee = (
   res: Response,
   next: NextFunction
 ) => {
-  if (req.role === "mentee") {
+  if (req.roles?.includes("mentee")) {
     next();
   } else {
     res.status(403).json({ error: "Unauthorized" });
@@ -51,7 +52,7 @@ export const isMentor = (
   res: Response,
   next: NextFunction
 ) => {
-  if (req.role === "mentor") {
+  if (req.roles?.includes("mentor")) {
     next();
   } else {
     res.status(403).json({ error: "Unauthorized" });
@@ -63,7 +64,7 @@ export const isAdmin = (
   res: Response,
   next: NextFunction
 ) => {
-  if (req.role === "admin") {
+  if (req.roles?.includes("admin")) {
     next();
   } else {
     res.status(403).json({ error: "Unauthorized" });

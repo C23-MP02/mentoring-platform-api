@@ -34,30 +34,26 @@ export class AuthService {
     message?: string;
   }> {
     try {
-      const existingUser = await this.userRepository.findUserByEmail(email);
+      const roleName = getRoleNameFromRoleId(role_id);
 
-      if (existingUser) {
-        return { success: false, message: "Email already taken" };
-      }
-
-      const newUser = {
-        name,
-        email,
-        role_id,
-      };
-
-      const createdUser = await this.userRepository.createUser(newUser);
-
-      const uid = createdUser.id.toString();
-
-      const userRecord: UserRecord = await this.authRepository.createUser(
-        uid,
+      const firebaseUser: UserRecord = await this.authRepository.createUser(
         name,
         email,
         password
       );
 
-      const roleName = getRoleNameFromRoleId(role_id);
+      const provider_id = firebaseUser.uid;
+
+      const newUser = {
+        name,
+        email,
+        role_id,
+        provider_id,
+        is_mentor: roleName === "mentor",
+        is_mentee: roleName === "mentee",
+      };
+
+      const createdUser = await this.userRepository.createUser(newUser);
 
       if (roleName === "mentor") {
         await this.mentorRepository.createMentor(createdUser.id);
@@ -65,18 +61,19 @@ export class AuthService {
         await this.menteeRepository.createMentee(createdUser.id);
       }
 
-      await this.authRepository.setRoleClaims(uid, {
-        role: roleName!,
+      await this.authRepository.setRoleClaims(provider_id, {
+        roles: [roleName!],
+        record_id: createdUser.id,
       });
 
-      await this.firestoreRepository.createDocument("users", uid, {
-        name: userRecord.displayName,
+      await this.firestoreRepository.createDocument("users", provider_id, {
+        name: firebaseUser.displayName,
         groups: [],
       });
 
       return {
         success: true,
-        data: userRecord,
+        data: firebaseUser,
       };
     } catch (error: any) {
       return { success: false, message: error.message };

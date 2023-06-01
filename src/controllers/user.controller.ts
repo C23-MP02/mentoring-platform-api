@@ -50,6 +50,7 @@ export const updateProfile = async (
 ) => {
   try {
     const id = req.userId;
+
     const { name, email, gender_id, bio, phone } = req.body;
     let parsedGenderId: number | undefined;
 

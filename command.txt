@@ -4,7 +4,7 @@ npx prisma generate
 Migrate Dev
 1. Change the .env db to dev
 2. Run command
-    npx prisma migrate dev --name v2.5
+    npx prisma migrate dev --name 
 
 Migrate Staging/Prod
 1. Change the .env db to staging/prod db

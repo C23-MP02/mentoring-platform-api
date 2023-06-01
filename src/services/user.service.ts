@@ -48,7 +48,7 @@ export class UserService {
   async updateUser(id: number, user: UserUpdateInput): Promise<User> {
     const updatedUser = await this.userRepository.updateUser(id, user);
 
-    await this.authRepository.updateUser(id.toString(), {
+    await this.authRepository.updateUser(updatedUser.provider_id!, {
       name: updatedUser.name,
       email: updatedUser.email,
       phoneNumber: updatedUser.phone,
@@ -79,6 +79,7 @@ export class UserService {
     return updatedUser;
   }
 
+  // TODO: Adjust so that user can have multiple roles
   async updateUserRole(id: number, role_id: number): Promise<User> {
     const updatedUser = await this.userRepository.updateUser(id, { role_id });
 
@@ -93,7 +94,7 @@ export class UserService {
     }
 
     await this.authRepository.setRoleClaims(id.toString(), {
-      role: roleName!,
+      roles: [roleName!],
     });
 
     return updatedUser;

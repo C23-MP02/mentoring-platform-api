@@ -1,12 +1,12 @@
 import {
-  getAllMentors,
   getMentorDashboard,
+  getMentoringsSchedule,
 } from "../controllers/mentor.controller";
-import { isMentee, isMentor } from "../middlewares/firebase.auth";
+import { createMentoring } from "../controllers/mentoring.controller";
 import router from "./router";
 
-// router.get("/", getMentor);
-router.get("/all", isMentee, getAllMentors);
-router.get("/dashboard", isMentor, getMentorDashboard);
+router.get("/dashboard", getMentorDashboard);
+router.post("/mentoring", createMentoring);
+router.get("/schedule", getMentoringsSchedule);
 
 export default router;

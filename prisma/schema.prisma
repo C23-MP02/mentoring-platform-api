@@ -32,6 +32,9 @@ model User {
   phone                  String?  @unique
   bio                    String?
   profile_picture_url    String?
+  provider_id            String?
+  is_mentor              Boolean  @default(false)
+  is_mentee              Boolean  @default(false)
   is_path_android        Boolean  @default(false)
   is_path_web            Boolean  @default(false)
   is_path_ios            Boolean  @default(false)

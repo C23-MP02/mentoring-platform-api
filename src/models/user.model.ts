@@ -26,6 +26,7 @@ export type UserCreateInput = {
   name: string;
   role_id: number;
   email: string;
+  provider_id: string;
 };
 
 export type UserUpdateInput = {

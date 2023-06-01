@@ -4,14 +4,12 @@ import { FirebaseUpdateData } from "../typings/firebase.type";
 
 export default class AuthRepository {
   async createUser(
-    uid: string,
     name: string,
     email: string,
     password: string,
     phoneNumber?: string
   ): Promise<auth.UserRecord> {
     const userRecord = await firebaseAuth.createUser({
-      uid,
       email,
       password,
       displayName: name,
@@ -20,7 +18,10 @@ export default class AuthRepository {
     return userRecord;
   }
 
-  async setRoleClaims(uid: string, claims: { role: string }): Promise<void> {
+  async setRoleClaims(
+    uid: string,
+    claims: { roles: string[]; record_id?: number }
+  ): Promise<void> {
     await firebaseAuth.setCustomUserClaims(uid, claims);
   }
 

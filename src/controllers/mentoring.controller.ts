@@ -70,18 +70,17 @@ export const createMentoringFeedback = async (
   }
 };
 
-export const getMentoringsSchedule = async (
+export const getMentoringsScheduleByMentee = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {
   try {
     const user_id = req.userId;
-    const role = req.role;
     const { from_date } = req.query;
 
     const mentorings = await mentoringService.getMentoringsSchedule(
       Number(user_id),
-      role!,
+      "mentee",
       from_date as string
     );
 
