@@ -35,6 +35,7 @@ export type MentoringUpdateInput = {
   meeting_id?: string | null;
   created_at?: Date | string;
   updated_at?: Date | string;
+  is_finished?: boolean;
 };
 
 export type MentoringFeedbackInput = {

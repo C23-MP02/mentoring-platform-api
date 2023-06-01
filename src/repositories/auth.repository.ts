@@ -32,4 +32,12 @@ export default class AuthRepository {
     const userRecord = await firebaseAuth.updateUser(uid, data);
     return userRecord;
   }
+
+  async createCustomToken(
+    uid: string,
+    claims: { roles: string[]; record_id: number }
+  ): Promise<string> {
+    const customToken = await firebaseAuth.createCustomToken(uid, claims);
+    return customToken;
+  }
 }

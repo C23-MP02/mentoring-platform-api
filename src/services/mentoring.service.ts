@@ -3,6 +3,7 @@ import MenteeRepository from "../repositories/mentee.repository";
 import MentorRepository from "../repositories/mentor.repository";
 import MentoringRepository from "../repositories/mentoring.repository";
 import MentoringAttendeeRepository from "../repositories/mentoringAttendee.repository";
+import { MentoringUpdateInput } from "../typings/mentoring.type";
 import { getSentimentId } from "../utils/dataConverter";
 import {
   formatMentoringDataFromMentee,
@@ -155,6 +156,27 @@ export class MentoringService {
       }
       return formatMentoringDataFromMentee(mentoring);
     }
+  }
+
+  async updateMentoring(
+    mentoring_id: number,
+    mentor_id: number,
+    data: MentoringUpdateInput
+  ) {
+    const mentoring = await this.mentoringRepository.getMentoringById(
+      mentoring_id
+    );
+
+    if (mentoring?.mentor_id !== mentor_id) {
+      throw new Error("Unauthorized");
+    }
+
+    const updatedMentoring = await this.mentoringRepository.updateMentoringById(
+      mentoring_id,
+      data
+    );
+
+    return updatedMentoring;
   }
 }
 

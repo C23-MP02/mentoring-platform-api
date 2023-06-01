@@ -1,7 +1,6 @@
 export type User = {
   id: number;
   name: string;
-  role_id: number;
   gender_id: number | null;
   email: string;
   address: string | null;
@@ -24,14 +23,15 @@ export type User = {
 
 export type UserCreateInput = {
   name: string;
-  role_id: number;
   email: string;
   provider_id: string;
+  profile_picture_url?: string;
+  is_mentor?: boolean;
+  is_mentee?: boolean;
 };
 
 export type UserUpdateInput = {
   name?: string;
-  role_id?: number;
   gender_id?: number | null;
   email?: string;
   address?: string | null;

@@ -121,21 +121,22 @@ export const updateInterests = async (
   }
 };
 
-export const updateRole = async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    const id = req.userId;
-    const { role_id } = req.body;
+// TODO: Update Role
+// export const updateRole = async (req: AuthenticatedRequest, res: Response) => {
+//   try {
+//     const id = req.userId;
+//     const { role_id } = req.body;
 
-    const updatedUser = await userService.updateUserRole(id!, Number(role_id));
+//     const updatedUser = await userService.updateUserRole(id!, Number(role_id));
 
-    return res
-      .status(200)
-      .json({ message: "Update user success", updatedUser });
-  } catch (error: any) {
-    console.log(error);
-    return res.status(500).json({ message: error.message });
-  }
-};
+//     return res
+//       .status(200)
+//       .json({ message: "Update user success", updatedUser });
+//   } catch (error: any) {
+//     console.log(error);
+//     return res.status(500).json({ message: error.message });
+//   }
+// };
 
 export const updateDaysAvailability = async (
   req: AuthenticatedRequest,

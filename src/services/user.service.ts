@@ -45,6 +45,11 @@ export class UserService {
     return user;
   }
 
+  async getUserByEmail(email: string): Promise<User | null> {
+    const user = await this.userRepository.findUserByEmail(email);
+    return user;
+  }
+
   async updateUser(id: number, user: UserUpdateInput): Promise<User> {
     const updatedUser = await this.userRepository.updateUser(id, user);
 
@@ -80,25 +85,25 @@ export class UserService {
   }
 
   // TODO: Adjust so that user can have multiple roles
-  async updateUserRole(id: number, role_id: number): Promise<User> {
-    const updatedUser = await this.userRepository.updateUser(id, { role_id });
+  // async updateUserRole(id: number, role_id: number): Promise<User> {
+  //   const updatedUser = await this.userRepository.updateUser(id, { role_id });
 
-    const roleName = getRoleNameFromRoleId(role_id);
+  //   const roleName = getRoleNameFromRoleId(role_id);
 
-    if (roleName === "mentor") {
-      await this.menteeRepository.deleteMentee(id);
-      await this.mentorRepository.createMentor(id);
-    } else if (roleName === "mentee") {
-      await this.mentorRepository.deleteMentor(id);
-      await this.menteeRepository.createMentee(id);
-    }
+  //   if (roleName === "mentor") {
+  //     await this.menteeRepository.deleteMentee(id);
+  //     await this.mentorRepository.createMentor(id);
+  //   } else if (roleName === "mentee") {
+  //     await this.mentorRepository.deleteMentor(id);
+  //     await this.menteeRepository.createMentee(id);
+  //   }
 
-    await this.authRepository.setRoleClaims(id.toString(), {
-      roles: [roleName!],
-    });
+  //   await this.authRepository.setRoleClaims(id.toString(), {
+  //     roles: [roleName!],
+  //   });
 
-    return updatedUser;
-  }
+  //   return updatedUser;
+  // }
 }
 
 const userService = new UserService();

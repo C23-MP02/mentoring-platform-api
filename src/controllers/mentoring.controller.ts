@@ -93,3 +93,33 @@ export const getMentoringsScheduleByMentee = async (
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const updateMentoring = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const user_id = req.userId!;
+    const { mentoring_id, start_time, end_time, is_finished } = req.body;
+
+    const mentoring_status = is_finished === "true";
+
+    const mentoring = await mentoringService.updateMentoring(
+      Number(mentoring_id),
+      Number(user_id),
+      {
+        start_time,
+        end_time,
+        is_finished: mentoring_status,
+      }
+    );
+
+    return res.status(200).json({
+      message: "Mentoring updated successfully",
+      data: mentoring,
+    });
+  } catch (error: any) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};

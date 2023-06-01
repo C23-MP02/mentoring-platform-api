@@ -13,7 +13,6 @@ datasource db {
 model Role {
   id   Int    @id @default(autoincrement())
   name String @unique
-  User User[]
 }
 
 model Gender {
@@ -25,7 +24,6 @@ model Gender {
 model User {
   id                     Int      @id @default(autoincrement())
   name                   String
-  role_id                Int      @default(3)
   gender_id              Int?
   email                  String   @unique
   address                String?
@@ -56,7 +54,6 @@ model User {
   updated_at             DateTime @default(now())
   Mentee                 Mentee?
   Mentor                 Mentor?
-  Role                   Role     @relation(fields: [role_id], references: [id])
   Gender                 Gender?  @relation(fields: [gender_id], references: [id])
 }
 
@@ -86,6 +83,7 @@ model Mentoring {
   end_time           DateTime
   event_id           String?
   meeting_id         String?
+  is_finished        Boolean              @default(false)
   created_at         DateTime             @default(now())
   updated_at         DateTime             @default(now())
   Mentor             Mentor               @relation(fields: [mentor_id], references: [user_id])
