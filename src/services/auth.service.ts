@@ -46,7 +46,7 @@ export class AuthService {
     }
 
     await this.authRepository.setRoleClaims(provider_id, {
-      roles: [role!],
+      role,
       record_id: createdUser.id,
     });
 
@@ -113,7 +113,7 @@ export class AuthService {
       );
 
       const token = await this.authRepository.createCustomToken(provider_id, {
-        roles: [role],
+        role,
         record_id: createdUser.id,
       });
 
@@ -124,6 +124,16 @@ export class AuthService {
     } catch (error: any) {
       return { success: false, message: error.message };
     }
+  }
+
+  // Login Callback but not used now
+  async login(role: string, provider_id: string, record_id: number) {
+    const token = await this.authRepository.createCustomToken(provider_id, {
+      role,
+      record_id,
+    });
+
+    return token;
   }
 }
 

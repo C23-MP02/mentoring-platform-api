@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import authService from "../services/auth.service";
 import userService from "../services/user.service";
+import { AuthenticatedRequest } from "../typings/request.type";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -56,6 +57,31 @@ export const providerLogin = async (req: Request, res: Response) => {
     } else {
       return res.status(400).json({ message: loginResult.message });
     }
+  } catch (error: any) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const loginCallback = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const { role } = req.body;
+    const user_id = req.userId;
+    const provider_id = req.providerId;
+
+    const newToken = await authService.login(
+      role ?? "mentee",
+      provider_id!,
+      user_id!
+    );
+
+    return res.status(200).json({
+      message: "Login successful",
+      token: newToken,
+    });
   } catch (error: any) {
     console.log(error);
     return res.status(500).json({ message: error.message });

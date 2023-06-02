@@ -126,7 +126,7 @@ export interface CustomDecodedIdToken {
    */
   uid: string;
 
-  roles: string[];
+  role?: string;
 
   record_id: string;
   /**
@@ -134,3 +134,8 @@ export interface CustomDecodedIdToken {
    */
   [key: string]: any;
 }
+
+export type CustomClaims = {
+  role: string;
+  record_id: number;
+};

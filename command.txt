@@ -39,3 +39,12 @@ gcloud run deploy --image gcr.io/dicoding-mp/mentoring-platform-api
 docker build -t gcr.io/dicoding-mp/mentoring-platform-api .
 docker push gcr.io/dicoding-mp/mentoring-platform-api
 gcloud run deploy --image gcr.io/dicoding-mp/mentoring-platform-api
+
+##############################################################################################
+
+DEPLOY ML API
+docker build -t gcr.io/dicoding-mp/mentoring-platform-ml-api: .
+
+docker push gcr.io/dicoding-mp/mentoring-platform-ml-api
+
+gcloud run deploy --image gcr.io/dicoding-mp/mentoring-platform-ml-api

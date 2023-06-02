@@ -19,8 +19,8 @@ export const isAuth = (
       .verifyIdToken(token)
       .then((decodedToken) => {
         // Set the authenticated user ID on the request
-        req.userId = Number(decodedToken.record_id);
-        req.roles = decodedToken.roles;
+        req.userId = decodedToken.record_id;
+        req.role = decodedToken.role;
         req.providerId = decodedToken.uid;
 
         // Proceed to the next middleware or route handler
@@ -35,12 +35,19 @@ export const isAuth = (
   }
 };
 
+// TODO
+export const isFirebaseAuth = (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {};
+
 export const isMentee = (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
 ) => {
-  if (req.roles?.includes("mentee")) {
+  if (req.role === "mentee") {
     next();
   } else {
     res.status(403).json({ error: "Unauthorized" });
@@ -52,7 +59,7 @@ export const isMentor = (
   res: Response,
   next: NextFunction
 ) => {
-  if (req.roles?.includes("mentor")) {
+  if (req.role === "mentor") {
     next();
   } else {
     res.status(403).json({ error: "Unauthorized" });
@@ -64,7 +71,7 @@ export const isAdmin = (
   res: Response,
   next: NextFunction
 ) => {
-  if (req.roles?.includes("admin")) {
+  if (req.role === "admin") {
     next();
   } else {
     res.status(403).json({ error: "Unauthorized" });

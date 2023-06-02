@@ -5,6 +5,7 @@ import userService from "../services/user.service";
 
 export const getProfile = async (req: AuthenticatedRequest, res: Response) => {
   try {
+    console.log(req);
     const id = req.userId;
     const user = await userService.getUserById(id!);
 

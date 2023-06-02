@@ -1,6 +1,6 @@
 import { auth } from "firebase-admin";
 import { firebaseAuth } from "../config/firebase";
-import { FirebaseUpdateData } from "../typings/firebase.type";
+import { CustomClaims, FirebaseUpdateData } from "../typings/firebase.type";
 
 export default class AuthRepository {
   async createUser(
@@ -18,10 +18,7 @@ export default class AuthRepository {
     return userRecord;
   }
 
-  async setRoleClaims(
-    uid: string,
-    claims: { roles: string[]; record_id?: number }
-  ): Promise<void> {
+  async setRoleClaims(uid: string, claims: CustomClaims): Promise<void> {
     await firebaseAuth.setCustomUserClaims(uid, claims);
   }
 
@@ -33,10 +30,7 @@ export default class AuthRepository {
     return userRecord;
   }
 
-  async createCustomToken(
-    uid: string,
-    claims: { roles: string[]; record_id: number }
-  ): Promise<string> {
+  async createCustomToken(uid: string, claims: CustomClaims): Promise<string> {
     const customToken = await firebaseAuth.createCustomToken(uid, claims);
     return customToken;
   }
