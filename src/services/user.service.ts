@@ -50,7 +50,10 @@ export class UserService {
       name: updatedUser.name,
       email: updatedUser.email,
       phoneNumber: updatedUser.phone,
-      photoURL: updatedUser.profile_picture_url,
+      photoURL:
+        updatedUser.profile_picture_url === ""
+          ? undefined
+          : updatedUser.profile_picture_url,
     });
 
     return updatedUser;

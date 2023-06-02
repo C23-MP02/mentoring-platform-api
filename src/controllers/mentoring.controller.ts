@@ -1,10 +1,8 @@
-import axios from "axios";
 import { DateTime } from "luxon";
 import { Response } from "express";
 
 import { AuthenticatedRequest } from "../typings/request.type";
 import mentoringService from "../services/mentoring.service";
-import { translatedAndSentimentedFeedback } from "../typings/response.type";
 
 export const createMentoring = async (
   req: AuthenticatedRequest,
@@ -44,19 +42,10 @@ export const createMentoringFeedback = async (
     const mentee_id = req.userId;
     const { mentoring_id, feedback, rating } = req.body;
 
-    const translatedAndSentimentedFeedback: translatedAndSentimentedFeedback =
-      await axios.post(`${process.env.ML_API}/translated-sentiment`, [
-        {
-          feedback,
-        },
-      ]);
-
     const mentoringFeedback = await mentoringService.createMentoringFeedback(
       Number(mentoring_id),
       Number(mentee_id),
       feedback,
-      translatedAndSentimentedFeedback.data[0].translate,
-      translatedAndSentimentedFeedback.data[0].sentiment,
       Number(rating)
     );
 

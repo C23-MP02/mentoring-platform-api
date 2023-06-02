@@ -1,3 +1,4 @@
+import APIRepository from "../repositories/api.repository";
 import GoogleCalendarRepository from "../repositories/google.calendar.repository";
 import MenteeRepository from "../repositories/mentee.repository";
 import MentorRepository from "../repositories/mentor.repository";
@@ -16,6 +17,7 @@ export class MentoringService {
   private mentorRepository: MentorRepository;
   private menteeRepository: MenteeRepository;
   private googleCalendarRepository: GoogleCalendarRepository;
+  private APIRepository: APIRepository;
 
   constructor() {
     this.mentoringRepository = new MentoringRepository();
@@ -23,6 +25,7 @@ export class MentoringService {
     this.mentorRepository = new MentorRepository();
     this.menteeRepository = new MenteeRepository();
     this.googleCalendarRepository = new GoogleCalendarRepository();
+    this.APIRepository = new APIRepository();
   }
 
   // TESTING REQUIRED
@@ -81,18 +84,20 @@ export class MentoringService {
     mentoring_id: number,
     mentee_id: number,
     feedback: string,
-    en_feedback: string,
-    sentiment: string,
     rating: number
   ) {
+    // Call Machine Learning API
+    const { translate, sentiment } =
+      await this.APIRepository.translateAndSentimentFeedback(feedback);
     const sentiment_id = getSentimentId(sentiment);
 
+    // Insert data to db
     const mentoringFeedback =
       await this.mentoringAttendeeRepository.createMentoringFeedback(
         mentoring_id,
         mentee_id,
         feedback,
-        en_feedback,
+        translate,
         sentiment_id,
         rating
       );
