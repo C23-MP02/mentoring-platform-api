@@ -15,30 +15,51 @@ export class MentorService {
   }
 
   async getMentorDashboard(mentor_id: number) {
-    const mentor = await this.mentorRepository.getMentorSummaryById(mentor_id);
+    const [mentor, reviews] = await Promise.all([
+      this.mentorRepository.getMentorSummaryById(mentor_id),
+      this.mentoringRepository.getMentoringsFeedbackByMentorId(mentor_id),
+    ]);
 
-    const reviews =
-      await this.mentoringRepository.getMentoringsFeedbackByMentorId(mentor_id);
+    const sentimentCount: Record<string, number> = {
+      negative: 0,
+      neutral: 0,
+      positive: 0,
+    };
 
-    // Merge data
-    const dashboardRawData = { ...mentor, reviews };
+    const formattedReviews = reviews.map((review) => {
+      const mentoringAttendee = review.Mentoring_Attendee[0];
+      const sentimentName = mentoringAttendee.Sentiment!.name;
+      const menteeName = mentoringAttendee.Mentee.User.name;
 
-    // Format data
-    const formattedData = {
-      average_rating: dashboardRawData.average_rating,
-      rating_count: dashboardRawData.rating_count,
-      feedback_summary: dashboardRawData.feedback_summary,
-      reviews: dashboardRawData.reviews.map((review) => ({
+      sentimentCount[sentimentName] += 1;
+
+      return {
         start_time: review.start_time,
         end_time: review.end_time,
         created_at: review.created_at,
         updated_at: review.updated_at,
-        mentoring_id: review.Mentoring_Attendee[0].mentoring_id,
-        rating: review.Mentoring_Attendee[0].rating,
-        feedback: review.Mentoring_Attendee[0].feedback,
-        sentiment: review.Mentoring_Attendee[0].Sentiment!.name,
-        mentee_name: review.Mentoring_Attendee[0].Mentee.User.name,
-      })),
+        mentoring_id: mentoringAttendee.mentoring_id,
+        rating: mentoringAttendee.rating,
+        feedback: mentoringAttendee.feedback,
+        sentiment: sentimentName,
+        mentee_name: menteeName,
+      };
+    });
+
+    const totalReview = formattedReviews.length;
+
+    const sentimentPercentage = {
+      negative: (sentimentCount.negative / totalReview) * 100,
+      neutral: (sentimentCount.neutral / totalReview) * 100,
+      positive: (sentimentCount.positive / totalReview) * 100,
+    };
+
+    const formattedData = {
+      average_rating: mentor!.average_rating,
+      rating_count: mentor!.rating_count,
+      feedback_summary: mentor!.feedback_summary,
+      sentiment: sentimentPercentage,
+      reviews: formattedReviews,
     };
 
     return formattedData;
