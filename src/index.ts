@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 
 import cors from "cors";
 import helmet from "helmet";
-import multer from "multer";
+import { multerMid } from "./utils/multerConfig";
 
 import createError from "http-errors";
 
@@ -12,13 +12,6 @@ const PORT = parseInt(process.env.PORT!) || 8080;
 
 const app = express();
 
-const multerMid = multer({
-  storage: multer.memoryStorage(),
-  limits: {
-    fileSize: 2 * 1024 * 1024,
-  },
-});
-
 app.use(cors());
 app.use(helmet());
 app.use(express.json());
@@ -26,7 +19,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(multerMid.single("file"));
 
 app.get("/", async (req: Request, res: Response) => {
-  res.json({ message: "Response Success" });
+  res.json({
+    message: "Welcome to Dicoding Mentoring Platform API",
+    author: "Cloud Computing C23-MP02",
+  });
 });
 
 app.use(routes);

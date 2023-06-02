@@ -1,4 +1,3 @@
-import { getRoleNameFromRoleId } from "../helpers/role";
 import {
   User,
   UserDaysAvailability,
@@ -6,21 +5,15 @@ import {
   UserUpdateInput,
 } from "../models/user.model";
 import AuthRepository from "../repositories/auth.repository";
-import MenteeRepository from "../repositories/mentee.repository";
-import MentorRepository from "../repositories/mentor.repository";
 import UserRepository from "../repositories/user.repository";
 
 export class UserService {
   private userRepository: UserRepository;
   private authRepository: AuthRepository;
-  private menteeRepository: MenteeRepository;
-  private mentorRepository: MentorRepository;
 
   constructor() {
     this.userRepository = new UserRepository();
     this.authRepository = new AuthRepository();
-    this.menteeRepository = new MenteeRepository();
-    this.mentorRepository = new MentorRepository();
   }
 
   async getUserById(id: number): Promise<User | null> {

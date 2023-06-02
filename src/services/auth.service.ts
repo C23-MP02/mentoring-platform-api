@@ -58,6 +58,7 @@ export class AuthService {
     return createdUser;
   }
 
+  // TODO: Register and ProviderLogin for the first time using existing account but different role
   async register(
     name: string,
     email: string,
