@@ -1,5 +1,5 @@
 export type User = {
-  id: number;
+  id: string;
   name: string;
   gender_id: number | null;
   email: string;
@@ -31,9 +31,9 @@ export type User = {
 };
 
 export type UserCreateInput = {
+  id: string;
   name: string;
   email: string;
-  provider_id: string;
   profile_picture_url?: string;
   is_mentor?: boolean;
   is_mentee?: boolean;

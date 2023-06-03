@@ -24,7 +24,7 @@ export default class UserRepository extends Repository {
     return user;
   }
 
-  async updateUser(id: number, user: UserUpdateInput): Promise<User> {
+  async updateUser(id: string, user: UserUpdateInput): Promise<User> {
     const updatedUser = await this.prisma.user.update({
       where: {
         id,
@@ -37,7 +37,7 @@ export default class UserRepository extends Repository {
     return updatedUser;
   }
 
-  async getUserById(id: number): Promise<User | null> {
+  async getUserById(id: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: {
         id,
@@ -46,7 +46,7 @@ export default class UserRepository extends Repository {
     return user;
   }
 
-  async getUserInterestsById(id: number): Promise<UserInterests | null> {
+  async getUserInterestsById(id: string): Promise<UserInterests | null> {
     const user = await this.prisma.user.findUnique({
       where: {
         id,
@@ -67,7 +67,7 @@ export default class UserRepository extends Repository {
     return user;
   }
 
-  async getUserProfilePictureById(id: number): Promise<string | null> {
+  async getUserProfilePictureById(id: string): Promise<string | null> {
     const user = await this.prisma.user.findUnique({
       where: {
         id,
@@ -80,7 +80,7 @@ export default class UserRepository extends Repository {
   }
 
   async getUserDaysAvailabilityById(
-    id: number
+    id: string
   ): Promise<UserDaysAvailability | null> {
     const user = await this.prisma.user.findUnique({
       where: {

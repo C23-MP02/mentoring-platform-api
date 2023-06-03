@@ -39,10 +39,8 @@ export class AuthService {
         password
       );
 
-      const provider_id = firebaseUser.uid;
-
       const createdUser = await this.createUserAndSetClaims(
-        provider_id,
+        firebaseUser.uid,
         name,
         email,
         "", // No profile picture URL provided during registration
@@ -59,7 +57,7 @@ export class AuthService {
   }
 
   async providerLogin(
-    provider_id: string,
+    uid: string,
     name: string,
     email: string,
     profile_picture_url: string,
@@ -69,10 +67,10 @@ export class AuthService {
       const user = await this.userRepository.getUserByEmail(email);
 
       if (user) {
-        await this.updateRolesAndClaims(user, provider_id, role);
+        await this.updateRolesAndClaims(user, role);
       } else {
         await this.createUserAndSetClaims(
-          provider_id,
+          uid,
           name,
           email,
           profile_picture_url,
@@ -88,25 +86,25 @@ export class AuthService {
     }
   }
 
-  async login(provider_id: string, role: string, record_id: number) {
-    const user = await this.userRepository.getUserById(record_id);
+  async login(uid: string, role: string) {
+    const user = await this.userRepository.getUserById(uid);
 
     if (user) {
-      await this.updateRolesAndClaims(user, provider_id, role);
+      await this.updateRolesAndClaims(user, role);
     }
   }
 
   async createUserAndSetClaims(
-    provider_id: string,
+    uid: string,
     name: string,
     email: string,
     profile_picture_url: string,
     role: string
   ) {
     const newUser = {
+      id: uid,
       name,
       email,
-      provider_id,
       profile_picture_url,
       is_mentor: role === "mentor",
       is_mentee: role === "mentee",
@@ -120,12 +118,11 @@ export class AuthService {
       await this.menteeRepository.createMentee(createdUser.id);
     }
 
-    await this.authRepository.setRoleClaims(provider_id, {
+    await this.authRepository.setRoleClaims(uid, {
       role,
-      record_id: createdUser.id,
     });
 
-    await this.firestoreRepository.createDocument("users", provider_id, {
+    await this.firestoreRepository.createDocument("users", uid, {
       name,
       groups: [],
     });
@@ -133,11 +130,7 @@ export class AuthService {
     return createdUser;
   }
 
-  private async updateRolesAndClaims(
-    user: User,
-    provider_id: string,
-    role: string
-  ) {
+  private async updateRolesAndClaims(user: User, role: string) {
     if (role === "mentor" && !user.is_mentor) {
       await this.userRepository.updateUser(user.id, { is_mentor: true });
       await this.mentorRepository.createMentor(user.id);
@@ -146,9 +139,8 @@ export class AuthService {
       await this.userRepository.updateUser(user.id, { is_mentee: true });
     }
 
-    await this.authRepository.setRoleClaims(provider_id, {
+    await this.authRepository.setRoleClaims(user.id, {
       role,
-      record_id: user.id,
     });
   }
 }

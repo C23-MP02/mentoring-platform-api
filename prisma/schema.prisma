@@ -22,7 +22,7 @@ model Gender {
 }
 
 model User {
-  id                     Int      @id @default(autoincrement())
+  id                     String   @id @unique
   name                   String
   gender_id              Int?
   email                  String   @unique
@@ -30,7 +30,7 @@ model User {
   phone                  String?  @unique
   bio                    String?
   profile_picture_url    String?
-  provider_id            String?
+  // provider_id            String?
   is_mentor              Boolean  @default(false)
   is_mentee              Boolean  @default(false)
   is_path_android        Boolean  @default(false)
@@ -58,7 +58,7 @@ model User {
 }
 
 model Mentee {
-  user_id            Int                  @unique
+  user_id            String               @unique
   created_at         DateTime             @default(now())
   updated_at         DateTime             @default(now())
   User               User                 @relation(fields: [user_id], references: [id])
@@ -66,7 +66,7 @@ model Mentee {
 }
 
 model Mentor {
-  user_id          Int         @unique
+  user_id          String      @unique
   average_rating   Float?
   rating_count     Int         @default(0)
   feedback_summary String?
@@ -78,7 +78,7 @@ model Mentor {
 
 model Mentoring {
   id                 Int                  @id @default(autoincrement())
-  mentor_id          Int
+  mentor_id          String
   start_time         DateTime
   end_time           DateTime
   event_id           String?
@@ -92,7 +92,7 @@ model Mentoring {
 
 model Mentoring_Attendee {
   mentoring_id Int
-  mentee_id    Int
+  mentee_id    String
   rating       Float?
   feedback     String?
   en_feedback  String?

@@ -10,7 +10,7 @@ export default class MentorRepository extends Repository {
     return mentors;
   }
 
-  async getMentorById(user_id: number) {
+  async getMentorById(user_id: string) {
     const mentor = await this.prisma.mentor.findUnique({
       where: {
         user_id,
@@ -22,7 +22,7 @@ export default class MentorRepository extends Repository {
     return mentor;
   }
 
-  async getMentorSummaryById(user_id: number) {
+  async getMentorSummaryById(user_id: string) {
     const mentor = await this.prisma.mentor.findUnique({
       where: {
         user_id,
@@ -30,13 +30,13 @@ export default class MentorRepository extends Repository {
       select: {
         average_rating: true,
         rating_count: true,
-        feedback_summary: true
+        feedback_summary: true,
       },
     });
     return mentor;
   }
 
-  async createMentor(user_id: number) {
+  async createMentor(user_id: string) {
     const mentor = await this.prisma.mentor.create({
       data: {
         user_id,
@@ -45,7 +45,7 @@ export default class MentorRepository extends Repository {
     return mentor;
   }
 
-  async deleteMentor(user_id: number) {
+  async deleteMentor(user_id: string) {
     const mentor = await this.prisma.mentor.delete({
       where: {
         user_id,
@@ -54,7 +54,7 @@ export default class MentorRepository extends Repository {
     return mentor;
   }
 
-  async getMentorRating(user_id: number) {
+  async getMentorRating(user_id: string) {
     const mentor = await this.prisma.mentor.findUnique({
       where: {
         user_id,
@@ -67,7 +67,7 @@ export default class MentorRepository extends Repository {
     return mentor;
   }
 
-  async updateMentorRating(user_id: number, average_rating: number) {
+  async updateMentorRating(user_id: string, average_rating: number) {
     const mentor = await this.prisma.mentor.update({
       where: {
         user_id,

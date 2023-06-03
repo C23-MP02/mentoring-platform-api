@@ -1,7 +1,7 @@
 import { Repository } from "./index.repository";
 
 export default class MenteeRepository extends Repository {
-  async createMentee(user_id: number) {
+  async createMentee(user_id: string) {
     const mentee = await this.prisma.mentee.create({
       data: {
         user_id,
@@ -10,7 +10,7 @@ export default class MenteeRepository extends Repository {
     return mentee;
   }
 
-  async getMenteeById(user_id: number) {
+  async getMenteeById(user_id: string) {
     const mentee = await this.prisma.mentee.findUnique({
       where: {
         user_id,
@@ -22,7 +22,7 @@ export default class MenteeRepository extends Repository {
     return mentee;
   }
 
-  async deleteMentee(user_id: number) {
+  async deleteMentee(user_id: string) {
     const mentee = await this.prisma.mentee.delete({
       where: {
         user_id,

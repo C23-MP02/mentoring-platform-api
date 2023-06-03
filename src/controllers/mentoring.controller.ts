@@ -18,7 +18,7 @@ export const createMentoring = async (
 
   try {
     const mentoring = await mentoringService.createMentoring(
-      Number(mentor_id),
+      mentor_id!,
       mentees_id as string[],
       start_time,
       end_time
@@ -44,7 +44,7 @@ export const createMentoringFeedback = async (
 
     const mentoringFeedback = await mentoringService.createMentoringFeedback(
       Number(mentoring_id),
-      Number(mentee_id),
+      mentee_id!,
       feedback,
       Number(rating)
     );
@@ -68,7 +68,7 @@ export const getMentoringsScheduleByMentee = async (
     const { from_date } = req.query;
 
     const mentorings = await mentoringService.getMentoringsSchedule(
-      Number(user_id),
+      user_id!,
       "mentee",
       from_date as string
     );
@@ -88,14 +88,14 @@ export const updateMentoring = async (
   res: Response
 ) => {
   try {
-    const user_id = req.userId!;
+    const user_id = req.userId;
     const { mentoring_id, start_time, end_time, is_finished } = req.body;
 
     const mentoring_status = is_finished === "true";
 
     const mentoring = await mentoringService.updateMentoring(
       Number(mentoring_id),
-      Number(user_id),
+      user_id!,
       {
         start_time,
         end_time,

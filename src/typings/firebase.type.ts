@@ -128,7 +128,6 @@ export interface CustomDecodedIdToken {
 
   role?: string;
 
-  record_id: string;
   /**
    * Other arbitrary claims included in the ID token.
    */
@@ -137,5 +136,4 @@ export interface CustomDecodedIdToken {
 
 export type CustomClaims = {
   role?: string;
-  record_id?: number;
 };

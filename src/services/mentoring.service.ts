@@ -30,7 +30,7 @@ export class MentoringService {
 
   // TESTING REQUIRED
   async createMentoring(
-    mentor_id: number,
+    mentor_id: string,
     mentees_id: string[],
     start_time: string,
     end_time: string
@@ -45,17 +45,12 @@ export class MentoringService {
     );
 
     for (const mentee_id of mentees_id) {
-      // Converting mentee_id from string to int
-      const int_mentee_id = Number(mentee_id);
-
       await this.mentoringAttendeeRepository.createMentoringAttendee(
         mentoring.id,
-        int_mentee_id
+        mentee_id
       );
 
-      const menteeData = await this.menteeRepository.getMenteeById(
-        int_mentee_id
-      );
+      const menteeData = await this.menteeRepository.getMenteeById(mentee_id);
       menteesData.push(menteeData);
     }
 
@@ -82,7 +77,7 @@ export class MentoringService {
   // TESTING REQUIRED
   async createMentoringFeedback(
     mentoring_id: number,
-    mentee_id: number,
+    mentee_id: string,
     feedback: string,
     rating: number
   ) {
@@ -127,7 +122,7 @@ export class MentoringService {
   }
 
   async getMentoringsSchedule(
-    user_id: number,
+    user_id: string,
     role: string,
     from_date?: string
   ) {
@@ -165,7 +160,7 @@ export class MentoringService {
 
   async updateMentoring(
     mentoring_id: number,
-    mentor_id: number,
+    mentor_id: string,
     data: MentoringUpdateInput
   ) {
     const mentoring = await this.mentoringRepository.getMentoringById(

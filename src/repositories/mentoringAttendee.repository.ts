@@ -2,7 +2,7 @@ import { MentoringScheduleByMentee } from "../typings/mentoring.type";
 import { Repository } from "./index.repository";
 
 export default class MentoringAttendeeRepository extends Repository {
-  async createMentoringAttendee(mentoring_id: number, mentee_id: number) {
+  async createMentoringAttendee(mentoring_id: number, mentee_id: string) {
     const mentoringAttendee = await this.prisma.mentoring_Attendee.create({
       data: {
         mentoring_id,
@@ -13,7 +13,7 @@ export default class MentoringAttendeeRepository extends Repository {
   }
 
   async getMentoringAttendeeByMenteeIdAndMentoringId(
-    mentee_id: number,
+    mentee_id: string,
     mentoring_id: number
   ) {
     const mentoringAttendee = await this.prisma.mentoring_Attendee.findUnique({
@@ -29,7 +29,7 @@ export default class MentoringAttendeeRepository extends Repository {
 
   async createMentoringFeedback(
     mentoring_id: number,
-    mentee_id: number,
+    mentee_id: string,
     feedback: string,
     en_feedback: string,
     sentiment_id: number,
@@ -54,7 +54,7 @@ export default class MentoringAttendeeRepository extends Repository {
     return mentoringFeedback;
   }
 
-  async getMentoringsByMenteeId(mentee_id: number) {
+  async getMentoringsByMenteeId(mentee_id: string) {
     const mentoring: MentoringScheduleByMentee[] =
       await this.prisma.mentoring_Attendee.findMany({
         where: {
@@ -85,7 +85,7 @@ export default class MentoringAttendeeRepository extends Repository {
   }
 
   async getFilteredMentoringsByMenteeIdAndFromDate(
-    mentee_id: number,
+    mentee_id: string,
     from_date: string
   ) {
     const mentoring: MentoringScheduleByMentee[] =

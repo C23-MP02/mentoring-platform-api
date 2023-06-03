@@ -16,23 +16,23 @@ export class UserService {
     this.authRepository = new AuthRepository();
   }
 
-  async getUserById(id: number): Promise<User | null> {
+  async getUserById(id: string): Promise<User | null> {
     const user = await this.userRepository.getUserById(id);
     return user;
   }
 
-  async getUserInterestsById(id: number): Promise<UserInterests | null> {
+  async getUserInterestsById(id: string): Promise<UserInterests | null> {
     const user = await this.userRepository.getUserInterestsById(id);
     return user;
   }
 
-  async getUserProfilePictureById(id: number): Promise<string | null> {
+  async getUserProfilePictureById(id: string): Promise<string | null> {
     const user = await this.userRepository.getUserProfilePictureById(id);
     return user;
   }
 
   async getUserDaysAvailabilityById(
-    id: number
+    id: string
   ): Promise<UserDaysAvailability | null> {
     const user = await this.userRepository.getUserDaysAvailabilityById(id);
     return user;
@@ -43,13 +43,13 @@ export class UserService {
     return user;
   }
 
-  async updateUser(id: number, user: UserUpdateInput): Promise<User> {
+  async updateUser(id: string, user: UserUpdateInput): Promise<User> {
     const updatedUser = await this.userRepository.updateUser(id, user);
 
-    await this.authRepository.updateUser(updatedUser.provider_id!, {
+    await this.authRepository.updateUser(updatedUser.id, {
       name: updatedUser.name,
-      email: updatedUser.email,
-      phoneNumber: updatedUser.phone,
+      email: updatedUser.email === "" ? undefined : updatedUser.email,
+      phoneNumber: updatedUser.phone === "" ? undefined : updatedUser.phone,
       photoURL:
         updatedUser.profile_picture_url === ""
           ? undefined
@@ -60,7 +60,7 @@ export class UserService {
   }
 
   async updateUserInterests(
-    id: number,
+    id: string,
     interests: UserInterests
   ): Promise<UserInterests> {
     const updatedUser = await this.userRepository.updateUser(id, interests);
@@ -69,7 +69,7 @@ export class UserService {
   }
 
   async updateUserDaysAvailability(
-    id: number,
+    id: string,
     daysAvailability: UserDaysAvailability
   ): Promise<User> {
     const updatedUser = await this.userRepository.updateUser(

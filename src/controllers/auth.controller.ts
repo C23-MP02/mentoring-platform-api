@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import authService from "../services/auth.service";
-import userService from "../services/user.service";
 import { AuthenticatedRequest } from "../typings/request.type";
 
 export const register = async (req: Request, res: Response) => {
@@ -30,10 +29,10 @@ export const register = async (req: Request, res: Response) => {
 
 export const providerLogin = async (req: Request, res: Response) => {
   try {
-    const { email, name, role, profile_picture_url, provider_id } = req.body;
+    const { uid, email, name, role, profile_picture_url } = req.body;
 
     const loginResult = await authService.providerLogin(
-      provider_id,
+      uid,
       name,
       email,
       profile_picture_url,
@@ -60,7 +59,7 @@ export const loginCallback = async (
   try {
     const { role } = req.body;
 
-    await authService.login(req.providerId!, role, req.userId!);
+    await authService.login(req.userId!, role);
 
     return res.status(200).json({
       message: "Login successful",

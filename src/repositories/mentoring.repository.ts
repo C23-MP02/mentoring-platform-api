@@ -32,7 +32,7 @@ export default class MentoringRepository extends Repository {
     return mentoring;
   }
 
-  async getMentoringsByMentorId(mentor_id: number) {
+  async getMentoringsByMentorId(mentor_id: string) {
     const mentorings = await this.prisma.mentoring.findMany({
       where: {
         mentor_id,
@@ -54,7 +54,7 @@ export default class MentoringRepository extends Repository {
   }
 
   async getFilteredMentoringsByMentorIdAndFromDate(
-    mentor_id: number,
+    mentor_id: string,
     from_date: string
   ) {
     const mentorings = await this.prisma.mentoring.findMany({
@@ -80,7 +80,7 @@ export default class MentoringRepository extends Repository {
     return mentorings;
   }
 
-  async getMentoringsFeedbackByMentorId(mentor_id: number) {
+  async getMentoringsFeedbackByMentorId(mentor_id: string) {
     const mentorings = await this.prisma.mentoring.findMany({
       where: {
         mentor_id,
@@ -110,7 +110,7 @@ export default class MentoringRepository extends Repository {
   }
 
   async createMentoring(
-    mentor_id: number,
+    mentor_id: string,
     start_time: string,
     end_time: string
   ) {

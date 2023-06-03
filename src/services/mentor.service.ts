@@ -14,7 +14,7 @@ export class MentorService {
     return mentors;
   }
 
-  async getMentorDashboard(mentor_id: number) {
+  async getMentorDashboard(mentor_id: string) {
     const [mentor, reviews] = await Promise.all([
       this.mentorRepository.getMentorSummaryById(mentor_id),
       this.mentoringRepository.getMentoringsFeedbackByMentorId(mentor_id),

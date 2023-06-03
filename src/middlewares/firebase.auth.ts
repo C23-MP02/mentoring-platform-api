@@ -19,9 +19,8 @@ export const isAuth = (
       .verifyIdToken(token)
       .then((decodedToken) => {
         // Set the authenticated user ID on the request
-        req.userId = decodedToken.record_id;
+        req.userId = decodedToken.uid;
         req.role = decodedToken.role;
-        req.providerId = decodedToken.uid;
 
         // Proceed to the next middleware or route handler
         next();

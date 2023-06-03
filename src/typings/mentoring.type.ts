@@ -2,7 +2,7 @@ import { Mentee, Mentoring, Mentoring_Attendee, User } from "@prisma/client";
 
 export interface MentoringScheduleByMentee {
   mentoring_id: number;
-  mentee_id: number;
+  mentee_id: string;
   rating: number | null;
   feedback: string | null;
   en_feedback: string | null;
@@ -40,7 +40,7 @@ export type MentoringUpdateInput = {
 
 export type MentoringFeedbackInput = {
   mentoring_id: number;
-  mentee_id: number;
+  mentee_id: string;
   feedback: string;
   en_feedback: string;
   sentiment: string;
