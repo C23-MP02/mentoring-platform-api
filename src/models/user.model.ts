@@ -17,6 +17,15 @@ export type User = {
   is_path_react: boolean;
   is_path_devops: boolean;
   is_path_gcp: boolean;
+  is_monday_available: boolean;
+  is_tuesday_available: boolean;
+  is_wednesday_available: boolean;
+  is_thursday_available: boolean;
+  is_friday_available: boolean;
+  is_saturday_available: boolean;
+  is_sunday_available: boolean;
+  is_mentor: boolean;
+  is_mentee: boolean;
   created_at: Date;
   updated_at: Date;
 };
