@@ -39,7 +39,7 @@ export class UserService {
   }
 
   async getUserByEmail(email: string): Promise<User | null> {
-    const user = await this.userRepository.findUserByEmail(email);
+    const user = await this.userRepository.getUserByEmail(email);
     return user;
   }
 

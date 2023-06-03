@@ -55,6 +55,8 @@ export type UserUpdateInput = {
   is_friday_available?: boolean;
   is_saturday_available?: boolean;
   is_sunday_available?: boolean;
+  is_mentor?: boolean;
+  is_mentee?: boolean;
 };
 
 export type UserInterests = {

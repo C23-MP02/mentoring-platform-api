@@ -32,15 +32,6 @@ export const providerLogin = async (req: Request, res: Response) => {
   try {
     const { email, name, role, profile_picture_url, provider_id } = req.body;
 
-    // check if email is already registered
-    const user = await userService.getUserByEmail(email);
-
-    if (user) {
-      return res.status(200).json({
-        message: "Login successful",
-      });
-    }
-
     const loginResult = await authService.providerLogin(
       provider_id,
       name,
@@ -69,7 +60,7 @@ export const loginCallback = async (
   try {
     const { role } = req.body;
 
-    await authService.setLoginClaims(req.providerId!, role, req.userId!);
+    await authService.login(req.providerId!, role, req.userId!);
 
     return res.status(200).json({
       message: "Login successful",

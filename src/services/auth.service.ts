@@ -103,13 +103,30 @@ export class AuthService {
     role: string
   ) {
     try {
-      await this.createUserAndSetClaims(
-        provider_id,
-        name,
-        email,
-        profile_picture_url,
-        role
-      );
+      const user = await this.userRepository.getUserByEmail(email);
+      // check if user is already registered
+      if (user) {
+        if (role === "mentor" && !user.is_mentor) {
+          await this.userRepository.updateUser(user.id, { is_mentor: true });
+          await this.mentorRepository.createMentor(user.id);
+        } else if (role === "mentee" && !user.is_mentee) {
+          await this.menteeRepository.createMentee(user.id);
+          await this.userRepository.updateUser(user.id, { is_mentee: true });
+        }
+
+        await this.authRepository.setRoleClaims(provider_id, {
+          role,
+          record_id: user.id,
+        });
+      } else {
+        await this.createUserAndSetClaims(
+          provider_id,
+          name,
+          email,
+          profile_picture_url,
+          role
+        );
+      }
       return {
         success: true,
       };
@@ -118,7 +135,17 @@ export class AuthService {
     }
   }
 
-  async setLoginClaims(provider_id: string, role: string, record_id: number) {
+  async login(provider_id: string, role: string, record_id: number) {
+    const user = await this.userRepository.getUserById(record_id);
+
+    if (role === "mentor" && !user?.is_mentor) {
+      await this.userRepository.updateUser(record_id, { is_mentor: true });
+      await this.mentorRepository.createMentor(record_id);
+    } else if (role === "mentee" && !user?.is_mentee) {
+      await this.menteeRepository.createMentee(record_id);
+      await this.userRepository.updateUser(record_id, { is_mentee: true });
+    }
+
     await this.authRepository.setRoleClaims(provider_id, {
       role,
       record_id,
