@@ -35,13 +35,6 @@ export const isAuth = (
   }
 };
 
-// TODO
-export const isFirebaseAuth = (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-) => {};
-
 export const isMentee = (
   req: AuthenticatedRequest,
   res: Response,

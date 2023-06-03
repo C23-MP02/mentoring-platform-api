@@ -58,7 +58,6 @@ export class AuthService {
     return createdUser;
   }
 
-  // TODO: Register and ProviderLogin for the first time using existing account but different role
   async register(
     name: string,
     email: string,
@@ -104,36 +103,26 @@ export class AuthService {
     role: string
   ) {
     try {
-      const createdUser = await this.createUserAndSetClaims(
+      await this.createUserAndSetClaims(
         provider_id,
         name,
         email,
         profile_picture_url,
         role
       );
-
-      const token = await this.authRepository.createCustomToken(provider_id, {
-        role,
-        record_id: createdUser.id,
-      });
-
       return {
         success: true,
-        token,
       };
     } catch (error: any) {
       return { success: false, message: error.message };
     }
   }
 
-  // Login Callback but not used now
-  async login(role: string, provider_id: string, record_id: number) {
-    const token = await this.authRepository.createCustomToken(provider_id, {
+  async setLoginClaims(provider_id: string, role: string, record_id: number) {
+    await this.authRepository.setRoleClaims(provider_id, {
       role,
       record_id,
     });
-
-    return token;
   }
 }
 

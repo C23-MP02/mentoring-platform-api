@@ -51,8 +51,7 @@ export const providerLogin = async (req: Request, res: Response) => {
 
     if (loginResult.success) {
       return res.status(201).json({
-        message: "Register successful",
-        token: loginResult.token,
+        message: "Register successful.",
       });
     } else {
       return res.status(400).json({ message: loginResult.message });
@@ -69,18 +68,12 @@ export const loginCallback = async (
 ) => {
   try {
     const { role } = req.body;
-    const user_id = req.userId;
-    const provider_id = req.providerId;
 
-    const newToken = await authService.login(
-      role ?? "mentee",
-      provider_id!,
-      user_id!
-    );
+    await authService.setLoginClaims(req.providerId!, role, req.userId!);
 
     return res.status(200).json({
       message: "Login successful",
-      token: newToken,
+      role,
     });
   } catch (error: any) {
     console.log(error);

@@ -136,6 +136,6 @@ export interface CustomDecodedIdToken {
 }
 
 export type CustomClaims = {
-  role: string;
-  record_id: number;
+  role?: string;
+  record_id?: number;
 };
