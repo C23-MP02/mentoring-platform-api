@@ -10,7 +10,6 @@ import {
 import router from "./router";
 
 router.get("/dashboard", getMentorDashboard);
-// todo
 router.get("/schedule", getMentoringsSchedule);
 
 router.post("/mentoring", createMentoring);

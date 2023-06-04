@@ -1,5 +1,6 @@
 import axios from "axios";
-import { translatedAndSentimentedFeedback } from "../typings/response.type";
+import { mentorRanking, translatedAndSentimentedFeedback } from "../typings/response.type";
+import { MatchmakingRequest } from "../typings/request.type";
 
 export default class APIRepository {
   private machineLearningAPI = `${process.env.ML_API}`;
@@ -15,7 +16,8 @@ export default class APIRepository {
     return translatedAndSentimentedFeedback.data[0];
   }
 
-  async getMatchmakingResult (matchmaking: string){
-    
+  async getMatchmakingResult (data: MatchmakingRequest){
+    const matchmakingResult : mentorRanking = await axios.post(`${this.machineLearningAPI}/cosine_sim`, data);
+    return Object.values(matchmakingResult.data)[0];
   }
 }

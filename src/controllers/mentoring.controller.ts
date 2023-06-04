@@ -98,8 +98,6 @@ export const getMentoringsSchedule = async (
   try {
     const user_id = req.userId;
     const role = req.role;
-    console.log('ini jalan');
-    console.log(role);
     const { from_date } = req.query;
 
     const mentorings = await mentoringService.getMentoringsSchedule(

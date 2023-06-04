@@ -8,11 +8,7 @@ export class MentorService {
     this.mentorRepository = new MentorRepository();
     this.mentoringRepository = new MentoringRepository();
   }
-  async getAllMentors() {
-    // TODO: Integrate with ML API
-    const mentors = await this.mentorRepository.getAllMentors();
-    return mentors;
-  }
+
 
   async getMentorDashboard(mentor_id: string) {
     const [mentor, reviews] = await Promise.all([

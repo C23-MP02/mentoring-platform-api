@@ -1,14 +1,14 @@
 import { Response } from "express";
 import { AuthenticatedRequest } from "../typings/request.type";
-import mentorService from "../services/mentor.service";
-import mentoringService from "../services/mentoring.service";
+import menteeService from "../services/mentee.service";
 
 export const getAllMentors = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {
   try {
-    const mentors = await mentorService.getAllMentors();
+    const mentee_id = req.userId;
+    const mentors = await menteeService.getAllMentors(mentee_id!);
 
     return res
       .status(200)

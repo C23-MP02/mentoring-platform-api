@@ -7,6 +7,6 @@ export type translatedAndSentimentedFeedback = {
 };
 
 export type mentorRanking = {
-    [key: string]: number[];
+    [key: string]: string[];
 };
   
