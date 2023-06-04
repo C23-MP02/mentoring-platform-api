@@ -31,12 +31,11 @@ export class MentoringService {
   // TESTING REQUIRED
   async createMentoring(
     mentor_id: string,
-    mentees_id: string[],
+    mentee_id: string,
     start_time: string,
     end_time: string
   ) {
     const mentorData = await this.mentorRepository.getMentorById(mentor_id);
-    const menteesData = [];
 
     const mentoring = await this.mentoringRepository.createMentoring(
       mentor_id,
@@ -44,23 +43,20 @@ export class MentoringService {
       end_time
     );
 
-    for (const mentee_id of mentees_id) {
-      await this.mentoringAttendeeRepository.createMentoringAttendee(
-        mentoring.id,
-        mentee_id
-      );
+    await this.mentoringAttendeeRepository.createMentoringAttendee(
+      mentoring.id,
+      mentee_id
+    );
 
-      const menteeData = await this.menteeRepository.getMenteeById(mentee_id);
-      menteesData.push(menteeData);
-    }
+    const menteeData = await this.menteeRepository.getMenteeById(mentee_id);
 
     const calendarData = await this.googleCalendarRepository.createEvent(
       start_time,
       end_time,
       `Mentoring Session with ${mentorData!.User.name}`,
-      `Mentee(s): ${menteesData.map((mentee) => mentee!.User.name).join(", ")}`,
+      `Mentee(s): ${menteeData?.User.email}`,
       mentorData!.User.email,
-      menteesData.map((mentee) => mentee!.User.email)
+      menteeData!.User.email
     );
 
     const updatedMentoring = await this.mentoringRepository.updateMentoringById(
@@ -159,7 +155,6 @@ export class MentoringService {
       }
       return formatMentoringDataFromMentor(mentoring);
     } else {
-
       // if role is mentee
       if (from_date) {
         mentoring =

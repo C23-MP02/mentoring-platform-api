@@ -8,9 +8,8 @@ export const createMentoring = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {
-  const { mentees_id, start_time } = req.body;
+  const { mentee_id, start_time } = req.body;
   let { end_time } = req.body;
-  console.log(req.body);
   const mentor_id = req.userId;
 
   if (!end_time) {
@@ -20,7 +19,7 @@ export const createMentoring = async (
   try {
     const mentoring = await mentoringService.createMentoring(
       mentor_id!,
-      mentees_id as string[],
+      mentee_id,
       start_time,
       end_time
     );

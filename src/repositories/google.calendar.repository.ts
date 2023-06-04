@@ -22,7 +22,7 @@ export default class GoogleCalendarRepository {
     summary: string,
     description: string,
     mentorEmail: string,
-    menteeEmail: string[]
+    menteeEmail: string
   ) {
     const auth = await this.auth();
     const calendar = google.calendar({ version: "v3", auth });
@@ -31,9 +31,11 @@ export default class GoogleCalendarRepository {
     const attendees: Attendee[] = [];
     attendees.push({ email: mentorEmail });
 
-    for (const email of menteeEmail) {
-      attendees.push({ email });
-    }
+    // for (const email of menteeEmail) {
+    //   attendees.push({ email });
+    // }
+
+    attendees.push({ email: menteeEmail });
 
     const event = {
       summary,
