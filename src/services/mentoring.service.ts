@@ -81,6 +81,24 @@ export class MentoringService {
     feedback: string,
     rating: number
   ) {
+    const mentoringAttendee =
+      await this.mentoringAttendeeRepository.getMentoringAttendeeByMenteeIdAndMentoringId(
+        mentee_id,
+        mentoring_id
+      );
+
+    if (!mentoringAttendee) {
+      throw new Error("Mentoring not found");
+    }
+
+    const mentoring = await this.mentoringRepository.getMentoringById(
+      mentoring_id
+    );
+
+    if (!mentoring?.is_finished) {
+      throw new Error("Meeting is not done yet");
+    }
+
     // Call Machine Learning API
     const { translate, sentiment } =
       await this.APIRepository.translateAndSentimentFeedback(feedback);
