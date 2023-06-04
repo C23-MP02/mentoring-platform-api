@@ -1,14 +1,16 @@
 import {
   getMentorDashboard,
-  getMentoringsSchedule,
+ 
 } from "../controllers/mentor.controller";
 import {
   createMentoring,
+  getMentoringsSchedule,
   updateMentoring,
 } from "../controllers/mentoring.controller";
 import router from "./router";
 
 router.get("/dashboard", getMentorDashboard);
+// todo
 router.get("/schedule", getMentoringsSchedule);
 
 router.post("/mentoring", createMentoring);

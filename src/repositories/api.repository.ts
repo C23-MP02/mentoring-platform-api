@@ -14,4 +14,8 @@ export default class APIRepository {
 
     return translatedAndSentimentedFeedback.data[0];
   }
+
+  async getMatchmakingResult (matchmaking: string){
+    
+  }
 }

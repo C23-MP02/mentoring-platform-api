@@ -19,26 +19,3 @@ export const getAllMentors = async (
   }
 };
 
-export const getMentoringsSchedule = async (
-  req: AuthenticatedRequest,
-  res: Response
-) => {
-  try {
-    const user_id = req.userId;
-    const { from_date } = req.query;
-
-    const mentorings = await mentoringService.getMentoringsSchedule(
-      user_id!,
-      "mentee",
-      from_date as string
-    );
-
-    return res.status(200).json({
-      message: "Mentorings retrieved successfully",
-      data: mentorings,
-    });
-  } catch (error: any) {
-    console.log(error);
-    return res.status(500).json({ message: error.message });
-  }
-};

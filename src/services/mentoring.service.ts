@@ -145,7 +145,9 @@ export class MentoringService {
     from_date?: string
   ) {
     let mentoring;
+    console.log(role);
     if (role === "mentor") {
+      console.log("mentor");
       if (from_date) {
         mentoring =
           await this.mentoringRepository.getFilteredMentoringsByMentorIdAndFromDate(
@@ -159,6 +161,8 @@ export class MentoringService {
       }
       return formatMentoringDataFromMentor(mentoring);
     } else {
+      console.log("mentee");
+
       // if role is mentee
       if (from_date) {
         mentoring =

@@ -5,3 +5,8 @@ export type translatedAndSentimentedFeedback = {
     translate: string;
   }>;
 };
+
+export type mentorRanking = {
+    [key: string]: number[];
+};
+  

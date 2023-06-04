@@ -59,29 +59,6 @@ export const createMentoringFeedback = async (
   }
 };
 
-export const getMentoringsScheduleByMentee = async (
-  req: AuthenticatedRequest,
-  res: Response
-) => {
-  try {
-    const user_id = req.userId;
-    const { from_date } = req.query;
-
-    const mentorings = await mentoringService.getMentoringsSchedule(
-      user_id!,
-      "mentee",
-      from_date as string
-    );
-
-    return res.status(200).json({
-      message: "Mentorings retrieved successfully",
-      data: mentorings,
-    });
-  } catch (error: any) {
-    console.log(error);
-    return res.status(500).json({ message: error.message });
-  }
-};
 
 export const updateMentoring = async (
   req: AuthenticatedRequest,
@@ -106,6 +83,34 @@ export const updateMentoring = async (
     return res.status(200).json({
       message: "Mentoring updated successfully",
       data: mentoring,
+    });
+  } catch (error: any) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+
+export const getMentoringsSchedule = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const user_id = req.userId;
+    const role = req.role;
+    console.log('ini jalan');
+    console.log(role);
+    const { from_date } = req.query;
+
+    const mentorings = await mentoringService.getMentoringsSchedule(
+      user_id!,
+      role!,
+      from_date as string
+    );
+
+    return res.status(200).json({
+      message: "Mentorings retrieved successfully",
+      data: mentorings,
     });
   } catch (error: any) {
     console.log(error);
