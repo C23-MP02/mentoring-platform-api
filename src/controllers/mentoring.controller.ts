@@ -10,6 +10,7 @@ export const createMentoring = async (
 ) => {
   const { mentees_id, start_time } = req.body;
   let { end_time } = req.body;
+  console.log(req.body);
   const mentor_id = req.userId;
 
   if (!end_time) {
@@ -59,7 +60,6 @@ export const createMentoringFeedback = async (
   }
 };
 
-
 export const updateMentoring = async (
   req: AuthenticatedRequest,
   res: Response
@@ -89,7 +89,6 @@ export const updateMentoring = async (
     return res.status(500).json({ message: error.message });
   }
 };
-
 
 export const getMentoringsSchedule = async (
   req: AuthenticatedRequest,
