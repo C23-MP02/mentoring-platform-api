@@ -31,11 +31,17 @@ export class MentoringService {
   // TESTING REQUIRED
   async createMentoring(
     mentor_id: string,
-    mentee_id: string,
+    mentees_id: string,
     start_time: string,
     end_time: string
   ) {
+    const menteesIdArray = mentees_id.split(",");
+    if (menteesIdArray.length === 0) {
+      throw new Error("Mentees not found");
+    }
     const mentorData = await this.mentorRepository.getMentorById(mentor_id);
+
+    const menteesData = [];
 
     const mentoring = await this.mentoringRepository.createMentoring(
       mentor_id,
@@ -43,20 +49,23 @@ export class MentoringService {
       end_time
     );
 
-    await this.mentoringAttendeeRepository.createMentoringAttendee(
-      mentoring.id,
-      mentee_id
-    );
+    for (const mentee_id of menteesIdArray) {
+      await this.mentoringAttendeeRepository.createMentoringAttendee(
+        mentoring.id,
+        mentee_id
+      );
 
-    const menteeData = await this.menteeRepository.getMenteeById(mentee_id);
+      const menteeData = await this.menteeRepository.getMenteeById(mentee_id);
+      menteesData.push(menteeData);
+    }
 
     const calendarData = await this.googleCalendarRepository.createEvent(
       start_time,
       end_time,
       `Mentoring Session with ${mentorData!.User.name}`,
-      `Mentee(s): ${menteeData?.User.email}`,
+      `Mentee(s): ${menteesData.map((mentee) => mentee!.User.name).join(", ")}`,
       mentorData!.User.email,
-      menteeData!.User.email
+      menteesData.map((mentee) => mentee!.User.email)
     );
 
     const updatedMentoring = await this.mentoringRepository.updateMentoringById(
