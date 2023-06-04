@@ -8,6 +8,7 @@ export const createMentoring = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {
+  console.log(req.body);
   const { mentees_id, start_time } = req.body;
   let { end_time } = req.body;
   const mentor_id = req.userId;
