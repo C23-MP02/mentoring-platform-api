@@ -17,3 +17,5 @@ steps:
       - 'asia-southeast2'
       - '--project'
       - 'dicoding-mp'
+options:
+  logging: CLOUD_LOGGING_ONLY
