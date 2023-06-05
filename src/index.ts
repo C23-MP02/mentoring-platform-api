@@ -22,6 +22,7 @@ app.get("/", async (req: Request, res: Response) => {
   res.json({
     message: "Welcome to Dicoding Mentoring Platform API",
     author: "C23-MP02 - Cloud Computing",
+    env: process.env.NODE_ENV || "development",
   });
 });
 
