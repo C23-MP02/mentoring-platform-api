@@ -7,6 +7,7 @@ export function formatMentoringDataFromMentee(
   mentoring: MentoringScheduleByMentee[]
 ) {
   const formattedMentoring = mentoring.map((data) => ({
+    mentoring_id: data.mentoring_id,
     name: data.Mentoring.Mentor.User.name,
     start_time: data.Mentoring.start_time,
     end_time: data.Mentoring.end_time,
@@ -26,6 +27,7 @@ export function formatMentoringDataFromMentor(
     ).join(", ");
 
     return {
+      mentoring_id: data.id,
       name: menteeNames,
       start_time: data.start_time,
       end_time: data.end_time,
