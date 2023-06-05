@@ -21,7 +21,7 @@ app.use(multerMid.single("file"));
 app.get("/", async (req: Request, res: Response) => {
   res.json({
     message: "Welcome to Dicoding Mentoring Platform API",
-    author: "Cloud Computing C23-MP02",
+    author: "C23-MP02 - Cloud Computing",
   });
 });
 
