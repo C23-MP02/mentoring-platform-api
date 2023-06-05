@@ -1,0 +1,19 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/dicoding-mp/mentoring-platform-api', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/dicoding-mp/mentoring-platform-api']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'mentoring-platform-api'
+      - '--image'
+      - 'gcr.io/dicoding-mp/mentoring-platform-api'
+      - '--platform'
+      - 'managed'
+      - '--region'
+      - 'asia-southeast2'
+      - '--project'
+      - 'dicoding-mp'
