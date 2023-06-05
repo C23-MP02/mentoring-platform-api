@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "npx nodemon ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx tsc",
-    "prod": "npm run build && node ./dist/src/index.js"
+    "build": "npx tsc && npm run create-env",
+    "prod": "npm run build && node ./dist/src/index.js",
+    "create-env": "printenv > .env"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
