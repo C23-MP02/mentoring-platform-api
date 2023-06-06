@@ -106,13 +106,13 @@ export class MentoringService extends Service {
         throw new CustomError("Mentoring not found", 404);
       }
 
-      const mentoring = await this.mentoringRepository.getMentoringById(
-        mentoring_id
-      );
+      // const mentoring = await this.mentoringRepository.getMentoringById(
+      //   mentoring_id
+      // );
 
-      if (!mentoring?.is_finished) {
-        throw new CustomError("Meeting is not done yet", 400);
-      }
+      // if (!mentoring?.is_finished) {
+      //   throw new CustomError("Meeting is not done yet", 400);
+      // }
 
       // Call Machine Learning API
       const { translate, sentiment } =
