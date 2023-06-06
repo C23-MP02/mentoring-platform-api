@@ -112,15 +112,13 @@ export class AuthService extends Service {
       is_mentee: role === "mentee",
     };
 
-    const user = await this.prisma.$transaction(async (tx) => {
-      const createdUser = await this.userRepository.createUser(newUser, tx);
+    const createdUser = await this.userRepository.createUser(newUser);
 
-      if (role === "mentor") {
-        await this.mentorRepository.createMentor(createdUser.id, tx);
-      } else {
-        await this.menteeRepository.createMentee(createdUser.id, tx);
-      }
-    });
+    if (role === "mentor") {
+      await this.mentorRepository.createMentor(createdUser.id);
+    } else {
+      await this.menteeRepository.createMentee(createdUser.id);
+    }
 
     await this.authRepository.setRoleClaims(uid, {
       role,
@@ -131,7 +129,7 @@ export class AuthService extends Service {
       groups: [],
     });
 
-    return user;
+    return createdUser;
   }
 
   private async updateRolesAndClaims(user: User, role: string) {
