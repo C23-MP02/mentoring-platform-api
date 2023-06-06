@@ -1,14 +1,15 @@
+import { Service } from "./index.service";
 import MentorRepository from "../repositories/mentor.repository";
 import MentoringRepository from "../repositories/mentoring.repository";
 
-export class MentorService {
+export class MentorService extends Service {
   private mentorRepository: MentorRepository;
   private mentoringRepository: MentoringRepository;
   constructor() {
-    this.mentorRepository = new MentorRepository();
-    this.mentoringRepository = new MentoringRepository();
+    super();
+    this.mentorRepository = new MentorRepository(this.prisma);
+    this.mentoringRepository = new MentoringRepository(this.prisma);
   }
-
 
   async getMentorDashboard(mentor_id: string) {
     const [mentor, reviews] = await Promise.all([
@@ -26,6 +27,7 @@ export class MentorService {
       const mentoringAttendee = review.Mentoring_Attendee[0];
       const sentimentName = mentoringAttendee.Sentiment!.name;
       const menteeName = mentoringAttendee.Mentee.User.name;
+      // TODO: Censor mentee name
 
       sentimentCount[sentimentName] += 1;
 

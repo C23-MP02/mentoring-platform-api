@@ -8,7 +8,6 @@ export const createMentoring = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {
-  console.log(req.body);
   const { mentees_id, start_time } = req.body;
   let { end_time } = req.body;
   const mentor_id = req.userId;
@@ -31,7 +30,7 @@ export const createMentoring = async (
     });
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
@@ -56,7 +55,7 @@ export const createMentoringFeedback = async (
     });
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
@@ -86,7 +85,7 @@ export const updateMentoring = async (
     });
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
@@ -111,6 +110,6 @@ export const getMentoringsSchedule = async (
     });
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };

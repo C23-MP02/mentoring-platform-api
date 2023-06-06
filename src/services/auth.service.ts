@@ -1,3 +1,4 @@
+import { Service } from "./index.service";
 import AuthRepository from "../repositories/auth.repository";
 import UserRepository from "../repositories/user.repository";
 import MentorRepository from "../repositories/mentor.repository";
@@ -6,7 +7,7 @@ import FirestoreRepository from "../repositories/user.firestore.repository";
 import { UserRecord } from "firebase-admin/lib/auth";
 import { User } from "../models/user.model";
 
-export class AuthService {
+export class AuthService extends Service {
   private authRepository: AuthRepository;
   private userRepository: UserRepository;
   private menteeRepository: MenteeRepository;
@@ -14,10 +15,11 @@ export class AuthService {
   private firestoreRepository: FirestoreRepository;
 
   constructor() {
+    super();
     this.authRepository = new AuthRepository();
-    this.userRepository = new UserRepository();
-    this.menteeRepository = new MenteeRepository();
-    this.mentorRepository = new MentorRepository();
+    this.userRepository = new UserRepository(this.prisma);
+    this.menteeRepository = new MenteeRepository(this.prisma);
+    this.mentorRepository = new MentorRepository(this.prisma);
     this.firestoreRepository = new FirestoreRepository();
   }
 
@@ -110,13 +112,15 @@ export class AuthService {
       is_mentee: role === "mentee",
     };
 
-    const createdUser = await this.userRepository.createUser(newUser);
+    const user = await this.prisma.$transaction(async (tx) => {
+      const createdUser = await this.userRepository.createUser(newUser, tx);
 
-    if (role === "mentor") {
-      await this.mentorRepository.createMentor(createdUser.id);
-    } else {
-      await this.menteeRepository.createMentee(createdUser.id);
-    }
+      if (role === "mentor") {
+        await this.mentorRepository.createMentor(createdUser.id, tx);
+      } else {
+        await this.menteeRepository.createMentee(createdUser.id, tx);
+      }
+    });
 
     await this.authRepository.setRoleClaims(uid, {
       role,
@@ -127,20 +131,22 @@ export class AuthService {
       groups: [],
     });
 
-    return createdUser;
+    return user;
   }
 
   private async updateRolesAndClaims(user: User, role: string) {
-    if (role === "mentor" && !user.is_mentor) {
-      await this.userRepository.updateUser(user.id, { is_mentor: true });
-      await this.mentorRepository.createMentor(user.id);
-    } else if (role === "mentee" && !user.is_mentee) {
-      await this.menteeRepository.createMentee(user.id);
-      await this.userRepository.updateUser(user.id, { is_mentee: true });
-    }
+    return await this.prisma.$transaction(async (tx) => {
+      if (role === "mentor" && !user.is_mentor) {
+        await this.userRepository.updateUser(user.id, { is_mentor: true }, tx);
+        await this.mentorRepository.createMentor(user.id, tx);
+      } else if (role === "mentee" && !user.is_mentee) {
+        await this.menteeRepository.createMentee(user.id, tx);
+        await this.userRepository.updateUser(user.id, { is_mentee: true }, tx);
+      }
 
-    await this.authRepository.setRoleClaims(user.id, {
-      role,
+      await this.authRepository.setRoleClaims(user.id, {
+        role,
+      });
     });
   }
 }

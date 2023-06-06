@@ -1,7 +1,6 @@
 import { Response } from "express";
 import { AuthenticatedRequest } from "../typings/request.type";
 import mentorService from "../services/mentor.service";
-import mentoringService from "../services/mentoring.service";
 
 export const getMentorDashboard = async (
   req: AuthenticatedRequest,
@@ -15,8 +14,6 @@ export const getMentorDashboard = async (
       .json({ message: "Get mentor dashboard success", dashboard });
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
-
-

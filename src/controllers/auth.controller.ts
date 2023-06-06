@@ -23,7 +23,7 @@ export const register = async (req: Request, res: Response) => {
     }
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
@@ -48,7 +48,7 @@ export const providerLogin = async (req: Request, res: Response) => {
     }
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
@@ -67,6 +67,6 @@ export const loginCallback = async (
     });
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };

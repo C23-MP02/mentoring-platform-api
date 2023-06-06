@@ -1,16 +1,18 @@
+import { Service } from "./index.service";
 import APIRepository from "../repositories/api.repository";
 import MentorRepository from "../repositories/mentor.repository";
 import UserRepository from "../repositories/user.repository";
 
-export class MenteeService {
+export class MenteeService extends Service {
   private apiRespository: APIRepository;
   private mentorRepository: MentorRepository;
   private userRepository: UserRepository;
 
   constructor() {
+    super();
     this.apiRespository = new APIRepository();
-    this.mentorRepository = new MentorRepository();
-    this.userRepository = new UserRepository();
+    this.mentorRepository = new MentorRepository(this.prisma);
+    this.userRepository = new UserRepository(this.prisma);
   }
 
   async getAllMentors(mentee_id: string) {
@@ -21,13 +23,9 @@ export class MenteeService {
       mentors,
     };
 
-    console.log(mentors);
-
     const matchmakingResult = await this.apiRespository.getMatchmakingResult(
       data
     );
-
-    console.log(matchmakingResult);
 
     const sortedMentors = mentors.sort((a, b) => {
       const indexA = matchmakingResult.indexOf(a.user_id);

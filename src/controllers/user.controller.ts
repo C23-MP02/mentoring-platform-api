@@ -11,7 +11,7 @@ export const getProfile = async (req: AuthenticatedRequest, res: Response) => {
     return res.status(200).json({ message: "Get user success", user });
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
@@ -23,7 +23,7 @@ export const getInterest = async (req: AuthenticatedRequest, res: Response) => {
     return res.status(200).json({ message: "Get user interest success", user });
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
@@ -40,7 +40,7 @@ export const getAvailability = async (
       .json({ message: "Get user availability success", user });
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
@@ -71,7 +71,7 @@ export const updateProfile = async (
       .json({ message: "Update user success", updatedUser });
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
@@ -117,7 +117,7 @@ export const updateInterests = async (
       .json({ message: "Update user success", updatedUser });
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
@@ -134,7 +134,7 @@ export const updateInterests = async (
 //       .json({ message: "Update user success", updatedUser });
 //   } catch (error: any) {
 //     console.log(error);
-//     return res.status(500).json({ message: error.message });
+//     return res.status(error.statusCode || 500).json({ message: error.message });
 //   }
 // };
 
@@ -174,7 +174,7 @@ export const updateDaysAvailability = async (
       .json({ message: "Update user success", updatedUser });
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
@@ -205,6 +205,6 @@ export const uploadAvatar = async (
       .json({ message: "Update user success", updatedUser });
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };

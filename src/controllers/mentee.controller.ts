@@ -15,7 +15,6 @@ export const getAllMentors = async (
       .json({ message: "Get all mentors success", mentors });
   } catch (error: any) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
-

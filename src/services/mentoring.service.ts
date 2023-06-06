@@ -1,3 +1,4 @@
+import { Service } from "./index.service";
 import APIRepository from "../repositories/api.repository";
 import GoogleCalendarRepository from "../repositories/google.calendar.repository";
 import MenteeRepository from "../repositories/mentee.repository";
@@ -10,8 +11,9 @@ import {
   formatMentoringDataFromMentee,
   formatMentoringDataFromMentor,
 } from "../utils/dataFormatter";
+import { CustomError } from "../errors/CustomError";
 
-export class MentoringService {
+export class MentoringService extends Service {
   private mentoringRepository: MentoringRepository;
   private mentoringAttendeeRepository: MentoringAttendeeRepository;
   private mentorRepository: MentorRepository;
@@ -20,128 +22,145 @@ export class MentoringService {
   private APIRepository: APIRepository;
 
   constructor() {
-    this.mentoringRepository = new MentoringRepository();
-    this.mentoringAttendeeRepository = new MentoringAttendeeRepository();
-    this.mentorRepository = new MentorRepository();
-    this.menteeRepository = new MenteeRepository();
+    super();
+    this.mentoringRepository = new MentoringRepository(this.prisma);
+    this.mentoringAttendeeRepository = new MentoringAttendeeRepository(
+      this.prisma
+    );
+    this.mentorRepository = new MentorRepository(this.prisma);
+    this.menteeRepository = new MenteeRepository(this.prisma);
     this.googleCalendarRepository = new GoogleCalendarRepository();
     this.APIRepository = new APIRepository();
   }
 
-  // TESTING REQUIRED
   async createMentoring(
     mentor_id: string,
     mentees_id: string,
     start_time: string,
     end_time: string
   ) {
-    const menteesIdArray = mentees_id.split(",");
-    if (menteesIdArray.length === 0) {
-      throw new Error("Mentees not found");
-    }
-    const mentorData = await this.mentorRepository.getMentorById(mentor_id);
+    return await this.prisma.$transaction(async (tx) => {
+      const menteesIdArray = mentees_id.split(",");
+      if (menteesIdArray.length === 0) {
+        throw new Error("Mentees not found");
+      }
+      const mentorData = await this.mentorRepository.getMentorById(mentor_id);
 
-    const menteesData = [];
+      const menteesData = [];
 
-    const mentoring = await this.mentoringRepository.createMentoring(
-      mentor_id,
-      start_time,
-      end_time
-    );
-
-    for (const mentee_id of menteesIdArray) {
-      await this.mentoringAttendeeRepository.createMentoringAttendee(
-        mentoring.id,
-        mentee_id
+      const mentoring = await this.mentoringRepository.createMentoring(
+        mentor_id,
+        start_time,
+        end_time,
+        tx
       );
 
-      const menteeData = await this.menteeRepository.getMenteeById(mentee_id);
-      menteesData.push(menteeData);
-    }
+      for (const mentee_id of menteesIdArray) {
+        await this.mentoringAttendeeRepository.createMentoringAttendee(
+          mentoring.id,
+          mentee_id,
+          tx
+        );
 
-    const calendarData = await this.googleCalendarRepository.createEvent(
-      start_time,
-      end_time,
-      `Mentoring Session with ${mentorData!.User.name}`,
-      `Mentee(s): ${menteesData.map((mentee) => mentee!.User.name).join(", ")}`,
-      mentorData!.User.email,
-      menteesData.map((mentee) => mentee!.User.email)
-    );
-
-    const updatedMentoring = await this.mentoringRepository.updateMentoringById(
-      mentoring.id,
-      {
-        event_id: calendarData.id,
-        meeting_id: calendarData.conferenceData?.conferenceId,
+        const menteeData = await this.menteeRepository.getMenteeById(mentee_id);
+        menteesData.push(menteeData);
       }
-    );
+      const calendarData = await this.googleCalendarRepository.createEvent(
+        start_time,
+        end_time,
+        `Mentoring Session with ${mentorData!.User.name}`,
+        `Mentee(s): ${menteesData
+          .map((mentee) => mentee!.User.name)
+          .join(", ")}`,
+        mentorData!.User.email,
+        menteesData.map((mentee) => mentee!.User.email)
+      );
+      const updatedMentoring =
+        await this.mentoringRepository.updateMentoringById(
+          mentoring.id,
+          {
+            event_id: calendarData.id,
+            meeting_id: calendarData.conferenceData?.conferenceId,
+          },
+          tx
+        );
 
-    return updatedMentoring;
+      return updatedMentoring;
+    });
   }
 
-  // TESTING REQUIRED
   async createMentoringFeedback(
     mentoring_id: number,
     mentee_id: string,
     feedback: string,
     rating: number
   ) {
-    const mentoringAttendee =
-      await this.mentoringAttendeeRepository.getMentoringAttendeeByMenteeIdAndMentoringId(
-        mentee_id,
+    return await this.prisma.$transaction(async (tx) => {
+      const mentoringAttendee =
+        await this.mentoringAttendeeRepository.getMentoringAttendeeByMenteeIdAndMentoringId(
+          mentee_id,
+          mentoring_id
+        );
+
+      if (!mentoringAttendee) {
+        throw new CustomError("Mentoring not found", 404);
+      }
+
+      const mentoring = await this.mentoringRepository.getMentoringById(
         mentoring_id
       );
 
-    if (!mentoringAttendee) {
-      throw new Error("Mentoring not found");
-    }
+      if (!mentoring?.is_finished) {
+        throw new CustomError("Meeting is not done yet", 400);
+      }
 
-    const mentoring = await this.mentoringRepository.getMentoringById(
-      mentoring_id
-    );
+      // Call Machine Learning API
+      const { translate, sentiment } =
+        await this.APIRepository.translateAndSentimentFeedback(feedback);
+      const sentiment_id = getSentimentId(sentiment);
 
-    if (!mentoring?.is_finished) {
-      throw new Error("Meeting is not done yet");
-    }
+      // Insert data to db
+      const mentoringFeedback =
+        await this.mentoringAttendeeRepository.createMentoringFeedback(
+          mentoring_id,
+          mentee_id,
+          feedback,
+          translate,
+          sentiment_id,
+          rating,
+          tx
+        );
 
-    // Call Machine Learning API
-    const { translate, sentiment } =
-      await this.APIRepository.translateAndSentimentFeedback(feedback);
-    const sentiment_id = getSentimentId(sentiment);
-
-    // Insert data to db
-    const mentoringFeedback =
-      await this.mentoringAttendeeRepository.createMentoringFeedback(
-        mentoring_id,
-        mentee_id,
-        feedback,
-        translate,
-        sentiment_id,
-        rating
+      const mentor = await this.mentoringRepository.getMentorIdByMentoringId(
+        mentoring_id
       );
 
-    const mentor = await this.mentoringRepository.getMentorIdByMentoringId(
-      mentoring_id
-    );
-
-    const mentorRating = await this.mentorRepository.getMentorRating(
-      mentor!.mentor_id
-    );
-
-    if (mentorRating?.average_rating && mentorRating?.rating_count) {
-      const newRating =
-        (mentorRating.average_rating * mentorRating.rating_count + rating) /
-        (mentorRating.rating_count + 1);
-
-      await this.mentorRepository.updateMentorRating(
-        mentor!.mentor_id,
-        newRating
+      const mentorData = await this.mentorRepository.getMentorById(
+        mentor!.mentor_id
       );
-    } else {
-      await this.mentorRepository.updateMentorRating(mentor!.mentor_id, rating);
-    }
 
-    return mentoringFeedback;
+      if (mentorData?.average_rating && mentorData?.rating_count) {
+        const newRating =
+          (mentorData.average_rating * mentorData.rating_count + rating) /
+          (mentorData.rating_count + 1);
+
+        await this.mentorRepository.updateMentorRating(
+          mentor!.mentor_id,
+          newRating,
+          tx
+        );
+      } else {
+        await this.mentorRepository.updateMentorRating(
+          mentor!.mentor_id,
+          rating,
+          tx
+        );
+      }
+
+      // TODO: Summarize feedback if the mentorData!.feedback_summary_last_update is more than 1 week ago using luxon
+
+      return mentoringFeedback;
+    });
   }
 
   async getMentoringsSchedule(
@@ -191,7 +210,7 @@ export class MentoringService {
     );
 
     if (mentoring?.mentor_id !== mentor_id) {
-      throw new Error("Unauthorized");
+      throw new CustomError("Unauthorized", 401);
     }
 
     const updatedMentoring = await this.mentoringRepository.updateMentoringById(

@@ -1,5 +1,6 @@
 import { MentoringUpdateInput } from "../typings/mentoring.type";
 import { Repository } from "./index.repository";
+import { Transaction } from "../typings/prisma.type";
 
 export default class MentoringRepository extends Repository {
   async getMentoringById(id: number) {
@@ -112,9 +113,11 @@ export default class MentoringRepository extends Repository {
   async createMentoring(
     mentor_id: string,
     start_time: string,
-    end_time: string
+    end_time: string,
+    tx?: Transaction
   ) {
-    const mentoring = await this.prisma.mentoring.create({
+    const client = tx ?? this.prisma;
+    const mentoring = await client.mentoring.create({
       data: {
         mentor_id,
         start_time,
@@ -124,8 +127,13 @@ export default class MentoringRepository extends Repository {
     return mentoring;
   }
 
-  async updateMentoringById(id: number, data: MentoringUpdateInput) {
-    const mentoring = await this.prisma.mentoring.update({
+  async updateMentoringById(
+    id: number,
+    data: MentoringUpdateInput,
+    tx?: Transaction
+  ) {
+    const client = tx ?? this.prisma;
+    const mentoring = await client.mentoring.update({
       where: {
         id,
       },
@@ -140,9 +148,11 @@ export default class MentoringRepository extends Repository {
   async updateMentoringTimeById(
     id: number,
     start_time: string,
-    end_time: string
+    end_time: string,
+    tx?: Transaction
   ) {
-    const mentoring = await this.prisma.mentoring.update({
+    const client = tx ?? this.prisma;
+    const mentoring = await client.mentoring.update({
       where: {
         id,
       },
@@ -155,8 +165,9 @@ export default class MentoringRepository extends Repository {
     return mentoring;
   }
 
-  async deleteMentoringById(id: number) {
-    const mentoring = await this.prisma.mentoring.delete({
+  async deleteMentoringById(id: number, tx?: Transaction) {
+    const client = tx ?? this.prisma;
+    const mentoring = await client.mentoring.delete({
       where: {
         id,
       },

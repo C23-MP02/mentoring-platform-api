@@ -1,7 +1,8 @@
 import { Repository } from "./index.repository";
+import { Transaction } from "../typings/prisma.type";
 
 export default class MenteeRepository extends Repository {
-  async createMentee(user_id: string) {
+  async createMentee(user_id: string, tx?: Transaction) {
     const mentee = await this.prisma.mentee.create({
       data: {
         user_id,

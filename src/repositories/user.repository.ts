@@ -6,10 +6,12 @@ import {
   UserUpdateInput,
 } from "../models/user.model";
 import { Repository } from "./index.repository";
+import { Transaction } from "../typings/prisma.type";
 
 export default class UserRepository extends Repository {
-  async createUser(user: UserCreateInput): Promise<User> {
-    const newUser = await this.prisma.user.create({
+  async createUser(user: UserCreateInput, tx?: Transaction): Promise<User> {
+    const client = tx ?? this.prisma;
+    const newUser = await client.user.create({
       data: user,
     });
     return newUser;
@@ -24,8 +26,13 @@ export default class UserRepository extends Repository {
     return user;
   }
 
-  async updateUser(id: string, user: UserUpdateInput): Promise<User> {
-    const updatedUser = await this.prisma.user.update({
+  async updateUser(
+    id: string,
+    user: UserUpdateInput,
+    tx?: Transaction
+  ): Promise<User> {
+    const client = tx ?? this.prisma;
+    const updatedUser = await client.user.update({
       where: {
         id,
       },

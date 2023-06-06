@@ -1,3 +1,4 @@
+import { Service } from "./index.service";
 import {
   User,
   UserDaysAvailability,
@@ -7,12 +8,13 @@ import {
 import AuthRepository from "../repositories/auth.repository";
 import UserRepository from "../repositories/user.repository";
 
-export class UserService {
+export class UserService extends Service {
   private userRepository: UserRepository;
   private authRepository: AuthRepository;
 
   constructor() {
-    this.userRepository = new UserRepository();
+    super();
+    this.userRepository = new UserRepository(this.prisma);
     this.authRepository = new AuthRepository();
   }
 
@@ -44,19 +46,21 @@ export class UserService {
   }
 
   async updateUser(id: string, user: UserUpdateInput): Promise<User> {
-    const updatedUser = await this.userRepository.updateUser(id, user);
+    return await this.prisma.$transaction(async (tx) => {
+      const updatedUser = await this.userRepository.updateUser(id, user, tx);
 
-    await this.authRepository.updateUser(updatedUser.id, {
-      name: updatedUser.name,
-      email: updatedUser.email === "" ? undefined : updatedUser.email,
-      phoneNumber: updatedUser.phone === "" ? undefined : updatedUser.phone,
-      photoURL:
-        updatedUser.profile_picture_url === ""
-          ? undefined
-          : updatedUser.profile_picture_url,
+      await this.authRepository.updateUser(updatedUser.id, {
+        name: updatedUser.name,
+        email: updatedUser.email === "" ? undefined : updatedUser.email,
+        phoneNumber: updatedUser.phone === "" ? undefined : updatedUser.phone,
+        photoURL:
+          updatedUser.profile_picture_url === ""
+            ? undefined
+            : updatedUser.profile_picture_url,
+      });
+
+      return updatedUser;
     });
-
-    return updatedUser;
   }
 
   async updateUserInterests(

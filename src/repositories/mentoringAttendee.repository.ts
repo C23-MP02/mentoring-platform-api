@@ -1,9 +1,15 @@
 import { MentoringScheduleByMentee } from "../typings/mentoring.type";
 import { Repository } from "./index.repository";
+import { Transaction } from "../typings/prisma.type";
 
 export default class MentoringAttendeeRepository extends Repository {
-  async createMentoringAttendee(mentoring_id: number, mentee_id: string) {
-    const mentoringAttendee = await this.prisma.mentoring_Attendee.create({
+  async createMentoringAttendee(
+    mentoring_id: number,
+    mentee_id: string,
+    tx?: Transaction
+  ) {
+    const client = tx ?? this.prisma;
+    const mentoringAttendee = await client.mentoring_Attendee.create({
       data: {
         mentoring_id,
         mentee_id,
@@ -33,9 +39,11 @@ export default class MentoringAttendeeRepository extends Repository {
     feedback: string,
     en_feedback: string,
     sentiment_id: number,
-    rating: number
+    rating: number,
+    tx?: Transaction
   ) {
-    const mentoringFeedback = await this.prisma.mentoring_Attendee.update({
+    const client = tx ?? this.prisma;
+    const mentoringFeedback = await client.mentoring_Attendee.update({
       where: {
         mentoring_id_mentee_id: {
           mentoring_id,

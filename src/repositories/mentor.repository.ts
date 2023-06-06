@@ -1,4 +1,5 @@
 import { Repository } from "./index.repository";
+import { Transaction } from "../typings/prisma.type";
 
 export default class MentorRepository extends Repository {
   async getAllMentors() {
@@ -36,8 +37,9 @@ export default class MentorRepository extends Repository {
     return mentor;
   }
 
-  async createMentor(user_id: string) {
-    const mentor = await this.prisma.mentor.create({
+  async createMentor(user_id: string, tx?: Transaction) {
+    const client = tx ?? this.prisma;
+    const mentor = await client.mentor.create({
       data: {
         user_id,
       },
@@ -45,8 +47,9 @@ export default class MentorRepository extends Repository {
     return mentor;
   }
 
-  async deleteMentor(user_id: string) {
-    const mentor = await this.prisma.mentor.delete({
+  async deleteMentor(user_id: string, tx?: Transaction) {
+    const client = tx ?? this.prisma;
+    const mentor = await client.mentor.delete({
       where: {
         user_id,
       },
@@ -67,8 +70,13 @@ export default class MentorRepository extends Repository {
     return mentor;
   }
 
-  async updateMentorRating(user_id: string, average_rating: number) {
-    const mentor = await this.prisma.mentor.update({
+  async updateMentorRating(
+    user_id: string,
+    average_rating: number,
+    tx?: Transaction
+  ) {
+    const client = tx ?? this.prisma;
+    const mentor = await client.mentor.update({
       where: {
         user_id,
       },
