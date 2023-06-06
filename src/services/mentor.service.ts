@@ -47,13 +47,19 @@ export class MentorService extends Service {
     const totalReview = formattedReviews.length;
 
     const sentimentPercentage = {
-      negative: (sentimentCount.negative / totalReview) * 100,
-      neutral: (sentimentCount.neutral / totalReview) * 100,
-      positive: (sentimentCount.positive / totalReview) * 100,
+      negative: parseFloat(
+        ((sentimentCount.negative / totalReview) * 100).toFixed(1)
+      ),
+      neutral: parseFloat(
+        ((sentimentCount.neutral / totalReview) * 100).toFixed(1)
+      ),
+      positive: parseFloat(
+        ((sentimentCount.positive / totalReview) * 100).toFixed(1)
+      ),
     };
 
     const formattedData = {
-      average_rating: mentor!.average_rating,
+      average_rating: parseFloat(mentor!.average_rating!.toFixed(1)),
       rating_count: mentor!.rating_count,
       feedback_summary: mentor!.feedback_summary,
       sentiment: sentimentPercentage,
