@@ -27,7 +27,7 @@ export class MentorService extends Service {
       const mentoringAttendee = review.Mentoring_Attendee[0];
       const sentimentName = mentoringAttendee.Sentiment!.name;
       const menteeName = mentoringAttendee.Mentee.User.name;
-      // TODO: Censor mentee name
+      const censoredMenteeName = "*".repeat(menteeName.length);
 
       sentimentCount[sentimentName] += 1;
 
@@ -40,7 +40,7 @@ export class MentorService extends Service {
         rating: mentoringAttendee.rating,
         feedback: mentoringAttendee.feedback,
         sentiment: sentimentName,
-        mentee_name: menteeName,
+        mentee_name: censoredMenteeName,
       };
     });
 
