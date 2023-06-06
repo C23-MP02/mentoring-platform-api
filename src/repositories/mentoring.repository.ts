@@ -86,7 +86,7 @@ export default class MentoringRepository extends Repository {
       where: {
         mentor_id,
         Mentoring_Attendee: {
-          some: {
+          every: {
             rating: {
               not: null,
             },

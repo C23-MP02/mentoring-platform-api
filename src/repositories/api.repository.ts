@@ -1,5 +1,8 @@
 import axios from "axios";
-import { mentorRanking, translatedAndSentimentedFeedback } from "../typings/response.type";
+import {
+  mentorRanking,
+  translatedAndSentimentedFeedback,
+} from "../typings/response.type";
 import { MatchmakingRequest } from "../typings/request.type";
 
 export default class APIRepository {
@@ -16,8 +19,16 @@ export default class APIRepository {
     return translatedAndSentimentedFeedback.data[0];
   }
 
-  async getMatchmakingResult (data: MatchmakingRequest){
-    const matchmakingResult : mentorRanking = await axios.post(`${this.machineLearningAPI}/cosine_sim`, data);
+  async getMatchmakingResult(data: MatchmakingRequest): Promise<string> {
+    const matchmakingResult: mentorRanking = await axios.post(
+      `${this.machineLearningAPI}/cosine_sim`,
+      data
+    );
     return Object.values(matchmakingResult.data)[0];
+  }
+
+  // TODO: wait for ML to create summarize feedback API
+  async summarizeFeedback(feedbacks: string[]): Promise<string> {
+    return "";
   }
 }
