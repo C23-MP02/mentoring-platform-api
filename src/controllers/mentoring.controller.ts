@@ -39,6 +39,7 @@ export const createMentoringFeedback = async (
   res: Response
 ) => {
   try {
+    console.log(req.body);
     const mentee_id = req.userId;
     const { mentoring_id, feedback, rating } = req.body;
 
