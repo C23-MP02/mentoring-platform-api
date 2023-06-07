@@ -23,7 +23,7 @@ async function main() {
   const sentiments = await prisma.sentiment.findMany();
   if (sentiments.length === 0) {
     await prisma.sentiment.createMany({
-      data: [{ name: "negative" }, { name: "neutral" }, { name: "positive" }],
+      data: [{ name: "negative" }, { name: "positive" }],
     });
   }
 }

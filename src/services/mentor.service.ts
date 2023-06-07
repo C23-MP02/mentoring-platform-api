@@ -35,7 +35,6 @@ export class MentorService extends Service {
     const newFeedbacks: string[] = [];
     const sentimentCount: Record<string, number> = {
       negative: 0,
-      neutral: 0,
       positive: 0,
     };
 
@@ -79,9 +78,6 @@ export class MentorService extends Service {
     const sentimentPercentage = {
       negative: parseFloat(
         ((sentimentCount.negative / totalReview) * 100).toFixed(1)
-      ),
-      neutral: parseFloat(
-        ((sentimentCount.neutral / totalReview) * 100).toFixed(1)
       ),
       positive: parseFloat(
         ((sentimentCount.positive / totalReview) * 100).toFixed(1)
