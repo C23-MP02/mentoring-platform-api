@@ -6,7 +6,7 @@ const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY || "");
 
 const config = {
   projectId: serviceAccount.project_id,
-  keyFilename: "serviceAccountKey.json",
+  keyFilename: serviceAccount,
   bucketName: process.env.STORAGE_BUCKET_NAME!,
 };
 
