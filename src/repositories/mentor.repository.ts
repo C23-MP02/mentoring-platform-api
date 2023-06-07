@@ -32,6 +32,7 @@ export default class MentorRepository extends Repository {
         average_rating: true,
         rating_count: true,
         feedback_summary: true,
+        feedback_summary_last_update: true,
       },
     });
     return mentor;
@@ -86,6 +87,26 @@ export default class MentorRepository extends Repository {
         },
         average_rating,
         updated_at: new Date(),
+      },
+    });
+    return mentor;
+  }
+
+  async updateMentorFeedbackSummary(
+    user_id: string,
+    feedback_summary: string,
+    tx?: Transaction
+  ) {
+    const client = tx ?? this.prisma;
+    const currentTime = new Date();
+    const mentor = await client.mentor.update({
+      where: {
+        user_id,
+      },
+      data: {
+        feedback_summary,
+        feedback_summary_last_update: currentTime,
+        updated_at: currentTime,
       },
     });
     return mentor;

@@ -11,3 +11,8 @@ export interface MatchmakingRequest {
   mentee: User;
   mentors: Mentor[];
 }
+
+export interface SummarizeFeedbackRequest {
+  feedback: string[];
+}
+

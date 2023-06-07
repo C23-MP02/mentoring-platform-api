@@ -7,6 +7,9 @@ export type translatedAndSentimentedFeedback = {
 };
 
 export type mentorRanking = {
-    [key: string]: string[];
+  [key: string]: string[];
 };
-  
+
+export type summariedFeedback = {
+  feedback: string[];
+};

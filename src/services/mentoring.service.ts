@@ -157,8 +157,6 @@ export class MentoringService extends Service {
         );
       }
 
-      // TODO: Summarize feedback if the mentorData!.feedback_summary_last_update is more than 1 week ago using luxon
-
       return mentoringFeedback;
     });
   }

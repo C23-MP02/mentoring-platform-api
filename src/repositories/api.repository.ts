@@ -28,7 +28,11 @@ export default class APIRepository {
   }
 
   // TODO: wait for ML to create summarize feedback API
-  async summarizeFeedback(feedbacks: string[]): Promise<string> {
-    return "";
+  async summarizeFeedback(feedback: string[]): Promise<string> {
+    const summarizedFeedback = await axios.post(
+      `${this.machineLearningAPI}/feedback_summarizer`,
+      { feedback }
+    );
+    return summarizedFeedback.data.feedback[0];
   }
 }

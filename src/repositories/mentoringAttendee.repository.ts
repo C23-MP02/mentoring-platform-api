@@ -1,6 +1,7 @@
 import { MentoringScheduleByMentee } from "../typings/mentoring.type";
 import { Repository } from "./index.repository";
 import { Transaction } from "../typings/prisma.type";
+import { dateManipulation } from "../utils/dateFunctions";
 
 export default class MentoringAttendeeRepository extends Repository {
   async createMentoringAttendee(
@@ -122,4 +123,23 @@ export default class MentoringAttendeeRepository extends Repository {
 
     return mentoring;
   }
+
+  // async getMentoringFeedbacksByMentorId(mentor_id: string, date_from?: Date) {
+  //   const mentoringFeedback = await this.prisma.mentoring_Attendee.findMany({
+  //     where: {
+  //       feedback: {
+  //         not: null,
+  //       },
+  //       Mentoring: {
+  //         mentor_id,
+  //         // is_finished: true,
+  //         start_time: {
+  //           gte: date_from,
+  //         },
+  //       },
+  //     },
+  //   });
+
+  //   return mentoringFeedback;
+  // }
 }
