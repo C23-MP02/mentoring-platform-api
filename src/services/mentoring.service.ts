@@ -103,7 +103,14 @@ export class MentoringService extends Service {
         );
 
       if (!mentoringAttendee) {
-        throw new CustomError("Mentoring not found", 404);
+        throw new CustomError("Mentoring session not found", 404);
+      }
+
+      if (mentoringAttendee.rating) {
+        throw new CustomError(
+          "You have already provided feedback for this mentoring session!",
+          403
+        );
       }
 
       // const mentoring = await this.mentoringRepository.getMentoringById(
