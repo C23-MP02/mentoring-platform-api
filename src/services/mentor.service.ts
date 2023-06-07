@@ -106,6 +106,7 @@ export class MentorService extends Service {
     const summarizedFeedback = await this.apiRepository.summarizeFeedback(
       feedbacks
     );
+    // const translatedSummarizedFeedback =
     const newMentorData =
       await this.mentorRepository.updateMentorFeedbackSummary(
         mentor_id,
