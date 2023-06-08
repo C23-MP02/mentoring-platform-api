@@ -125,16 +125,16 @@ export const updateInterests = async (
     } = req.body;
 
     const interestBoolean = {
-      is_path_android: Boolean(is_path_android),
-      is_path_web: Boolean(is_path_web),
-      is_path_ios: Boolean(is_path_ios),
-      is_path_ml: Boolean(is_path_ml),
-      is_path_flutter: Boolean(is_path_flutter),
-      is_path_fe: Boolean(is_path_fe),
-      is_path_be: Boolean(is_path_be),
-      is_path_react: Boolean(is_path_react),
-      is_path_devops: Boolean(is_path_devops),
-      is_path_gcp: Boolean(is_path_gcp),
+      is_path_android: is_path_android === "true",
+      is_path_web: is_path_web === "true",
+      is_path_ios: is_path_ios === "true",
+      is_path_ml: is_path_ml === "true",
+      is_path_flutter: is_path_flutter === "true",
+      is_path_fe: is_path_fe === "true",
+      is_path_be: is_path_be === "true",
+      is_path_react: is_path_react === "true",
+      is_path_devops: is_path_devops === "true",
+      is_path_gcp: is_path_gcp === "true",
     };
 
     const updatedUser = await userService.updateUserInterests(
@@ -172,13 +172,13 @@ export const updateDaysAvailability = async (
     } = req.body;
 
     const daysAvailability = {
-      is_monday_available: Boolean(is_monday_available),
-      is_tuesday_available: Boolean(is_tuesday_available),
-      is_wednesday_available: Boolean(is_wednesday_available),
-      is_thursday_available: Boolean(is_thursday_available),
-      is_friday_available: Boolean(is_friday_available),
-      is_saturday_available: Boolean(is_saturday_available),
-      is_sunday_available: Boolean(is_sunday_available),
+      is_monday_available: is_monday_available === "true",
+      is_tuesday_available: is_tuesday_available === "true",
+      is_wednesday_available: is_wednesday_available === "true",
+      is_thursday_available: is_thursday_available === "true",
+      is_friday_available: is_friday_available === "true",
+      is_saturday_available: is_saturday_available === "true",
+      is_sunday_available: is_sunday_available === "true",
     };
 
     const updatedUser = await userService.updateUserDaysAvailability(
