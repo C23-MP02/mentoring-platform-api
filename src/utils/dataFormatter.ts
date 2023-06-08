@@ -2,6 +2,7 @@ import {
   MentoringScheduleByMentee,
   MentoringScheduleByMentor,
 } from "../typings/mentoring.type";
+import { timeManipulation } from "./dateFunctions";
 
 export function formatMentoringDataFromMentee(
   mentoring: MentoringScheduleByMentee[]
@@ -9,8 +10,9 @@ export function formatMentoringDataFromMentee(
   const formattedMentoring = mentoring.map((data) => ({
     mentoring_id: data.mentoring_id,
     name: data.Mentoring.Mentor.User.name,
-    start_time: data.Mentoring.start_time,
-    end_time: data.Mentoring.end_time,
+    // TODO: remove the hardcode, only for demo purpose
+    start_time: timeManipulation(data.Mentoring.start_time, 7),
+    end_time: timeManipulation(data.Mentoring.end_time, 7),
     meeting_id: data.Mentoring.meeting_id,
     event_id: data.Mentoring.event_id,
   }));
@@ -29,8 +31,9 @@ export function formatMentoringDataFromMentor(
     return {
       mentoring_id: data.id,
       name: menteeNames,
-      start_time: data.start_time,
-      end_time: data.end_time,
+      // TODO: remove the hardcode, only for demo purpose
+      start_time: timeManipulation(data.start_time, 7),
+      end_time: timeManipulation(data.end_time, 7),
       meeting_id: data.meeting_id,
       event_id: data.event_id,
     };
