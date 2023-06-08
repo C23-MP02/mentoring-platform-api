@@ -27,7 +27,6 @@ export default class APIRepository {
     return Object.values(matchmakingResult.data)[0];
   }
 
-  // TODO: adjust for new summarized
   async summarizeFeedback(feedback: string[]): Promise<string> {
     const summarizedFeedback = await axios.post(
       `${this.machineLearningAPI}/feedback_summarizer`,

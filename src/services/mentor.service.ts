@@ -2,17 +2,20 @@ import { Service } from "./index.service";
 import MentorRepository from "../repositories/mentor.repository";
 import MentoringRepository from "../repositories/mentoring.repository";
 import APIRepository from "../repositories/api.repository";
+import GoogleTranslateRepository from "../repositories/google.translate.repository";
 import { dateManipulation, compareDate } from "../utils/dateFunctions";
 
 export class MentorService extends Service {
   private mentorRepository: MentorRepository;
   private mentoringRepository: MentoringRepository;
   private apiRepository: APIRepository;
+  private googleTranslateRepository: GoogleTranslateRepository;
   constructor() {
     super();
     this.mentorRepository = new MentorRepository(this.prisma);
     this.mentoringRepository = new MentoringRepository(this.prisma);
     this.apiRepository = new APIRepository();
+    this.googleTranslateRepository = new GoogleTranslateRepository();
   }
 
   async getMentorDashboard(mentor_id: string) {
@@ -51,10 +54,10 @@ export class MentorService extends Service {
       // Collect new feedbacks for summary update
       if (
         renewMentorSummary &&
-        mentoringAttendee.feedback !== null &&
+        mentoringAttendee.en_feedback !== null &&
         compareDate(data.updated_at, ">", dateManipulation(new Date(), -7))
       ) {
-        newFeedbacks.push(mentoringAttendee.feedback);
+        newFeedbacks.push(mentoringAttendee.en_feedback);
       }
 
       // Format feedback data for output
@@ -108,11 +111,17 @@ export class MentorService extends Service {
     const summarizedFeedback = await this.apiRepository.summarizeFeedback(
       feedbacks
     );
-    // const translatedSummarizedFeedback =
+
+    const translatedFeedback =
+      await this.googleTranslateRepository.translateText(
+        summarizedFeedback,
+        "en",
+        "id"
+      );
     const newMentorData =
       await this.mentorRepository.updateMentorFeedbackSummary(
         mentor_id,
-        summarizedFeedback
+        translatedFeedback[0]
       );
 
     return newMentorData;

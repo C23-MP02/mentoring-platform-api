@@ -1,9 +1,7 @@
 import { OAuth2Client } from "google-auth-library/build/src/auth/oauth2client";
-
 import { v4 as uid } from "uuid";
-
 import { calendarAuth } from "../config/google-calendar/calendar";
-import { google } from "googleapis";
+import { google, calendar_v3 } from "googleapis";
 
 interface Attendee {
   email: string;
@@ -16,6 +14,17 @@ export default class GoogleCalendarRepository {
     this.auth = calendarAuth;
   }
 
+  /**
+   * Creates a new event in Google Calendar.
+   *
+   * @param startTime The start time of the event in UTC format.
+   * @param endTime The end time of the event in UTC format.
+   * @param summary The summary or title of the event.
+   * @param description The description of the event.
+   * @param mentorEmail The email of the mentor.
+   * @param menteeEmail An array of emails of the mentees.
+   * @returns The created event data.
+   */
   async createEvent(
     startTime: string,
     endTime: string,
@@ -23,19 +32,17 @@ export default class GoogleCalendarRepository {
     description: string,
     mentorEmail: string,
     menteeEmail: string[]
-  ) {
+  ): Promise<calendar_v3.Schema$Event> {
     const auth = await this.auth();
     const calendar = google.calendar({ version: "v3", auth });
     const requestId = uid();
 
-    const attendees: Attendee[] = [];
-    attendees.push({ email: mentorEmail });
+    const attendees: Attendee[] = [
+      { email: mentorEmail },
+      ...menteeEmail.map((email) => ({ email })),
+    ];
 
-    for (const email of menteeEmail) {
-      attendees.push({ email });
-    }
-
-    const event = {
+    const event: calendar_v3.Schema$Event = {
       summary,
       description,
       start: {

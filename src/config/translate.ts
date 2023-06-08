@@ -13,27 +13,4 @@ const config = {
 };
 
 // Instantiates a client
-const translationClient = new TranslationServiceClient(config);
-
-const loc = "global";
-
-export async function translateText(text: string, src?: string, dest?: string) {
-  // Construct request
-  const request = {
-    parent: `projects/${serviceAccount.project_id}/locations/${loc}`,
-    contents: [text],
-    mimeType: "text/plain", // mime types: text/plain, text/html
-    sourceLanguageCode: src ?? "id",
-    targetLanguageCode: dest ?? "en",
-  };
-
-  // Run request
-  const [response] = await translationClient.translateText(request);
-
-  const translations: string[] = [];
-  for (const translation of response.translations!) {
-    translations.push(translation.translatedText!);
-  }
-
-  return translations;
-}
+export const translationClient = new TranslationServiceClient(config);
