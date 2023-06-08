@@ -2,7 +2,7 @@ import { Response } from "express";
 import { AuthenticatedRequest } from "../typings/request.type";
 
 import mentoringService from "../services/mentoring.service";
-import { dateManipulation } from "../utils/dateFunctions";
+import { timeManipulation } from "../utils/dateFunctions";
 import handleErrorResponse from "../utils/handleErrorResponse";
 
 /**
@@ -19,7 +19,7 @@ export const createMentoring = async (
   const {
     mentees_id,
     start_time,
-    end_time = dateManipulation(new Date(start_time), 1).toISOString(),
+    end_time = timeManipulation(new Date(start_time), 1).toISOString(),
   } = req.body;
   const mentor_id = req.userId;
 

@@ -12,12 +12,11 @@ export default class UserRepository extends Repository {
   /**
    * Creates a new user.
    * @param user - The user data.
-   * @param tx - Optional transaction object.
+   * @param {Transaction} tx - Optional transaction object.
    * @returns The created user.
    */
   async createUser(user: UserCreateInput, tx?: Transaction): Promise<User> {
-    const client = tx ?? this.prisma;
-    const newUser = await client.user.create({
+    const newUser = await (tx ?? this.prisma).user.create({
       data: user,
     });
     return newUser;
@@ -41,7 +40,7 @@ export default class UserRepository extends Repository {
    * Updates a user by ID.
    * @param id - The ID of the user.
    * @param user - The updated user data.
-   * @param tx - Optional transaction object.
+   * @param {Transaction} tx - Optional transaction object.
    * @returns The updated user.
    */
   async updateUser(
@@ -49,8 +48,7 @@ export default class UserRepository extends Repository {
     user: UserUpdateInput,
     tx?: Transaction
   ): Promise<User> {
-    const client = tx ?? this.prisma;
-    const updatedUser = await client.user.update({
+    const updatedUser = await (tx ?? this.prisma).user.update({
       where: {
         id,
       },

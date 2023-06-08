@@ -11,8 +11,7 @@ export default class MenteeRepository extends Repository {
    * @returns {Promise<Mentee>} - A promise that resolves with the created mentee record.
    */
   async createMentee(user_id: string, tx?: Transaction): Promise<Mentee> {
-    const client = tx || this.prisma;
-    const mentee = await client.mentee.create({
+    const mentee = await (tx ?? this.prisma).mentee.create({
       data: {
         user_id,
       },
@@ -46,8 +45,7 @@ export default class MenteeRepository extends Repository {
    * @returns {Promise<Mentee>} - A promise that resolves with the deleted mentee record.
    */
   async deleteMentee(user_id: string, tx?: Transaction): Promise<Mentee> {
-    const client = tx || this.prisma;
-    const mentee = await client.mentee.delete({
+    const mentee = await (tx ?? this.prisma).mentee.delete({
       where: {
         user_id,
       },

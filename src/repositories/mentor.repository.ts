@@ -66,7 +66,7 @@ export default class MentorRepository extends Repository {
    */
   async createMentor(user_id: string, tx?: Transaction): Promise<Mentor> {
     const client = tx ?? this.prisma;
-    const mentor = await client.mentor.create({
+    const mentor = await (tx ?? this.prisma).mentor.create({
       data: {
         user_id,
       },
@@ -83,7 +83,7 @@ export default class MentorRepository extends Repository {
    */
   async deleteMentor(user_id: string, tx?: Transaction): Promise<Mentor> {
     const client = tx ?? this.prisma;
-    const mentor = await client.mentor.delete({
+    const mentor = await (tx ?? this.prisma).mentor.delete({
       where: {
         user_id,
       },
@@ -105,7 +105,7 @@ export default class MentorRepository extends Repository {
     tx?: Transaction
   ): Promise<Mentor> {
     const client = tx ?? this.prisma;
-    const mentor = await client.mentor.update({
+    const mentor = await (tx ?? this.prisma).mentor.update({
       where: {
         user_id,
       },
@@ -135,7 +135,7 @@ export default class MentorRepository extends Repository {
   ): Promise<Mentor> {
     const client = tx ?? this.prisma;
     const currentTime = new Date();
-    const mentor = await client.mentor.update({
+    const mentor = await (tx ?? this.prisma).mentor.update({
       where: {
         user_id,
       },

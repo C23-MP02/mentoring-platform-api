@@ -16,7 +16,9 @@ export default class MentoringAttendeeRepository extends Repository {
     tx?: Transaction
   ) {
     const client = tx ?? this.prisma;
-    const mentoringAttendee = await client.mentoring_Attendee.create({
+    const mentoringAttendee = await (
+      tx ?? this.prisma
+    ).mentoring_Attendee.create({
       data: {
         mentoring_id,
         mentee_id,
@@ -67,7 +69,9 @@ export default class MentoringAttendeeRepository extends Repository {
     tx?: Transaction
   ) {
     const client = tx ?? this.prisma;
-    const mentoringFeedback = await client.mentoring_Attendee.update({
+    const mentoringFeedback = await (
+      tx ?? this.prisma
+    ).mentoring_Attendee.update({
       where: {
         mentoring_id_mentee_id: {
           mentoring_id,
