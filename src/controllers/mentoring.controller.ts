@@ -1,20 +1,27 @@
-import { DateTime } from "luxon";
 import { Response } from "express";
-
 import { AuthenticatedRequest } from "../typings/request.type";
-import mentoringService from "../services/mentoring.service";
 
+import mentoringService from "../services/mentoring.service";
+import { dateManipulation } from "../utils/dateFunctions";
+import handleErrorResponse from "../utils/handleErrorResponse";
+
+/**
+ * Creates a mentoring session.
+ *
+ * @param {AuthenticatedRequest} req - The authenticated request object containing the mentor's user ID and mentoring data.
+ * @param {Response} res - The response object used to send the JSON response.
+ * @return {Promise<Response>} - A promise that resolves with the JSON response.
+ */
 export const createMentoring = async (
   req: AuthenticatedRequest,
   res: Response
-) => {
-  const { mentees_id, start_time } = req.body;
-  let { end_time } = req.body;
+): Promise<Response> => {
+  const {
+    mentees_id,
+    start_time,
+    end_time = dateManipulation(new Date(start_time), 1).toISOString(),
+  } = req.body;
   const mentor_id = req.userId;
-
-  if (!end_time) {
-    end_time = DateTime.fromISO(start_time).plus({ hours: 1 }).toISO();
-  }
 
   try {
     const mentoring = await mentoringService.createMentoring(
@@ -24,20 +31,26 @@ export const createMentoring = async (
       end_time
     );
 
-    return res.status(200).json({
+    return res.json({
       message: "Mentoring created successfully",
       data: mentoring,
     });
   } catch (error: any) {
-    console.log(error);
-    return res.status(error.statusCode || 500).json({ message: error.message });
+    return handleErrorResponse(res, error);
   }
 };
 
+/**
+ * Creates mentoring feedback.
+ *
+ * @param {AuthenticatedRequest} req - The authenticated request object containing the mentee's user ID and feedback data.
+ * @param {Response} res - The response object used to send the JSON response.
+ * @return {Promise<Response>} - A promise that resolves with the JSON response.
+ */
 export const createMentoringFeedback = async (
   req: AuthenticatedRequest,
   res: Response
-) => {
+): Promise<Response> => {
   try {
     const mentee_id = req.userId;
     const { mentoring_id, feedback, rating } = req.body;
@@ -49,20 +62,26 @@ export const createMentoringFeedback = async (
       Number(rating)
     );
 
-    return res.status(200).json({
+    return res.json({
       message: "Mentoring feedback created successfully",
       data: mentoringFeedback,
     });
   } catch (error: any) {
-    console.log(error);
-    return res.status(error.statusCode || 500).json({ message: error.message });
+    return handleErrorResponse(res, error);
   }
 };
 
+/**
+ * Updates a mentoring session.
+ *
+ * @param {AuthenticatedRequest} req - The authenticated request object containing the user ID and updated mentoring data.
+ * @param {Response} res - The response object used to send the JSON response.
+ * @return {Promise<Response>} - A promise that resolves with the JSON response.
+ */
 export const updateMentoring = async (
   req: AuthenticatedRequest,
   res: Response
-) => {
+): Promise<Response> => {
   try {
     const user_id = req.userId;
     const { mentoring_id, start_time, end_time, is_finished } = req.body;
@@ -79,20 +98,26 @@ export const updateMentoring = async (
       }
     );
 
-    return res.status(200).json({
+    return res.json({
       message: "Mentoring updated successfully",
       data: mentoring,
     });
   } catch (error: any) {
-    console.log(error);
-    return res.status(error.statusCode || 500).json({ message: error.message });
+    return handleErrorResponse(res, error);
   }
 };
 
+/**
+ * Retrieves the mentorings schedule.
+ *
+ * @param {AuthenticatedRequest} req - The authenticated request object containing the user ID, role, and date query parameter.
+ * @param {Response} res - The response object used to send the JSON response.
+ * @return {Promise<Response>} - A promise that resolves with the JSON response.
+ */
 export const getMentoringsSchedule = async (
   req: AuthenticatedRequest,
   res: Response
-) => {
+): Promise<Response> => {
   try {
     const user_id = req.userId;
     const role = req.role;
@@ -104,12 +129,11 @@ export const getMentoringsSchedule = async (
       from_date as string
     );
 
-    return res.status(200).json({
+    return res.json({
       message: "Mentorings retrieved successfully",
       data: mentorings,
     });
   } catch (error: any) {
-    console.log(error);
-    return res.status(error.statusCode || 500).json({ message: error.message });
+    return handleErrorResponse(res, error);
   }
 };

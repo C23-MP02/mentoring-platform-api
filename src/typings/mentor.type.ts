@@ -19,3 +19,10 @@ export type DashboardRawData = {
   rating_count?: number;
   feedback_summary?: string;
 };
+
+export type MentorSummary = {
+  average_rating: number | null;
+  rating_count: number;
+  feedback_summary: string | null;
+  feedback_summary_last_update: Date | null;
+} | null;

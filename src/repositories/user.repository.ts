@@ -9,6 +9,12 @@ import { Repository } from "./index.repository";
 import { Transaction } from "../typings/prisma.type";
 
 export default class UserRepository extends Repository {
+  /**
+   * Creates a new user.
+   * @param user - The user data.
+   * @param tx - Optional transaction object.
+   * @returns The created user.
+   */
   async createUser(user: UserCreateInput, tx?: Transaction): Promise<User> {
     const client = tx ?? this.prisma;
     const newUser = await client.user.create({
@@ -17,6 +23,11 @@ export default class UserRepository extends Repository {
     return newUser;
   }
 
+  /**
+   * Retrieves a user by email.
+   * @param email - The user's email.
+   * @returns The found user, if any.
+   */
   async getUserByEmail(email: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -26,6 +37,13 @@ export default class UserRepository extends Repository {
     return user;
   }
 
+  /**
+   * Updates a user by ID.
+   * @param id - The ID of the user.
+   * @param user - The updated user data.
+   * @param tx - Optional transaction object.
+   * @returns The updated user.
+   */
   async updateUser(
     id: string,
     user: UserUpdateInput,
@@ -44,6 +62,11 @@ export default class UserRepository extends Repository {
     return updatedUser;
   }
 
+  /**
+   * Retrieves a user by ID.
+   * @param id - The ID of the user.
+   * @returns The found user, if any.
+   */
   async getUserById(id: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -53,6 +76,11 @@ export default class UserRepository extends Repository {
     return user;
   }
 
+  /**
+   * Retrieves user interests by ID.
+   * @param id - The ID of the user.
+   * @returns The user interests, if any.
+   */
   async getUserInterestsById(id: string): Promise<UserInterests | null> {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -74,6 +102,11 @@ export default class UserRepository extends Repository {
     return user;
   }
 
+  /**
+   * Retrieves a user's profile picture URL by ID.
+   * @param id - The ID of the user.
+   * @returns The user's profile picture URL, if available.
+   */
   async getUserProfilePictureById(id: string): Promise<string | null> {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -83,9 +116,14 @@ export default class UserRepository extends Repository {
         profile_picture_url: true,
       },
     });
-    return user!.profile_picture_url;
+    return user?.profile_picture_url || null;
   }
 
+  /**
+   * Retrieves user days availability by ID.
+   * @param id - The ID of the user.
+   * @returns The user's days availability, if available.
+   */
   async getUserDaysAvailabilityById(
     id: string
   ): Promise<UserDaysAvailability | null> {

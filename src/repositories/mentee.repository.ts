@@ -1,9 +1,18 @@
 import { Repository } from "./index.repository";
 import { Transaction } from "../typings/prisma.type";
+import { Mentee } from "../models/mentee.model";
 
 export default class MenteeRepository extends Repository {
-  async createMentee(user_id: string, tx?: Transaction) {
-    const mentee = await this.prisma.mentee.create({
+  /**
+   * Creates a new mentee record.
+   *
+   * @param {string} user_id - The user ID associated with the mentee.
+   * @param {Transaction} tx - Optional transaction object for database operations.
+   * @returns {Promise<Mentee>} - A promise that resolves with the created mentee record.
+   */
+  async createMentee(user_id: string, tx?: Transaction): Promise<Mentee> {
+    const client = tx || this.prisma;
+    const mentee = await client.mentee.create({
       data: {
         user_id,
       },
@@ -11,7 +20,13 @@ export default class MenteeRepository extends Repository {
     return mentee;
   }
 
-  async getMenteeById(user_id: string) {
+  /**
+   * Retrieves a mentee record by user ID.
+   *
+   * @param {string} user_id - The user ID associated with the mentee.
+   * @returns {Promise<Mentee>} - A promise that resolves with the retrieved mentee record.
+   */
+  async getMenteeById(user_id: string): Promise<Mentee | null> {
     const mentee = await this.prisma.mentee.findUnique({
       where: {
         user_id,
@@ -23,8 +38,16 @@ export default class MenteeRepository extends Repository {
     return mentee;
   }
 
-  async deleteMentee(user_id: string) {
-    const mentee = await this.prisma.mentee.delete({
+  /**
+   * Deletes a mentee record by user ID.
+   *
+   * @param {string} user_id - The user ID associated with the mentee.
+   * @param {Transaction} tx - Optional transaction object for database operations.
+   * @returns {Promise<Mentee>} - A promise that resolves with the deleted mentee record.
+   */
+  async deleteMentee(user_id: string, tx?: Transaction): Promise<Mentee> {
+    const client = tx || this.prisma;
+    const mentee = await client.mentee.delete({
       where: {
         user_id,
       },

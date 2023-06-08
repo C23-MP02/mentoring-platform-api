@@ -5,6 +5,10 @@ import APIRepository from "../repositories/api.repository";
 import GoogleTranslateRepository from "../repositories/google.translate.repository";
 import { dateManipulation, compareDate } from "../utils/dateFunctions";
 
+/**
+ * MentorService Class
+ * @extends Service
+ */
 export class MentorService extends Service {
   private mentorRepository: MentorRepository;
   private mentoringRepository: MentoringRepository;
@@ -18,6 +22,11 @@ export class MentorService extends Service {
     this.googleTranslateRepository = new GoogleTranslateRepository();
   }
 
+  /**
+   * Fetches and processes data for mentor dashboard
+   * @param mentor_id - Mentor ID
+   * @returns Formatted mentor data for dashboard
+   */
   async getMentorDashboard(mentor_id: string) {
     // Retrieve mentor summary and feedbacks asynchronously
     const [mentor, feedbacks] = await Promise.all([
@@ -107,6 +116,12 @@ export class MentorService extends Service {
     return formattedData;
   }
 
+  /**
+   * Updates mentor's summary based on the feedbacks received
+   * @param mentor_id - Mentor ID
+   * @param feedbacks - Array of feedbacks
+   * @returns Updated mentor data
+   */
   async updateMentorSummary(mentor_id: string, feedbacks: string[]) {
     const summarizedFeedback = await this.apiRepository.summarizeFeedback(
       feedbacks

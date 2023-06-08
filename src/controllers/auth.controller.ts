@@ -2,7 +2,17 @@ import { Request, Response } from "express";
 import authService from "../services/auth.service";
 import { AuthenticatedRequest } from "../typings/request.type";
 
-export const register = async (req: Request, res: Response) => {
+/**
+ * Handles the registration process.
+ *
+ * @param {Request} req - The request object containing the registration data.
+ * @param {Response} res - The response object used to send the JSON response.
+ * @return {Promise<Response>} - A promise that resolves with the JSON response.
+ */
+export const register = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     const { email, name, password, role } = req.body;
 
@@ -27,7 +37,17 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-export const providerLogin = async (req: Request, res: Response) => {
+/**
+ * Handles the provider login process.
+ *
+ * @param {Request} req - The request object containing the login data.
+ * @param {Response} res - The response object used to send the JSON response.
+ * @return {Promise<Response>} - A promise that resolves with the JSON response.
+ */
+export const providerLogin = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     const { uid, email, name, role, profile_picture_url } = req.body;
 
@@ -52,10 +72,17 @@ export const providerLogin = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Handles the login callback process.
+ *
+ * @param {AuthenticatedRequest} req - The authenticated request object containing the user ID.
+ * @param {Response} res - The response object used to send the JSON response.
+ * @return {Promise<Response>} - A promise that resolves with the JSON response.
+ */
 export const loginCallback = async (
   req: AuthenticatedRequest,
   res: Response
-) => {
+): Promise<Response> => {
   try {
     const { role } = req.body;
 

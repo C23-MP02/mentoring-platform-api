@@ -1,9 +1,11 @@
 export type translatedAndSentimentedFeedback = {
-  data: Array<{
-    feedback: string;
-    sentiment: string;
-    translate: string;
-  }>;
+  data: translatedAndSentimentedFeedbackData[];
+};
+
+export type translatedAndSentimentedFeedbackData = {
+  feedback: string;
+  sentiment: string;
+  translate: string;
 };
 
 export type mentorRanking = {

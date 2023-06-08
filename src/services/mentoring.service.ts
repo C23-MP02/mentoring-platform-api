@@ -13,6 +13,10 @@ import {
 } from "../utils/dataFormatter";
 import { CustomError } from "../errors/CustomError";
 
+/**
+ * Mentoring Service class.
+ * Handles mentoring-related operations.
+ */
 export class MentoringService extends Service {
   private mentoringRepository: MentoringRepository;
   private mentoringAttendeeRepository: MentoringAttendeeRepository;
@@ -33,6 +37,14 @@ export class MentoringService extends Service {
     this.APIRepository = new APIRepository();
   }
 
+  /**
+   * Creates a mentoring session.
+   * @param mentor_id - ID of the mentor.
+   * @param mentees_id - Comma-separated IDs of the mentees.
+   * @param start_time - Start time of the mentoring session.
+   * @param end_time - End time of the mentoring session.
+   * @returns The created mentoring session.
+   */
   async createMentoring(
     mentor_id: string,
     mentees_id: string,
@@ -68,12 +80,12 @@ export class MentoringService extends Service {
       const calendarData = await this.googleCalendarRepository.createEvent(
         start_time,
         end_time,
-        `Mentoring Session with ${mentorData!.User.name}`,
+        `Mentoring Session with ${mentorData!.User!.name}`,
         `Mentee(s): ${menteesData
-          .map((mentee) => mentee!.User.name)
+          .map((mentee) => mentee!.User!.name)
           .join(", ")}`,
-        mentorData!.User.email,
-        menteesData.map((mentee) => mentee!.User.email)
+        mentorData!.User!.email,
+        menteesData.map((mentee) => mentee!.User!.email)
       );
       const updatedMentoring =
         await this.mentoringRepository.updateMentoringById(
@@ -89,6 +101,14 @@ export class MentoringService extends Service {
     });
   }
 
+  /**
+   * Creates a mentoring feedback for a mentoring session.
+   * @param mentoring_id - ID of the mentoring session.
+   * @param mentee_id - ID of the mentee.
+   * @param feedback - Feedback message.
+   * @param rating - Rating given by the mentee.
+   * @returns The created mentoring feedback.
+   */
   async createMentoringFeedback(
     mentoring_id: number,
     mentee_id: string,
@@ -113,20 +133,10 @@ export class MentoringService extends Service {
         );
       }
 
-      // const mentoring = await this.mentoringRepository.getMentoringById(
-      //   mentoring_id
-      // );
-
-      // if (!mentoring?.is_finished) {
-      //   throw new CustomError("Meeting is not done yet", 400);
-      // }
-
-      // Call Machine Learning API
       const { translate, sentiment } =
         await this.APIRepository.translateAndSentimentFeedback(feedback);
       const sentiment_id = getSentimentId(sentiment);
 
-      // Insert data to db
       const mentoringFeedback =
         await this.mentoringAttendeeRepository.createMentoringFeedback(
           mentoring_id,
@@ -168,6 +178,13 @@ export class MentoringService extends Service {
     });
   }
 
+  /**
+   * Retrieves the schedule of mentorings for a user.
+   * @param user_id - ID of the user.
+   * @param role - Role of the user (mentor or mentee).
+   * @param from_date - Optional start date to filter the mentorings.
+   * @returns The schedule of mentorings.
+   */
   async getMentoringsSchedule(
     user_id: string,
     role: string,
@@ -188,7 +205,6 @@ export class MentoringService extends Service {
       }
       return formatMentoringDataFromMentor(mentoring);
     } else {
-      // if role is mentee
       if (from_date) {
         mentoring =
           await this.mentoringAttendeeRepository.getFilteredMentoringsByMenteeIdAndFromDate(
@@ -205,6 +221,13 @@ export class MentoringService extends Service {
     }
   }
 
+  /**
+   * Updates a mentoring session.
+   * @param mentoring_id - ID of the mentoring session.
+   * @param mentor_id - ID of the mentor.
+   * @param data - Updated mentoring data.
+   * @returns The updated mentoring session.
+   */
   async updateMentoring(
     mentoring_id: number,
     mentor_id: string,

@@ -8,14 +8,11 @@ interface File {
 }
 
 /**
+ * Uploads an image file to the image bucket on Google Cloud Storage.
  *
- * @param { File } object file object that will be uploaded
- * @description - This function does the following
- * - It uploads a file to the image bucket on Google Cloud
- * - It accepts an object as an argument with the
- *   "originalname" and "buffer" as keys
+ * @param {File} file - The file object containing the original name and buffer of the image.
+ * @returns {Promise<string>} - A promise that resolves with the public URL of the uploaded image.
  */
-
 export const uploadImage = (file: File): Promise<string> =>
   new Promise((resolve, reject) => {
     const { originalname, buffer } = file;
@@ -28,6 +25,7 @@ export const uploadImage = (file: File): Promise<string> =>
     const blobStream = blob.createWriteStream({
       resumable: false,
     });
+
     blobStream
       .on("finish", () => {
         const publicUrl = format(
@@ -37,15 +35,20 @@ export const uploadImage = (file: File): Promise<string> =>
       })
       .on("error", (error: any) => {
         console.log(error);
-        reject(`Unable to upload image, something went wrong`);
+        reject("Unable to upload image, something went wrong");
       })
       .end(buffer);
   });
 
+/**
+ * Deletes an image file from the image bucket on Google Cloud Storage.
+ *
+ * @param {string} imageUrl - The URL of the image to be deleted.
+ * @returns {Promise<void>} - A promise that resolves when the image is successfully deleted.
+ */
 export const deleteImage = (imageUrl: string): Promise<void> =>
   new Promise((resolve, reject) => {
     const regex = /^(?:https?:\/\/storage.googleapis.com\/)?[^/]+\/([^/]+)/i;
-
     const matchResult = imageUrl.match(regex);
 
     if (!matchResult) {
@@ -54,12 +57,10 @@ export const deleteImage = (imageUrl: string): Promise<void> =>
     }
 
     const [_, fileName] = matchResult;
-
     const file = bucket.file(fileName);
 
     file.delete((error) => {
       if (error) {
-        // console.error("Error deleting image:", error);
         reject("Unable to delete image");
       } else {
         resolve();

@@ -2,28 +2,34 @@ import { Service } from "./index.service";
 import APIRepository from "../repositories/api.repository";
 import MentorRepository from "../repositories/mentor.repository";
 import UserRepository from "../repositories/user.repository";
+import { MatchmakingRequest } from "../typings/request.type";
 
 export class MenteeService extends Service {
-  private apiRespository: APIRepository;
+  private apiRepository: APIRepository;
   private mentorRepository: MentorRepository;
   private userRepository: UserRepository;
 
   constructor() {
     super();
-    this.apiRespository = new APIRepository();
+    this.apiRepository = new APIRepository();
     this.mentorRepository = new MentorRepository(this.prisma);
     this.userRepository = new UserRepository(this.prisma);
   }
 
+  /**
+   * Retrieves all mentors for a mentee and sorts them based on the matchmaking result.
+   * @param mentee_id - The ID of the mentee.
+   * @returns An array of sorted mentors.
+   */
   async getAllMentors(mentee_id: string) {
     const mentors = await this.mentorRepository.getAllMentors();
     const mentee = await this.userRepository.getUserById(mentee_id);
-    const data = {
+    const data: MatchmakingRequest = {
       mentee: mentee!,
       mentors,
     };
 
-    const matchmakingResult = await this.apiRespository.getMatchmakingResult(
+    const matchmakingResult = await this.apiRepository.getMatchmakingResult(
       data
     );
 
@@ -32,6 +38,7 @@ export class MenteeService extends Service {
       const indexB = matchmakingResult.indexOf(b.user_id);
       return indexA - indexB;
     });
+
     return sortedMentors;
   }
 }

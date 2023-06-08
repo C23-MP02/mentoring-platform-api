@@ -23,6 +23,14 @@ export class AuthService extends Service {
     this.firestoreRepository = new FirestoreRepository();
   }
 
+  /**
+   * Registers a new user.
+   * @param name - The user's name.
+   * @param email - The user's email.
+   * @param password - The user's password.
+   * @param role - The user's role.
+   * @returns A response object indicating the success or failure of the registration.
+   */
   async register(
     name: string,
     email: string,
@@ -58,6 +66,15 @@ export class AuthService extends Service {
     }
   }
 
+  /**
+   * Performs a provider login.
+   * @param uid - The user's UID.
+   * @param name - The user's name.
+   * @param email - The user's email.
+   * @param profile_picture_url - The URL of the user's profile picture.
+   * @param role - The user's role.
+   * @returns A response object indicating the success or failure of the provider login.
+   */
   async providerLogin(
     uid: string,
     name: string,
@@ -88,6 +105,11 @@ export class AuthService extends Service {
     }
   }
 
+  /**
+   * Performs a login.
+   * @param uid - The user's UID.
+   * @param role - The user's role.
+   */
   async login(uid: string, role: string) {
     const user = await this.userRepository.getUserById(uid);
 
@@ -96,7 +118,7 @@ export class AuthService extends Service {
     }
   }
 
-  async createUserAndSetClaims(
+  private async createUserAndSetClaims(
     uid: string,
     name: string,
     email: string,
