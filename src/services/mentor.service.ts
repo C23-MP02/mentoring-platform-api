@@ -91,7 +91,9 @@ export class MentorService extends Service {
 
     // Format the final data to be returned
     const formattedData = {
-      average_rating: parseFloat(mentor!.average_rating!.toFixed(1)),
+      average_rating: mentor!.average_rating
+        ? parseFloat(mentor!.average_rating.toFixed(1))
+        : null,
       rating_count: mentor!.rating_count,
       feedback_summary:
         updatedMentor?.feedback_summary ?? mentor!.feedback_summary,

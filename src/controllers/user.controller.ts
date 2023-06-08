@@ -2,6 +2,7 @@ import { AuthenticatedRequest } from "../typings/request.type";
 import { Response } from "express";
 import { deleteImage, uploadImage } from "../helpers/image";
 import userService from "../services/user.service";
+import { translateText } from "../config/translate";
 
 export const getProfile = async (req: AuthenticatedRequest, res: Response) => {
   try {
