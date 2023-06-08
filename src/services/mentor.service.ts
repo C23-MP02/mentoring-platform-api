@@ -97,9 +97,10 @@ export class MentorService extends Service {
     };
 
     // Update mentor summary if needed
-    const updatedMentor = renewMentorSummary
-      ? await this.updateMentorSummary(mentor_id, newFeedbacks)
-      : null;
+    const updatedMentor =
+      renewMentorSummary && newFeedbacks.length > 0
+        ? await this.updateMentorSummary(mentor_id, newFeedbacks)
+        : null;
 
     // Format the final data to be returned
     const formattedData = {
