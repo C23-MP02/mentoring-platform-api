@@ -58,3 +58,8 @@ This project is licensed under the [MIT License](LICENSE). Feel free to use, mod
 ## Contact
 
 If you have any questions or need further assistance, you can reach out to the project maintainer at [fahrelga30@gmail.com](mailto:fahrelga30@gmail.com) or [katarinakantim@gmail.com](mailto:katarinakantim@gmail.com).
+
+## Work Division
+
+Fahrel: backend and architecture
+Katarina: deployments
